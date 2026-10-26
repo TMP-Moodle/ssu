@@ -179,7 +179,6 @@ function renderCourses(courses) {
         heading.append(title, element('span', '', 'Vidéos & PDF'));
         intro.append(heading);
         if (semester === sorted[0][0]) {
-            intro.append(element('p', 'intro-description', 'Vos cours, vos supports, votre progression.'));
         }
         const accordion = element('div', 'accordion course-accordion');
         accordion.id = `accordionS${semester}`;

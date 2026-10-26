@@ -1,0 +1,47 @@
+.brand-group { display:flex; align-items:center; gap:8px; }
+.naming-pencil { display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; padding:0; border:0; background:transparent; box-shadow:inset 0 0 0 1px var(--line); color:var(--muted); transition:background-color .15s ease, color .15s ease, box-shadow .15s ease; border-radius:8px; width:36px; height:36px; cursor:pointer; }
+.naming-pencil svg { display:block; }
+.naming-pencil:hover { background:var(--soft); color:var(--accent); }
+#naming-dialog { width:min(760px, calc(100% - 24px)); max-height:90dvh; padding:28px; border:1px solid var(--line); border-radius:24px; background:var(--page); color:var(--ink); overscroll-behavior:contain; box-shadow:0 24px 80px #0003; }
+#naming-dialog::backdrop { background:#081c19a6; backdrop-filter:blur(5px); }
+body:has(#naming-dialog[open]) { overflow:hidden; }
+.naming-dialog-header { display:flex; align-items:flex-start; justify-content:space-between; gap:20px; }
+#naming-close { display:grid; place-items:center; flex-shrink:0; width:36px; height:36px; padding:0; border:1px solid var(--line); border-radius:50%; background:var(--surface); color:var(--muted); }
+#naming-close:hover { background:var(--soft); color:var(--ink); }
+#naming-title { font-size:clamp(25px, 4.5vw, 32px); line-height:1.2; letter-spacing:-1px; font-weight:650; margin:0; }
+.naming-intro { margin:14px 0 0; max-width:64ch; }
+.naming-intro, .naming-rules { color:var(--muted); line-height:1.65; font-size:13px; }
+#naming-form { padding:18px; border:1px solid var(--line); border-radius:16px; background:var(--surface); margin:22px 0; }
+#naming-form label { display:block; font-size:12px; font-weight:650; margin-bottom:10px; }
+.naming-compose { display:flex; gap:8px; }
+.naming-compose input { width:100%; min-width:0; padding:12px; border:1px solid var(--line); border-radius:9px; background:var(--page); color:var(--ink); font-size:16px; }
+.naming-compose button { border:0; border-radius:9px; background:var(--accent); color:var(--page); padding:10px 16px; font-weight:650; white-space:nowrap; }
+#naming-submit-hint { display:block; margin-top:10px; color:var(--muted); font-size:11px; }
+.naming-list-heading { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+.naming-list-heading h3 { font-size:17px; margin:0; font-weight:650; }
+#naming-sort { background:var(--surface); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:8px; font-size:12px; max-width:50%; }
+.naming-rules { margin:10px 0; font-size:11px; }
+#naming-status { font-size:13px; margin:12px 0; }
+#naming-status:empty { display:none; }
+.naming-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; }
+.naming-card { display:flex; flex-direction:column; padding:18px; border:1px solid var(--line); border-radius:15px; background:var(--surface); }
+.naming-card-head { display:flex; gap:12px; align-items:center; }
+.naming-avatar { width:38px; height:38px; flex-shrink:0; display:grid; place-items:center; background:var(--soft); color:var(--accent); border-radius:11px; font-weight:750; font-size:20px; }
+.naming-card h4 { font-size:16px; font-weight:650; margin:0; overflow-wrap:anywhere; }
+.naming-score { color:var(--muted); font-size:12px; margin:auto 0 10px; padding-top:16px; }
+.naming-actions { display:flex; gap:8px; }
+.naming-vote { flex:1; min-height:42px; border-radius:8px; border:1px solid transparent; padding:10px 5px; font-weight:650; font-size:12px; }
+.naming-vote[data-value="1"] { background:#dff4e7; color:#186d43; }
+.naming-vote[data-value="-1"] { background:#fbe6e6; color:#a53342; }
+.naming-vote[aria-pressed="true"] { border-color:currentColor; }
+[data-bs-theme="dark"] .naming-vote[data-value="1"] { background:#233e30; color:#a2dfb9; }
+[data-bs-theme="dark"] .naming-vote[data-value="-1"] { background:#412b30; color:#f0a8b2; }
+.naming-vote:not(:disabled):hover { filter:brightness(.95); border-color:currentColor; }
+.naming-countdown { min-height:17px; margin:10px 0 0; color:var(--muted); font-size:10px; }
+#naming-dialog button { cursor:pointer; }
+#naming-dialog button:disabled { cursor:default; opacity:.55; }
+@media (max-width:600px) { #naming-dialog { padding:20px; border-radius:20px; } .naming-dialog-header { gap:12px; } #naming-title { letter-spacing:-.7px; } .naming-grid { grid-template-columns:1fr; } .naming-compose { flex-direction:column; } .naming-compose button { min-height:44px; } .brand-group { gap:8px; } .naming-pencil { width:32px; height:32px; } }
+@media (max-width:380px) {
+    .naming-list-heading { flex-direction:column; align-items:flex-start; }
+    #naming-sort { max-width:100%; }
+}
