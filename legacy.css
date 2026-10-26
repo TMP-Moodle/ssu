@@ -1,0 +1,69 @@
+a {
+    color: palevioletred;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+main,
+footer {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 12px;
+}
+
+#site-heading {
+    text-align: center;
+    margin: 0;
+    border-radius: 0;
+}
+
+.course-title {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--bs-body-color);
+}
+
+.course-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.course-notice {
+    display: block;
+    margin-bottom: 12px;
+}
+
+.course-completion {
+    margin-top: 12px;
+}
+
+.course-completion .form-check {
+    display: inline-block;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.completion-feedback:not(:empty) {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.875rem;
+}
+
+#courses-status {
+    margin-bottom: 12px;
+}
+
+footer {
+    padding-top: 18px;
+    color: var(--bs-secondary-color);
+    font-size: 0.9rem;
+}
+
+.semester-section + .semester-section { margin-top: 24px; }
+.semester-heading h1, .semester-heading h2 { font-size: 20px; margin: 16px 0; }
+.semester-heading > span, .intro-description { display: none; }

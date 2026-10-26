@@ -1,0 +1,80 @@
+:root, [data-bs-theme="light"] {
+    color-scheme: light;
+    --page: #f7f8f4; --surface: #fff; --ink: #1e302b; --muted: #65736b;
+    --line: #dce3da; --accent: #28634e; --soft: #eaf1e9;
+    --bs-body-bg: var(--page); --bs-body-color: var(--ink); --bs-secondary-color: var(--muted);
+}
+[data-bs-theme="dark"] {
+    color-scheme: dark;
+    --page: #141c19; --surface: #1c2722; --ink: #e6eee7; --muted: #a7b6ab;
+    --line: #35453b; --accent: #a2d4b2; --soft: #293c30;
+}
+body { margin: 0; background: var(--page); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button, input, a { touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+.site-header, main, footer { width: min(100% - 48px, 1000px); margin-inline: auto; }
+.site-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 26px; border-bottom: 1px solid var(--line); }
+.wordmark { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 650; letter-spacing: -.4px; }
+.brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--accent); color: var(--page); font-size: 23px; font-weight: 700; }
+.theme-toggle { border: 1px solid var(--line); border-radius: 100px; background: transparent; color: var(--ink); padding: 9px 15px; font-size: 13px; }
+.theme-toggle:hover { background: var(--soft); }
+.intro { padding-block: 28px 20px; }
+.semester-heading h1, .semester-heading h2 { font-size: 30px; font-weight: 600; letter-spacing: -1px; line-height: 1.2; margin: 0; }
+.intro-description { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 8px 0 0; }
+.semester-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.semester-heading > span { font-size: 12px; color: var(--muted); }
+.accordion { --bs-accordion-bg: var(--surface); --bs-accordion-color: var(--ink); --bs-accordion-border-color: var(--line); --bs-accordion-btn-color: var(--ink); --bs-accordion-active-color: var(--ink); --bs-accordion-active-bg: var(--soft); --bs-accordion-btn-focus-box-shadow: none; }
+.course-accordion { display: grid; gap: 12px; }
+.accordion-item, .accordion-item:first-of-type, .accordion-item:last-of-type { border: 1px solid var(--line); border-radius: 16px; overflow: clip; }
+.accordion-button, .accordion-item:first-of-type > .accordion-header .accordion-button, .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed { border-radius: 16px; }
+.accordion-button { gap: 16px; padding: 24px; font-size: 16px; font-weight: 600; line-height: 1.5; background: var(--surface); }
+.accordion-button:hover { background: var(--soft); }
+.accordion-button:not(.collapsed) { box-shadow: none; border-radius: 16px 16px 0 0; }
+.accordion-button:focus-visible { outline-offset: -4px; }
+.accordion-body { padding: 0 24px 12px; }
+.course-notice { display: block; margin: 0; padding: 16px 0; color: var(--muted); font-weight: 400; font-size: 12px; }
+.list-group { --bs-list-group-bg: transparent; --bs-list-group-color: var(--ink); --bs-list-group-border-color: var(--line); }
+.list-group-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 20px; padding: 16.5px 0; border: 0; border-top: 1px solid var(--line); }
+.course-title { color: var(--ink); font-size: 14px; line-height: 1.6; font-weight: 550; grid-column: 1; }
+.course-heading { grid-column: 1; display: flex; align-items: flex-start; gap: 8px; }
+.course-report { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; min-width: 32px; min-height: 32px; margin-top: -4px; color: var(--muted); border-radius: 6px; font-size: 18px; }
+.course-report:hover { color: var(--accent); background: var(--soft); text-decoration: none; }
+.course-links { grid-column: 1; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+.course-links a.badge { background: var(--soft) !important; color: var(--accent); border: 1px solid var(--line); border-radius: 7px; font-size: 11px; font-weight: 500; padding: 8px 10px; }
+.course-links a.badge:hover { border-color: var(--accent); text-decoration: none; }
+.course-links span.badge { background: transparent !important; color: var(--muted); font-size: 11px; white-space: normal; text-align: left; padding: 4px 0; font-weight: 400; }
+.course-completion { grid-column: 2; grid-row: 1 / 3; align-self: center; max-width: 180px; }
+.course-completion label { margin-bottom: 0; cursor: pointer; font-size: 12px; color: var(--muted); }
+.form-check-input { cursor: pointer; border-color: var(--muted); background-color: var(--surface); }
+.form-check-input:checked { background-color: #397455; border-color: var(--accent); }
+.completion-feedback:not(:empty) { display: block; margin-top: 6px; font-size: 12px; }
+#courses-status { margin-bottom: 12px; }
+#accordionOtherSemester { margin-top: 28px; }
+#accordionOtherSemester .accordion-button { font-size: 14px; color: var(--muted); padding-block: 18px; }
+.table { --bs-table-bg: transparent; --bs-table-color: var(--ink); --bs-table-border-color: var(--line); font-size: 13px; margin-top: 16px; }
+.table th, .table td { padding: 14px 8px; }
+footer { margin-top: 28px; padding-top: 16px; padding-bottom: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.6; }
+.footer-navigation { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
+.footer-navigation a { color: var(--muted); white-space: nowrap; }
+footer p { max-width: 740px; margin-bottom: 10px; }
+.site-information summary { cursor: pointer; width: fit-content; }
+.site-information p { margin-top: 10px; }
+@media (max-width: 600px) {
+    .site-header, main, footer { width: calc(100% - 32px); }
+    .site-header { padding-block: 12px; }
+    .wordmark { font-size: 14px; }
+    .theme-toggle { font-size: 12px; padding: 8px 11px; }
+    .intro { padding-block: 22px 18px; }
+    .semester-heading h1, .semester-heading h2 { font-size: 26px; }
+    .intro-description { font-size: 13px; }
+    .course-accordion { gap: 8px; }
+    .accordion-button { padding: 14px 16px; font-size: 14px; line-height: 1.4; min-height: 52px; }
+    .accordion-body { padding-inline: 16px; }
+    .list-group-item { display: block; }
+    .course-completion { margin-top: 16px; max-width: none; }
+    #accordionOtherSemester { margin-top: 16px; }
+    #accordionOtherSemester .accordion-button { padding-block: 12px; }
+    footer { margin-top: 20px; padding-block: 12px 16px; }
+}
