@@ -1,14 +1,15 @@
 {
   "site": {
     "nom": "TMP Moodle",
+    "nom_simplifie": "TMP Moodle (version simplifiée sans javascript)",
     "accueil": "TMP Moodle, accueil",
     "description": "Plateforme temporaire d’accès aux cours."
   },
   "pied_de_page": {
     "signalement": "Un lien ne fonctionne plus ? Signalez-le avec le drapeau ⚑ à côté du cours.",
     "reclamation": "Effectuer une réclamation",
-    "ancienne_version": "Ancienne version ↗",
-    "nouvelle_version": "Revenir à la nouvelle version",
+    "version_simplifiee": "Les cours ne chargent pas ? Version simplifiée ↗",
+    "version_normale": "Revenir à la version complète",
     "titre_a_propos": "À propos de cette plateforme",
     "a_propos": "Plateforme indépendante non affiliée à l’université ou à l’IFSI, mise à disposition temporairement pour permettre l’accès aux cours de la faculté en raison d’un dysfonctionnement du Moodle SSU."
   },
@@ -44,7 +45,6 @@
   "messages": {
     "chargement": "Chargement des cours…",
     "chargement_liens": "Chargement des liens…",
-    "javascript": "Activez JavaScript pour afficher les cours.",
     "aucun_cours": "Aucun cours disponible.",
     "stockage": "La progression ne peut pas être enregistrée dans ce navigateur.",
     "erreur_locale": "Pour charger les cours, ouvrez la page avec un serveur local (par exemple Live Server dans VS Code).",

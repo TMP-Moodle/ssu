@@ -59,8 +59,8 @@ button, input, a { touch-action: manipulation; }
 .table { --bs-table-bg: transparent; --bs-table-color: var(--ink); --bs-table-border-color: var(--line); font-size: 13px; margin-top: 16px; }
 .table th, .table td { padding: 14px 8px; }
 footer { margin-top: 28px; padding-top: 16px; padding-bottom: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.6; }
-.footer-navigation { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
-.footer-navigation a { color: var(--muted); white-space: nowrap; }
+.footer-navigation { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; margin-bottom: 8px; }
+.footer-navigation a { color: var(--muted); }
 footer p { max-width: 740px; margin-bottom: 10px; }
 .site-information summary { cursor: pointer; width: fit-content; }
 .site-information p { margin-top: 10px; }
