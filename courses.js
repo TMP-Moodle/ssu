@@ -299,6 +299,7 @@ async function loadCourses() {
         status.textContent = courses.length ? '' : SiteTexts.get('messages.aucun_cours');
         status.hidden = courses.length > 0;
     } catch (error) {
+        document.getElementById('accordionOtherSemester').hidden = true;
         document.getElementById('other-semesters').replaceChildren();
         document.getElementById('course-semesters').replaceChildren();
         if (!SiteTexts.loaded) return; // textes.js affiche l’erreur de configuration.

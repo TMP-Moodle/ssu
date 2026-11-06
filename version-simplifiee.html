@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Plateforme temporaire d’accès aux cours.">
-<title>TMP Moodle (version simplifiée sans javascript)</title>
+<title>TMP Moodle (version simplifiée sans Javascript)</title>
 <style>:root, [data-bs-theme="light"] {
     color-scheme: light;
     --page: #f7f8f4; --surface: #fff; --ink: #1e302b; --muted: #65736b;
@@ -61,7 +61,16 @@ button, input, a { touch-action: manipulation; }
 .form-check-input { cursor: pointer; border-color: var(--muted); background-color: var(--surface); }
 .form-check-input:checked { background-color: #397455; border-color: var(--accent); }
 .completion-feedback:not(:empty) { display: block; margin-top: 6px; font-size: 12px; }
-#courses-status { margin-bottom: 12px; }
+#courses-status { margin-block: 16px; }
+#courses-status:has(.loading-help) { white-space: normal; }
+.loading-help {
+    margin: 8px 0 0;
+    visibility: hidden;
+    animation: show-loading-help 0s 1s forwards;
+}
+@keyframes show-loading-help {
+    to { visibility: visible; }
+}
 #accordionOtherSemester { margin-top: 28px; }
 #accordionOtherSemester .accordion-button { font-size: 14px; color: var(--muted); padding-block: 18px; }
 .table { --bs-table-bg: transparent; --bs-table-color: var(--ink); --bs-table-border-color: var(--line); font-size: 13px; margin-top: 16px; }
@@ -138,7 +147,7 @@ details[open] > summary { background: var(--soft); border-radius: 16px 16px 0 0;
 </head>
 <body>
 <header class="site-header">
-<a class="wordmark" href="index.html" aria-label="TMP Moodle, accueil"><span class="brand-mark" aria-hidden="true">m.</span> TMP Moodle (version simplifiée sans javascript)</a>
+<a class="wordmark" href="index.html" aria-label="TMP Moodle, accueil"><span class="brand-mark" aria-hidden="true">m.</span> TMP Moodle (version simplifiée sans Javascript)</a>
 <a class="version-link" href="index.html">Revenir à la version complète</a>
 </header>
 <main>

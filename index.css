@@ -53,7 +53,16 @@ button, input, a { touch-action: manipulation; }
 .form-check-input { cursor: pointer; border-color: var(--muted); background-color: var(--surface); }
 .form-check-input:checked { background-color: #397455; border-color: var(--accent); }
 .completion-feedback:not(:empty) { display: block; margin-top: 6px; font-size: 12px; }
-#courses-status { margin-bottom: 12px; }
+#courses-status { margin-block: 16px; }
+#courses-status:has(.loading-help) { white-space: normal; }
+.loading-help {
+    margin: 8px 0 0;
+    visibility: hidden;
+    animation: show-loading-help 0s 1s forwards;
+}
+@keyframes show-loading-help {
+    to { visibility: visible; }
+}
 #accordionOtherSemester { margin-top: 28px; }
 #accordionOtherSemester .accordion-button { font-size: 14px; color: var(--muted); padding-block: 18px; }
 .table { --bs-table-bg: transparent; --bs-table-color: var(--ink); --bs-table-border-color: var(--line); font-size: 13px; margin-top: 16px; }

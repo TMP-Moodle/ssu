@@ -1,7 +1,7 @@
 {
   "site": {
     "nom": "TMP Moodle",
-    "nom_simplifie": "TMP Moodle (version simplifiée sans javascript)",
+    "nom_simplifie": "TMP Moodle (version simplifiée sans Javascript)",
     "accueil": "TMP Moodle, accueil",
     "description": "Plateforme temporaire d’accès aux cours."
   },
@@ -44,6 +44,8 @@
   },
   "messages": {
     "chargement": "Chargement des cours…",
+    "chargement_persistant": "Si le chargement se prolonge, vous pouvez consulter la",
+    "lien_version_simplifiee": "version simplifiée sans JavaScript",
     "chargement_liens": "Chargement des liens…",
     "aucun_cours": "Aucun cours disponible.",
     "stockage": "La progression ne peut pas être enregistrée dans ce navigateur.",

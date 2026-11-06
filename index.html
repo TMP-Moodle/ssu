@@ -37,10 +37,12 @@
         <button id="theme-toggle" class="theme-toggle" type="button">☾ Mode sombre</button>
     </header>
     <main>
-        <div id="courses-status" role="status" data-texte="messages.chargement">Chargement des cours…</div>
+        <div id="courses-status" role="status">
+            <span data-texte="messages.chargement">Chargement des cours…</span>
+            <p class="loading-help"><span data-texte="messages.chargement_persistant">Si le chargement se prolonge, vous pouvez consulter la</span> <a href="version-simplifiee.html" data-texte="messages.lien_version_simplifiee">version simplifiée sans JavaScript</a>.</p>
+        </div>
         <div id="course-semesters"></div>
-        <noscript><p>JavaScript est désactivé. <a href="version-simplifiee.html">Accéder aux cours sans JavaScript</a>.</p></noscript>
-        <div class="accordion" id="accordionOtherSemester">
+        <div class="accordion" id="accordionOtherSemester" hidden>
 
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOtherSemester">
