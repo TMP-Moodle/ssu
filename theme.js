@@ -7,9 +7,9 @@
     const apply = theme => {
         root.setAttribute('data-bs-theme', theme);
         const button = document.getElementById('theme-toggle');
-        if (button) {
-            button.textContent = theme === 'dark' ? '☀ Mode clair' : '☾ Mode sombre';
-            button.setAttribute('aria-label', `Activer le mode ${theme === 'dark' ? 'clair' : 'sombre'}`);
+        if (button && SiteTexts.loaded) {
+            button.textContent = SiteTexts.get(theme === 'dark' ? 'theme.clair' : 'theme.sombre');
+            button.setAttribute('aria-label', SiteTexts.get(theme === 'dark' ? 'theme.activer_clair' : 'theme.activer_sombre'));
         }
     };
     apply(explicit ? saved : preference.matches ? 'dark' : 'light');
@@ -22,6 +22,7 @@
             try { localStorage.setItem('tmp-moodle:theme', theme); } catch {}
         });
     });
+    SiteTexts.ready.then(() => apply(root.getAttribute('data-bs-theme'))).catch(() => {});
     preference.addEventListener('change', event => {
         if (!explicit) apply(event.matches ? 'dark' : 'light');
     });

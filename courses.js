@@ -108,7 +108,7 @@ function renderCourse(course) {
     report.href = `https://tally.so/r/X554dL?cours=${encodeURIComponent(reportCourse)}`;
     report.target = '_blank';
     report.rel = 'noopener noreferrer';
-    report.title = `Signaler un lien inaccessible — ${course.cours} (${course.id})`;
+    report.title = SiteTexts.get('cours.signaler', { cours: course.cours, id: course.id });
     report.setAttribute('aria-label', report.title);
     heading.append(title, report);
     item.append(heading);
@@ -116,15 +116,15 @@ function renderCourse(course) {
     const links = element('div', 'course-links');
     const split = Boolean(course.video_link_2 || course.video_link_2_backup);
     const labels = [
-        ['video_link_1', split ? 'Enregistrement (première partie)' : 'Enregistrement'],
-        ['video_link_2', 'Enregistrement (seconde partie)'],
-        ['video_link_1_backup', split ? 'Secours vidéo (première partie)' : 'Secours vidéo'],
-        ['video_link_2_backup', 'Secours vidéo (seconde partie)'],
-        ['pdf_link', 'PDF'],
-        ['pdf_link_backup', 'PDF de secours'],
+        ['video_link_1', split ? SiteTexts.get('cours.premiere_partie') : SiteTexts.get('cours.enregistrement')],
+        ['video_link_2', SiteTexts.get('cours.seconde_partie')],
+        ['video_link_1_backup', split ? SiteTexts.get('cours.secours_premiere_partie') : SiteTexts.get('cours.secours_video')],
+        ['video_link_2_backup', SiteTexts.get('cours.secours_seconde_partie')],
+        ['pdf_link', SiteTexts.get('cours.pdf')],
+        ['pdf_link_backup', SiteTexts.get('cours.pdf_secours')],
     ];
     if (!COURSE_COLUMNS.slice(2, 6).some(column => course[column])) {
-        links.append(element('span', 'badge bg-danger', 'Pas d’enregistrement disponible'));
+        links.append(element('span', 'badge bg-danger', SiteTexts.get('cours.sans_enregistrement')));
     }
     for (const [column, label] of labels) {
         if (!course[column]) continue;
@@ -139,7 +139,7 @@ function renderCourse(course) {
     const checkbox = element('input', 'form-check-input');
     checkbox.type = 'checkbox';
     checkbox.id = `completed-${course.id}`;
-    checkbox.setAttribute('aria-label', `Cours terminé : ${course.cours}`);
+    checkbox.setAttribute('aria-label', SiteTexts.get('cours.termine_accessible', { cours: course.cours }));
     const feedback = element('span', 'completion-feedback text-warning');
     feedback.id = `feedback-${course.id}`;
     feedback.setAttribute('role', 'status');
@@ -147,7 +147,7 @@ function renderCourse(course) {
     const key = `${PROGRESS_PREFIX}${course.id}`;
 
     function showStorageError() {
-        feedback.textContent = 'La progression ne peut pas être enregistrée dans ce navigateur.';
+        feedback.textContent = SiteTexts.get('messages.stockage');
     }
 
     try {
@@ -164,7 +164,7 @@ function renderCourse(course) {
             showStorageError();
         }
     });
-    label.append(checkbox, element('span', 'form-check-label', 'Terminé'));
+    label.append(checkbox, element('span', 'form-check-label', SiteTexts.get('cours.termine')));
     completion.append(label, feedback);
     item.append(completion);
     return item;
@@ -183,15 +183,15 @@ function renderCourses(courses) {
         section.setAttribute('aria-labelledby', `semester-title-${semester}`);
         const intro = element('div', 'intro');
         const heading = element('div', 'semester-heading');
-        const title = element(semester === sorted[0][0] ? 'h1' : 'h2', '', `Semestre ${semester}`);
+        const title = element(semester === sorted[0][0] ? 'h1' : 'h2', '', SiteTexts.get('navigation.semestre', { semestre: semester }));
         title.id = `semester-title-${semester}`;
-        heading.append(title, element('span', '', 'Vidéos & PDF'));
+        heading.append(title, element('span', '', SiteTexts.get('navigation.sous_titre')));
         intro.append(heading);
         if (semester === sorted[0][0]) {
         }
         const accordion = element('div', 'accordion course-accordion');
         accordion.id = `accordionS${semester}`;
-        accordion.setAttribute('aria-label', `Cours du semestre ${semester}`);
+        accordion.setAttribute('aria-label', SiteTexts.get('navigation.cours_semestre', { semestre: semester }));
         // Les numéros déterminent l’ordre, indépendamment de celui des lignes du CSV.
         group.sort((a, b) => a.ue_numero.localeCompare(b.ue_numero, 'fr', { numeric: true })
             || Number(a.cours_numero) - Number(b.cours_numero));
@@ -217,7 +217,10 @@ function renderUEs(courses, accordion) {
         const item = element('div', 'accordion-item');
         const heading = element('h2', 'accordion-header');
         heading.id = `heading-${id}`;
-        const button = element('button', 'accordion-button collapsed', ue);
+        const button = element('button', 'accordion-button collapsed');
+        button.append(element('span', 'ue-title', ue));
+        const progress = element('span', 'ue-progress');
+        button.append(progress);
         button.type = 'button';
         button.setAttribute('data-bs-toggle', 'collapse');
         button.setAttribute('data-bs-target', `#${id}`);
@@ -232,11 +235,18 @@ function renderUEs(courses, accordion) {
         const body = element('div', 'accordion-body');
         // Conserve les indications de mise à jour de la page d’origine.
         const previousYear = /^S3 UE (1\.2|2\.5)\s*-/.test(ue);
-        if (group[0].semestre === '3') body.append(element('strong', 'course-notice', previousYear
-            ? '⚠️ Il s’agit des cours de l’année dernière.'
-            : '✅ Les cours sont à jour.'));
+        const notice = previousYear ? SiteTexts.get('cours.annee_precedente') : SiteTexts.get('cours.a_jour');
+        if (group[0].semestre === '3' && notice) body.append(element('strong', 'course-notice', notice));
         const list = element('ul', 'list-group');
         for (const course of group) list.append(renderCourse(course));
+        function updateProgress() {
+            const completed = list.querySelectorAll('.form-check-input:checked').length;
+            progress.textContent = `${completed}/${group.length}`;
+            progress.setAttribute('aria-label', SiteTexts.get('cours.progression', { faits: completed, total: group.length }));
+            progress.title = SiteTexts.get('cours.progression', { faits: completed, total: group.length });
+        }
+        list.addEventListener('change', updateProgress);
+        updateProgress();
         body.append(list);
         panel.append(body);
         item.append(heading, panel);
@@ -263,11 +273,11 @@ function renderOtherSemesters(text) {
                 const url = new URL(source[column]);
                 if (!["https:", "http:"].includes(url.protocol)) throw new Error("Lien de semestre incorrect.");
                 if (count++) cell.append(element("span", "", " · "));
-                const link = element("a", "", column.endsWith("backup") ? "Secours" : "Accéder");
+                const link = element("a", "", column.endsWith("backup") ? SiteTexts.get('cours.secours') : SiteTexts.get('cours.acceder'));
                 link.href = url.href;
                 cell.append(link);
             }
-            if (!count) cell.textContent = "Bientôt disponible.";
+            if (!count) cell.textContent = SiteTexts.get('cours.bientot');
             tr.append(cell);
         }
         fragment.append(tr);
@@ -279,23 +289,25 @@ function renderOtherSemesters(text) {
 async function loadCourses() {
     const status = document.getElementById('courses-status');
     try {
+        await SiteTexts.ready;
         const response = await fetch('sources.csv', { cache: 'no-cache' });
         if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
         const text = await response.text();
         const courses = readCourses(text);
         renderOtherSemesters(text);
         renderCourses(courses);
-        status.textContent = courses.length ? '' : 'Aucun cours disponible.';
+        status.textContent = courses.length ? '' : SiteTexts.get('messages.aucun_cours');
         status.hidden = courses.length > 0;
     } catch (error) {
         document.getElementById('other-semesters').replaceChildren();
         document.getElementById('course-semesters').replaceChildren();
+        if (!SiteTexts.loaded) return; // textes.js affiche l’erreur de configuration.
         status.hidden = false;
         status.setAttribute('role', 'alert');
         status.className = 'alert alert-danger';
         status.textContent = location.protocol === 'file:'
-            ? 'Pour charger les cours, ouvrez la page avec un serveur local (par exemple Live Server dans VS Code).'
-            : 'Impossible de charger les cours. Vérifiez sources.csv puis rechargez la page.';
+            ? SiteTexts.get('messages.erreur_locale')
+            : SiteTexts.get('messages.erreur_cours');
         console.error('Chargement des cours :', error);
     }
 }

@@ -67,3 +67,23 @@ footer {
 .semester-section + .semester-section { margin-top: 24px; }
 .semester-heading h1, .semester-heading h2 { font-size: 20px; margin: 16px 0; }
 .semester-heading > span, .intro-description { display: none; }
+
+.ue-title { flex: 1; min-width: 0; }
+.ue-progress { margin-left: 12px; margin-right: 12px; flex-shrink: 0; color: var(--bs-secondary-color); font-size: 12px; font-weight: 400; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.course-accordion .accordion-button::after { margin-left: 0; }
+
+/* Respecte les espaces et retours à la ligne des textes personnalisables. */
+[data-texte],
+#theme-toggle,
+#courses-status,
+.course-notice,
+.course-links .badge,
+.form-check-label,
+.completion-feedback,
+.semester-heading h1,
+.semester-heading h2,
+.semester-heading > span,
+#other-semesters td {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}

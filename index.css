@@ -30,6 +30,9 @@ button, input, a { touch-action: manipulation; }
 .accordion-item, .accordion-item:first-of-type, .accordion-item:last-of-type { border: 1px solid var(--line); border-radius: 16px; overflow: clip; }
 .accordion-button, .accordion-item:first-of-type > .accordion-header .accordion-button, .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed { border-radius: 16px; }
 .accordion-button { gap: 16px; padding: 24px; font-size: 16px; font-weight: 600; line-height: 1.5; background: var(--surface); }
+.ue-title { flex: 1; min-width: 0; }
+.ue-progress { flex-shrink: 0; color: var(--muted); font-size: 12px; font-weight: 400; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.course-accordion .accordion-button::after { margin-left: 0; }
 .accordion-button:hover { background: var(--soft); }
 .accordion-button:not(.collapsed) { box-shadow: none; border-radius: 16px 16px 0 0; }
 .accordion-button:focus-visible { outline-offset: -4px; }
@@ -78,4 +81,20 @@ footer p { max-width: 740px; margin-bottom: 10px; }
     #accordionOtherSemester { margin-top: 16px; }
     #accordionOtherSemester .accordion-button { padding-block: 12px; }
     footer { margin-top: 20px; padding-block: 12px 16px; }
+}
+
+/* Respecte les espaces et retours à la ligne des textes personnalisables. */
+[data-texte],
+#theme-toggle,
+#courses-status,
+.course-notice,
+.course-links .badge,
+.form-check-label,
+.completion-feedback,
+.semester-heading h1,
+.semester-heading h2,
+.semester-heading > span,
+#other-semesters td {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
