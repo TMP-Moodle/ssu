@@ -28,18 +28,22 @@ button, input, a { touch-action: manipulation; }
 .accordion { --bs-accordion-bg: var(--surface); --bs-accordion-color: var(--ink); --bs-accordion-border-color: var(--line); --bs-accordion-btn-color: var(--ink); --bs-accordion-active-color: var(--ink); --bs-accordion-active-bg: var(--soft); --bs-accordion-btn-focus-box-shadow: none; }
 .course-accordion { display: grid; gap: 12px; }
 .accordion-item, .accordion-item:first-of-type, .accordion-item:last-of-type { border: 1px solid var(--line); border-radius: 16px; overflow: clip; }
-.accordion-button, .accordion-item:first-of-type > .accordion-header .accordion-button, .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed { border-radius: 16px; }
+/* Le conteneur découpe les coins extérieurs ; aucun arrondi à la jonction du contenu. */
+.accordion-button, .accordion-item:first-of-type > .accordion-header .accordion-button, .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed { border-radius: 0; }
 .accordion-button { gap: 16px; padding: 24px; font-size: 16px; font-weight: 600; line-height: 1.5; background: var(--surface); }
 .ue-title { flex: 1; min-width: 0; }
 .ue-progress { flex-shrink: 0; color: var(--muted); font-size: 12px; font-weight: 400; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .course-accordion .accordion-button::after { margin-left: 0; }
 .accordion-button:hover { background: var(--soft); }
-.accordion-button:not(.collapsed) { box-shadow: none; border-radius: 16px 16px 0 0; }
+.accordion-button:not(.collapsed) { box-shadow: none; border-radius: 0; }
 .accordion-button:focus-visible { outline-offset: -4px; }
 .accordion-body { padding: 0 24px 12px; }
-.course-notice { display: block; margin: 0; padding: 16px 0; color: var(--muted); font-weight: 400; font-size: 12px; }
-.list-group { --bs-list-group-bg: transparent; --bs-list-group-color: var(--ink); --bs-list-group-border-color: var(--line); }
+.course-notice { display: block; margin: 0; padding: 16px 0 0; color: var(--muted); font-weight: 400; font-size: 12px; }
+.list-group { --bs-list-group-border-radius: 0; --bs-list-group-bg: transparent; --bs-list-group-color: var(--ink); --bs-list-group-border-color: var(--line); }
 .list-group-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 20px; padding: 16.5px 0; border: 0; border-top: 1px solid var(--line); }
+.list-group-item:first-child { border-top: 0; }
+.course-notice + .list-group { margin-top: 12px; border-top: 1px solid var(--line); }
+.course-notice + .list-group > .list-group-item:first-child { padding-top: 12px; }
 .course-title { color: var(--ink); font-size: 14px; line-height: 1.6; font-weight: 550; grid-column: 1; }
 .course-heading { grid-column: 1; display: flex; align-items: flex-start; gap: 8px; }
 .course-report { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; min-width: 32px; min-height: 32px; margin-top: -4px; color: var(--muted); background: transparent; box-shadow: inset 0 0 0 1px var(--line); transition: background-color .15s ease, color .15s ease, box-shadow .15s ease; border-radius: 6px; font-size: 18px; }
@@ -48,10 +52,11 @@ button, input, a { touch-action: manipulation; }
 .course-links a.badge { background: var(--soft) !important; color: var(--accent); border: 1px solid var(--line); border-radius: 7px; font-size: 11px; font-weight: 500; padding: 8px 10px; }
 .course-links a.badge:hover { border-color: var(--accent); text-decoration: none; }
 .course-links span.badge { background: transparent !important; color: var(--muted); font-size: 11px; white-space: normal; text-align: left; padding: 4px 0; font-weight: 400; }
-.course-completion { grid-column: 2; grid-row: 1 / 3; align-self: center; max-width: 180px; }
-.course-completion label { margin-bottom: 0; cursor: pointer; font-size: 12px; color: var(--muted); }
+.course-completion { grid-column: 2; grid-row: 1 / 3; align-self: center; justify-self: end; display: flex; flex-direction: column; align-items: flex-end; max-width: 180px; }
+.course-completion label { display: flex; align-items: center; gap: 6px; padding-left: 0; margin-bottom: 0; cursor: pointer; font-size: 12px; color: var(--muted); }
+.course-completion .form-check-input { float: none; flex-shrink: 0; margin: 0; }
 .form-check-input { cursor: pointer; border-color: var(--muted); background-color: var(--surface); }
-.form-check-input:checked { background-color: #397455; border-color: var(--accent); }
+.form-check-input:checked { background-color: #3d5f7c; border-color: var(--due-ink); }
 .completion-feedback:not(:empty) { display: block; margin-top: 6px; font-size: 12px; }
 #courses-status { margin-block: 16px; }
 #courses-status:has(.loading-help) { white-space: normal; }
@@ -85,8 +90,9 @@ footer p { max-width: 740px; margin-bottom: 10px; }
     .accordion-button { padding: 14px 16px; font-size: 14px; line-height: 1.4; min-height: 52px; }
     .accordion-body { padding-inline: 16px; }
     .list-group-item { display: block; padding-block: 9px; }
+    .course-notice + .list-group > .list-group-item:first-child { padding-top: 9px; }
     .course-links { margin-top: 6px; }
-    .course-completion { margin-top: 6px; max-width: none; }
+    .course-completion { margin-top: 10px; max-width: none; width: 100%; justify-self: start; justify-content: flex-start; text-align: left; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
     #accordionOtherSemester { margin-top: 16px; }
     #accordionOtherSemester .accordion-button { padding-block: 12px; }
     footer { margin-top: 20px; padding-block: 12px 16px; }
@@ -106,4 +112,120 @@ footer p { max-width: 740px; margin-bottom: 10px; }
 #other-semesters td {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
+}
+
+/* Une teinte discrète distingue uniquement les liens vers les ressources antérieures. */
+:root, [data-bs-theme="light"] {
+    --previous-bg: #f0edf5;
+    --previous-ink: #68577d;
+    --previous-border: #dcd4e5;
+}
+[data-bs-theme="dark"] {
+    --previous-bg: #302b38;
+    --previous-ink: #c9bbdb;
+    --previous-border: #4f445e;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-bs-theme]) {
+        --previous-bg: #302b38;
+        --previous-ink: #c9bbdb;
+        --previous-border: #4f445e;
+    }
+}
+.table a.link-anterieur,
+.course-links a.badge.link-anterieur {
+    background: var(--previous-bg) !important;
+    color: var(--previous-ink);
+    border: 1px solid var(--previous-border);
+    border-radius: 7px;
+}
+.table a.link-anterieur { display: inline-block; padding: 4px 8px; }
+.previous-year-legend { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.course-label { min-width: 0; }
+.course-date { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 400; line-height: 1.5; }
+
+.course-completion .course-date { margin: 0 0 6px; }
+
+@media (max-width: 600px) {
+    .course-completion .course-date { margin: 0; }
+    .course-completion label { white-space: nowrap; }
+    .course-completion .completion-feedback:empty { display: none; }
+    .course-completion .completion-feedback:not(:empty) { flex-basis: 100%; margin-top: 0; }
+}
+
+/* Le bleu ardoise distingue les dates arrivées du vert et du mauve existants. */
+:root, [data-bs-theme="light"] {
+    --visio-bg: #fbefdf; --visio-ink: #89521e; --visio-border: #e9cfaa;
+    --session-bg: #f8eaea; --session-ink: #8b4149; --session-border: #e9c9cd;
+    --due-bg: #e9eff5;
+    --due-ink: #3d5f7c;
+    --due-border: #cbd8e4;
+}
+[data-bs-theme="dark"] {
+    --visio-bg: #3e3023; --visio-ink: #edc18e; --visio-border: #6c5032;
+    --session-bg: #402b30; --session-ink: #efb9bf; --session-border: #69434c;
+    --due-bg: #263543;
+    --due-ink: #b0c8df;
+    --due-border: #41596e;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-bs-theme]) {
+        --visio-bg: #3e3023; --visio-ink: #edc18e; --visio-border: #6c5032;
+    --session-bg: #402b30; --session-ink: #efb9bf; --session-border: #69434c;
+    --due-bg: #263543;
+        --due-ink: #b0c8df;
+        --due-border: #41596e;
+    }
+}
+.course-date.course-date-due,
+.course-date.course-date-session {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+    padding: 4px 8px;
+    border: 1px solid var(--due-border);
+    border-radius: 6px;
+    background: var(--due-bg);
+    color: var(--due-ink);
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+}
+.course-date-due::before,
+.course-date-session::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.course-date.course-date-session {
+    background: var(--session-bg);
+    color: var(--session-ink);
+    border-color: var(--session-border);
+    font-weight: 500;
+}
+
+.course-date.course-date-visio {
+    background: var(--visio-bg);
+    color: var(--visio-ink);
+    border-color: var(--visio-border);
+}
+
+/* Aperçu compact des deux prochains jours, au-dessus du bloc du semestre 3. */
+.daily-schedule { margin-top: 18px; padding: 4px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.daily-schedule-day { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 16px; padding-block: 12px; }
+.daily-schedule-day + .daily-schedule-day { border-top: 1px solid var(--line); }
+.daily-schedule-heading { margin: 0; color: var(--ink); font-size: 12px; line-height: 1.6; font-weight: 600; }
+.daily-schedule-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.daily-schedule-course { display: flex; align-items: baseline; gap: 10px; color: var(--ink); font-size: 12px; line-height: 1.6; }
+.daily-schedule-ue { flex-shrink: 0; color: var(--muted); font-size: 11px; }
+.daily-schedule-course > span:last-child { overflow-wrap: anywhere; }
+.daily-schedule-empty { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+@media (max-width: 600px) {
+    .daily-schedule { margin-top: 14px; padding-inline: 12px; }
+    .daily-schedule-day { grid-template-columns: 1fr; gap: 5px; padding-block: 10px; }
 }

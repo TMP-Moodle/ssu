@@ -11,7 +11,7 @@
     "version_simplifiee": "Les cours ne chargent pas ? Version simplifiée ↗",
     "version_normale": "Revenir à la version complète",
     "titre_a_propos": "À propos de cette plateforme",
-    "a_propos": "Plateforme indépendante non affiliée à l’université ou à l’IFSI, mise à disposition temporairement pour permettre l’accès aux cours de la faculté en raison d’un dysfonctionnement du Moodle SSU."
+    "a_propos": "Plateforme indépendante non affiliée à l’université ou à l’IFSI, mise à disposition temporairement pour permettre l’accès aux cours de la faculté en raison d’un dysfonctionnement du Moodle SSU. Ce site peut comporter des erreurs."
   },
   "navigation": {
     "autres_semestres": "Autres semestres",
@@ -23,24 +23,30 @@
     "cours_semestre": "Cours du semestre {semestre}"
   },
   "cours": {
-    "annee_precedente": "⚠️  Il s’agit des cours de l’année dernière.",
-    "a_jour": "✅  Les cours sont à jour.",
     "enregistrement": "Enregistrement",
     "premiere_partie": "Enregistrement (première partie)",
     "seconde_partie": "Enregistrement (seconde partie)",
-    "secours_video": "Secours vidéo",
-    "secours_premiere_partie": "Secours vidéo (première partie)",
-    "secours_seconde_partie": "Secours vidéo (seconde partie)",
     "pdf": "PDF",
-    "pdf_secours": "PDF de secours",
     "sans_enregistrement": "Pas d’enregistrement disponible",
     "termine": "Terminé",
     "termine_accessible": "Cours terminé : {cours}",
     "progression": "{faits} cours terminés sur {total}",
     "signaler": "Signaler un lien inaccessible — {cours} ({id})",
     "acceder": "Accéder",
-    "secours": "Secours",
-    "bientot": "Bientôt disponible."
+    "bientot": "Bientôt disponible.",
+    "video_anterieure": "Enregistrement (année précédente)",
+    "anterieur_premiere_partie": "Enregistrement (première partie, année précédente)",
+    "anterieur_seconde_partie": "Enregistrement (seconde partie, année précédente)",
+    "pdf_anterieur": "PDF (année précédente)",
+    "anterieur": "Accéder (année précédente)",
+    "legende_anterieurs": "⚠️  Les liens sur fond mauve correspondent aux enregistrements et aux PDF de l’année précédente. Le contenu du cours peut avoir changé depuis.",
+    "date_programmee": "Programmé le {date}",
+    "non_programme": "Non programmé",
+    "date_prevue": "Prévu le {date}",
+    "enregistrements_indisponibles": "Enregistrements non disponibles ici",
+    "date_presentiel": "Présentiel le {date}",
+    "date_visio": "Visio le {date}",
+    "date_hybride": "En présentiel / visio le {date}"
   },
   "messages": {
     "chargement": "Chargement des cours…",
@@ -57,5 +63,11 @@
     "sombre": "☾ Mode sombre",
     "activer_clair": "Activer le mode clair",
     "activer_sombre": "Activer le mode sombre"
+  },
+  "planning": {
+    "titre": "Cours d’aujourd’hui et de demain",
+    "aujourdhui": "Aujourd’hui",
+    "demain": "Demain",
+    "aucun": "Aucun cours programmé sur l'EDT."
   }
 }

@@ -2,6 +2,7 @@
 """Construit une page autonome sans JS, avec la bibliothèque standard Python."""
 import argparse
 import csv
+from datetime import date, datetime, timedelta
 import html
 import io
 import json
@@ -10,10 +11,52 @@ import re
 import subprocess
 import sys
 from urllib.parse import quote, urlsplit
+from zoneinfo import ZoneInfo
 
 
-LINKS = ('video_link_1', 'video_link_2', 'video_link_1_backup',
-         'video_link_2_backup', 'pdf_link', 'pdf_link_backup')
+LINKS = ('video_link_1', 'video_link_2', 'video_link_1_anterieur',
+         'video_link_2_anterieur', 'pdf_link', 'pdf_link_anterieur')
+
+
+def parse_course_date(value):
+    if not value:
+        return None
+    if re.fullmatch(r'\d{2}/\d{2}/\d{4}', value):
+        day, month, year = value.split('/')
+    elif re.fullmatch(r'\d{4}-\d{2}-\d{2}', value):
+        year, month, day = value.split('-')
+    else:
+        raise ValueError('Date incorrecte : utilisez JJ/MM/AAAA ou AAAA-MM-JJ.')
+    scheduled = date(int(year), int(month), int(day))
+    return scheduled.isoformat(), f'{day}/{month}/{year}'
+
+
+def course_schedule_style(row, iso, today):
+    presentiel, visio = bool(row['Presentiel'].strip()), bool(row['Visio'].strip())
+    if iso >= today and (presentiel or visio):
+        key = 'date_hybride' if presentiel and visio else 'date_presentiel' if presentiel else 'date_visio'
+        css = 'course-date course-date-session' + ('' if presentiel else ' course-date-visio')
+        return css, 'cours.' + key
+    due = iso <= today
+    return ('course-date course-date-due' if due else 'course-date',
+            'cours.date_programmee' if due else 'cours.date_prevue')
+
+
+def courses_by_day(courses, today):
+    days = []
+    for offset in (0, 1):
+        iso = (date.fromisoformat(today) + timedelta(days=offset)).isoformat()
+        group = [row for row in courses if row['semestre'] == '3'
+                 and row['date'] and parse_course_date(row['date'])[0] == iso]
+        group.sort(key=lambda row: (tuple(map(int, row['ue_numero'].split('.'))), int(row['cours_numero'])))
+        days.append((offset, group))
+    return days
+
+
+def has_previous_links(sources):
+    return any(row[column] for row in sources for column in LINKS if column.endswith('_anterieur'))
+
+
 STATIC_CSS = """
 /* Une nuance bleu-gris distingue discrètement la version simplifiée. */
 :root {
@@ -47,6 +90,7 @@ details[open] > summary { background: var(--soft); border-radius: 16px 16px 0 0;
 
 def generate(read):
     texts = json.loads(read('textes.json'))
+    today = datetime.now(ZoneInfo('Europe/Paris')).date().isoformat()
 
     def t(key, **values):
         value = texts
@@ -60,7 +104,7 @@ def generate(read):
         return f'<a href="{html.escape(url, quote=True)}"{attrs}>{label}</a>'
 
     reader = csv.DictReader(io.StringIO(read('sources.csv').lstrip('\ufeff')))
-    required = {'semestre', 'ue_numero', 'ue_nom', 'cours_numero', 'cours_nom', 'id', *LINKS}
+    required = {'semestre', 'ue_numero', 'ue_nom', 'cours_numero', 'cours_nom', 'id', 'date', 'Presentiel', 'Visio', *LINKS}
     if not required.issubset(reader.fieldnames or []):
         raise ValueError('Colonnes manquantes dans sources.csv')
     courses, resources, ids = [], [], set()
@@ -68,6 +112,7 @@ def generate(read):
         if None in row or None in row.values():
             raise ValueError(f'Nombre de champs incorrect à la ligne {line}')
         row = {key: value.strip() for key, value in row.items()}
+        parse_course_date(row['date'])
         if not re.fullmatch(r'[1-9]\d*', row['semestre']):
             raise ValueError(f'Semestre incorrect à la ligne {line}')
         for column in LINKS:
@@ -107,8 +152,25 @@ def generate(read):
     if not courses:
         parts.append(f'<p>{t("messages.aucun_cours")}</p>')
     for semester in semesters:
+        schedule = ''
+        if semester == '3':
+            schedule = f'<section class="daily-schedule" aria-label="{t("planning.titre")}">'
+            for offset, day_courses in courses_by_day(courses, today):
+                day_title = t('planning.demain' if offset else 'planning.aujourdhui')
+                schedule += f'<div class="daily-schedule-day"><h3 class="daily-schedule-heading">{day_title}</h3>'
+                if day_courses:
+                    schedule += '<ul class="daily-schedule-list">'
+                    for course in day_courses:
+                        ue = html.escape(course['ue_numero'])
+                        name = html.escape(course['cours_nom'])
+                        schedule += f'<li class="daily-schedule-course"><span class="daily-schedule-ue">UE {ue}</span><span>{name}</span></li>'
+                    schedule += '</ul>'
+                else:
+                    schedule += f'<p class="daily-schedule-empty">{t("planning.aucun")}</p>'
+                schedule += '</div>'
+            schedule += '</section>'
         tag = 'h1' if semester == semesters[0] else 'h2'
-        parts.append(f'''<section aria-labelledby="semestre-{semester}">
+        parts.append(f'''{schedule}<section aria-labelledby="semestre-{semester}">
 <div class="intro"><div class="semester-heading"><{tag} id="semestre-{semester}">{t('navigation.semestre', semestre=semester)}</{tag}><span>{t('navigation.sous_titre')}</span></div></div>
 <div class="course-accordion" aria-label="{t('navigation.cours_semestre', semestre=semester)}">''')
         groups = {}
@@ -119,37 +181,49 @@ def generate(read):
         for (number, name), group in groups.items():
             title = html.escape(f'S{semester} UE {number} - {name}')
             parts.append(f'<details class="accordion-item"><summary class="accordion-button"><span class="ue-title">{title}</span></summary><div class="accordion-body">')
-            if semester == '3':
-                notice = t('cours.annee_precedente' if number in ('1.2', '2.5') else 'cours.a_jour')
-                if notice:
-                    parts.append(f'<p class="course-notice">{notice}</p>')
+            if has_previous_links(group):
+                parts.append(f'<p class="course-notice previous-year-legend">{t("cours.legende_anterieurs")}</p>')
             parts.append('<ul class="list-group">')
             for row in group:
                 title = f"{row['cours_numero']}. {row['cours_nom']}"
-                primary = next((row[k] for k in (LINKS[0], LINKS[2], LINKS[1], *LINKS[3:]) if row[k]), '')
-                heading = link(primary, html.escape(title), ' class="course-title"') if primary else f'<span class="course-title">{html.escape(title)}</span>'
+                primary_column = next((k for k in (LINKS[0], LINKS[1], LINKS[4], LINKS[2], LINKS[3], LINKS[5]) if row[k]), '')
+                heading = link(row[primary_column], html.escape(title), ' class="course-title"') if primary_column else f'<span class="course-title">{html.escape(title)}</span>'
+                scheduled = parse_course_date(row['date'])
+                date_label = f'<span class="course-date">{t("cours.non_programme")}</span>'
+                if scheduled:
+                    iso, label = scheduled
+                    date_class, date_key = course_schedule_style(row, iso, today)
+                    date_text = t(date_key, date=label)
+                    date_label = f'<time class="{date_class}" datetime="{iso}">{date_text}</time>'
+                heading = f'<div class="course-label">{heading}{date_label}</div>'
                 report_url = 'https://tally.so/r/X554dL?cours=' + quote(f"S{semester} UE {number} {row['cours_nom']}", safe='')
                 report_title = t('cours.signaler', cours=title, id=row['id'])
                 report = link(report_url, '⚑', f' class="course-report" title="{report_title}" aria-label="{report_title}" target="_blank" rel="noopener noreferrer"')
                 parts.append(f'<li class="list-group-item" id="{row["id"]}"><div class="course-heading">{heading}{report}</div><div class="course-links">')
-                split = bool(row['video_link_2'] or row['video_link_2_backup'])
+                split = bool(row['video_link_2'] or row['video_link_2_anterieur'])
                 labels = ('premiere_partie' if split else 'enregistrement', 'seconde_partie',
-                          'secours_premiere_partie' if split else 'secours_video', 'secours_seconde_partie', 'pdf', 'pdf_secours')
+                          'anterieur_premiere_partie' if split else 'video_anterieure', 'anterieur_seconde_partie', 'pdf', 'pdf_anterieur')
                 if not any(row[k] for k in LINKS[:4]):
                     parts.append(f'<span class="badge">{t("cours.sans_enregistrement")}</span>')
                 for column, label in zip(LINKS, labels):
                     if row[column]:
-                        parts.append(link(row[column], t('cours.' + label), ' class="badge"'))
+                        css_class = 'badge link-anterieur' if column.endswith('_anterieur') else 'badge'
+                        parts.append(link(row[column], t('cours.' + label), f' class="{css_class}"'))
                 parts.append('</div></li>')
             parts.append('</ul></div></details>')
         parts.append('</div></section>')
     if resources:
-        parts.append(f'''<details class="accordion-item" id="accordionOtherSemester"><summary class="accordion-button">{t('navigation.autres_semestres')}</summary><div class="accordion-body"><table class="table"><thead><tr><th scope="col">{t('navigation.colonne_semestre')}</th><th scope="col">{t('navigation.enregistrements')}</th><th scope="col">{t('navigation.pdf')}</th></tr></thead><tbody>''')
+        legend = f'<p class="course-notice previous-year-legend">{t("cours.legende_anterieurs")}</p>' if has_previous_links(resources) else ''
+        parts.append(f'''<details class="accordion-item" id="accordionOtherSemester"><summary class="accordion-button">{t('navigation.autres_semestres')}</summary><div class="accordion-body">{legend}<table class="table"><thead><tr><th scope="col">{t('navigation.colonne_semestre')}</th><th scope="col">{t('navigation.enregistrements')}</th><th scope="col">{t('navigation.pdf')}</th></tr></thead><tbody>''')
         for row in sorted(resources, key=lambda r: int(r['semestre'])):
             parts.append(f'<tr><th scope="row">S{row["semestre"]}</th>')
             for columns in (LINKS[:4], LINKS[4:]):
-                links = [link(row[k], t('cours.secours' if k.endswith('backup') else 'cours.acceder')) for k in columns if row[k]]
-                parts.append('<td>' + (' · '.join(links) or t('cours.bientot')) + '</td>')
+                links = [link(row[k], t('cours.anterieur' if k.endswith('_anterieur') else 'cours.acceder'), ' class="link-anterieur"' if k.endswith('_anterieur') else '') for k in columns if row[k]]
+                if not links and columns == LINKS[:4]:
+                    unavailable = t('cours.enregistrements_indisponibles')
+                    parts.append(f'<td title="{unavailable}" aria-label="{unavailable}">—</td>')
+                else:
+                    parts.append('<td>' + (' · '.join(links) or t('cours.bientot')) + '</td>')
             parts.append('</tr>')
         parts.append('</tbody></table></div></details>')
     parts.append(f'''</main>

@@ -3,8 +3,10 @@
 
 const COURSE_COLUMNS = [
     'UE', 'cours', 'video_link_1', 'video_link_2',
-    'video_link_1_backup', 'video_link_2_backup', 'pdf_link', 'pdf_link_backup',
+    'video_link_1_anterieur', 'video_link_2_anterieur', 'pdf_link', 'pdf_link_anterieur',
 ];
+const PREVIOUS_LINK_COLUMNS = COURSE_COLUMNS.slice(2).filter(column => column.endsWith('_anterieur'));
+const hasPreviousLinks = sources => sources.some(source => PREVIOUS_LINK_COLUMNS.some(column => source[column]));
 const PROGRESS_PREFIX = 'tmp-moodle:completed:';
 
 // Prend en charge les virgules, retours à la ligne et guillemets dans les champs.
@@ -43,9 +45,40 @@ function parseCSV(text) {
     return rows;
 }
 
+// Accepte le format français ou ISO, sans décalage lié au fuseau horaire.
+function parseCourseDate(value) {
+    if (!value) return null;
+    const french = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(value);
+    const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+    if (!french && !iso) throw new Error('Date incorrecte : utilisez JJ/MM/AAAA ou AAAA-MM-JJ.');
+    const [, year, month, day] = iso || [null, french[3], french[2], french[1]];
+    const date = new Date(`${year}-${month}-${day}T12:00:00Z`);
+    if (!Number(year) || Number.isNaN(date.getTime()) || date.getUTCFullYear() !== Number(year)
+        || date.getUTCMonth() + 1 !== Number(month) || date.getUTCDate() !== Number(day)) {
+        throw new Error('Date de cours inexistante.');
+    }
+    return { iso: `${year}-${month}-${day}`, label: `${day}/${month}/${year}` };
+}
+
+function isCourseDue(isoDate, today = new Date()) {
+    const localToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    return isoDate <= localToday;
+}
+
+function courseScheduleStyle(course, isoDate, today = new Date()) {
+    const todayISO = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const presentiel = Boolean(course.Presentiel?.trim());
+    const visio = Boolean(course.Visio?.trim());
+    if (isoDate >= todayISO && (presentiel || visio)) {
+        return { key: presentiel && visio ? 'cours.date_hybride' : presentiel ? 'cours.date_presentiel' : 'cours.date_visio', className: presentiel ? 'course-date-session' : 'course-date-session course-date-visio' };
+    }
+    const due = isCourseDue(isoDate, today);
+    return { key: due ? 'cours.date_programmee' : 'cours.date_prevue', className: due ? 'course-date-due' : '' };
+}
+
 function readSources(text) {
     const [headers, ...rows] = parseCSV(text);
-    if (!headers || ['semestre', 'ue_numero', 'ue_nom', 'cours_numero', 'cours_nom', ...COURSE_COLUMNS.slice(2), 'id'].some(column => !headers.includes(column))) {
+    if (!headers || ['semestre', 'ue_numero', 'ue_nom', 'cours_numero', 'cours_nom', ...COURSE_COLUMNS.slice(2), 'id', 'date', 'Presentiel', 'Visio'].some(column => !headers.includes(column))) {
         throw new Error('Les colonnes attendues sont absentes de sources.csv.');
     }
     const ids = new Set();
@@ -55,6 +88,7 @@ function readSources(text) {
         }
         const course = Object.fromEntries(headers.map((header, i) => [header, row[i].trim()]));
 
+        parseCourseDate(course.date);
         if (!/^[1-9]\d*$/.test(course.semestre)) {
             throw new Error(`Semestre incorrect à la ligne ${index + 2}.`);
         }
@@ -97,9 +131,10 @@ function element(tag, className, text) {
 
 function renderCourse(course) {
     const item = element('li', 'list-group-item');
-    const primary = course.video_link_1 || course.video_link_1_backup
-        || course.video_link_2 || course.video_link_2_backup
-        || course.pdf_link || course.pdf_link_backup;
+    const primaryColumn = ['video_link_1', 'video_link_2', 'pdf_link',
+        'video_link_1_anterieur', 'video_link_2_anterieur', 'pdf_link_anterieur']
+        .find(column => course[column]);
+    const primary = course[primaryColumn];
     const title = element(primary ? 'a' : 'span', 'course-title', course.cours);
     if (primary) title.href = primary;
     const heading = element('div', 'course-heading');
@@ -110,31 +145,43 @@ function renderCourse(course) {
     report.rel = 'noopener noreferrer';
     report.title = SiteTexts.get('cours.signaler', { cours: course.cours, id: course.id });
     report.setAttribute('aria-label', report.title);
-    heading.append(title, report);
+    const courseLabel = element('div', 'course-label');
+    courseLabel.append(title);
+    heading.append(courseLabel, report);
     item.append(heading);
 
     const links = element('div', 'course-links');
-    const split = Boolean(course.video_link_2 || course.video_link_2_backup);
+    const split = Boolean(course.video_link_2 || course.video_link_2_anterieur);
     const labels = [
         ['video_link_1', split ? SiteTexts.get('cours.premiere_partie') : SiteTexts.get('cours.enregistrement')],
         ['video_link_2', SiteTexts.get('cours.seconde_partie')],
-        ['video_link_1_backup', split ? SiteTexts.get('cours.secours_premiere_partie') : SiteTexts.get('cours.secours_video')],
-        ['video_link_2_backup', SiteTexts.get('cours.secours_seconde_partie')],
+        ['video_link_1_anterieur', split ? SiteTexts.get('cours.anterieur_premiere_partie') : SiteTexts.get('cours.video_anterieure')],
+        ['video_link_2_anterieur', SiteTexts.get('cours.anterieur_seconde_partie')],
         ['pdf_link', SiteTexts.get('cours.pdf')],
-        ['pdf_link_backup', SiteTexts.get('cours.pdf_secours')],
+        ['pdf_link_anterieur', SiteTexts.get('cours.pdf_anterieur')],
     ];
     if (!COURSE_COLUMNS.slice(2, 6).some(column => course[column])) {
         links.append(element('span', 'badge bg-danger', SiteTexts.get('cours.sans_enregistrement')));
     }
     for (const [column, label] of labels) {
         if (!course[column]) continue;
-        const link = element('a', 'badge bg-secondary', label);
+        const link = element('a', column.endsWith('_anterieur') ? 'badge link-anterieur' : 'badge bg-secondary', label);
         link.href = course[column];
         links.append(link);
     }
     item.append(links);
 
     const completion = element('div', 'course-completion');
+    const scheduledDate = parseCourseDate(course.date);
+    if (scheduledDate) {
+        const style = courseScheduleStyle(course, scheduledDate.iso);
+        const date = element('time', 'course-date', SiteTexts.get(style.key, { date: scheduledDate.label }));
+        date.dateTime = scheduledDate.iso;
+        if (style.className) date.classList.add(...style.className.split(' '));
+        completion.append(date);
+    } else {
+        completion.append(element('span', 'course-date', SiteTexts.get('cours.non_programme')));
+    }
     const label = element('label', 'form-check');
     const checkbox = element('input', 'form-check-input');
     checkbox.type = 'checkbox';
@@ -170,6 +217,37 @@ function renderCourse(course) {
     return item;
 }
 
+function coursesByDay(courses, today = new Date()) {
+    return [0, 1].map(offset => {
+        const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset, 12);
+        const iso = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
+        return { offset, courses: courses.filter(course => course.semestre === '3' && parseCourseDate(course.date)?.iso === iso)
+            .sort((a, b) => a.ue_numero.localeCompare(b.ue_numero, 'fr', { numeric: true }) || Number(a.cours_numero) - Number(b.cours_numero)) };
+    });
+}
+
+function renderDailySchedule(courses) {
+    const schedule = element('section', 'daily-schedule');
+    schedule.setAttribute('aria-label', SiteTexts.get('planning.titre'));
+    for (const day of coursesByDay(courses)) {
+        const row = element('div', 'daily-schedule-day');
+        row.append(element('h3', 'daily-schedule-heading', SiteTexts.get(day.offset ? 'planning.demain' : 'planning.aujourdhui')));
+        if (!day.courses.length) {
+            row.append(element('p', 'daily-schedule-empty', SiteTexts.get('planning.aucun')));
+        } else {
+            const list = element('ul', 'daily-schedule-list');
+            for (const course of day.courses) {
+                const item = element('li', 'daily-schedule-course');
+                item.append(element('span', 'daily-schedule-ue', `UE ${course.ue_numero}`), element('span', '', course.cours_nom));
+                list.append(item);
+            }
+            row.append(list);
+        }
+        schedule.append(row);
+    }
+    return schedule;
+}
+
 function renderCourses(courses) {
     const semesters = new Map();
     for (const course of courses) {
@@ -187,8 +265,7 @@ function renderCourses(courses) {
         title.id = `semester-title-${semester}`;
         heading.append(title, element('span', '', SiteTexts.get('navigation.sous_titre')));
         intro.append(heading);
-        if (semester === sorted[0][0]) {
-        }
+        if (semester === '3') fragment.append(renderDailySchedule(group));
         const accordion = element('div', 'accordion course-accordion');
         accordion.id = `accordionS${semester}`;
         accordion.setAttribute('aria-label', SiteTexts.get('navigation.cours_semestre', { semestre: semester }));
@@ -233,10 +310,9 @@ function renderUEs(courses, accordion) {
         panel.setAttribute('aria-labelledby', heading.id);
         panel.setAttribute('data-bs-parent', `#${accordion.id}`);
         const body = element('div', 'accordion-body');
-        // Conserve les indications de mise à jour de la page d’origine.
-        const previousYear = /^S3 UE (1\.2|2\.5)\s*-/.test(ue);
-        const notice = previousYear ? SiteTexts.get('cours.annee_precedente') : SiteTexts.get('cours.a_jour');
-        if (group[0].semestre === '3' && notice) body.append(element('strong', 'course-notice', notice));
+        if (hasPreviousLinks(group)) {
+            body.append(element('p', 'course-notice previous-year-legend', SiteTexts.get('cours.legende_anterieurs')));
+        }
         const list = element('ul', 'list-group');
         for (const course of group) list.append(renderCourse(course));
         function updateProgress() {
@@ -260,12 +336,13 @@ function renderOtherSemesters(text) {
     const fragment = document.createDocumentFragment();
     const sources = readSources(text).filter(source => !source.cours_nom)
         .sort((a, b) => Number(a.semestre) - Number(b.semestre));
+    document.getElementById("other-semesters-legend").hidden = !hasPreviousLinks(sources);
     for (const source of sources) {
         const tr = element("tr");
         const heading = element("th", "", `S${source.semestre}`);
         heading.scope = "row";
         tr.append(heading);
-        for (const columns of [["video_link_1", "video_link_2", "video_link_1_backup", "video_link_2_backup"], ["pdf_link", "pdf_link_backup"]]) {
+        for (const columns of [["video_link_1", "video_link_2", "video_link_1_anterieur", "video_link_2_anterieur"], ["pdf_link", "pdf_link_anterieur"]]) {
             const cell = element("td");
             let count = 0;
             for (const column of columns) {
@@ -273,11 +350,18 @@ function renderOtherSemesters(text) {
                 const url = new URL(source[column]);
                 if (!["https:", "http:"].includes(url.protocol)) throw new Error("Lien de semestre incorrect.");
                 if (count++) cell.append(element("span", "", " · "));
-                const link = element("a", "", column.endsWith("backup") ? SiteTexts.get('cours.secours') : SiteTexts.get('cours.acceder'));
+                const link = element("a", column.endsWith("_anterieur") ? "link-anterieur" : "", column.endsWith("_anterieur") ? SiteTexts.get('cours.anterieur') : SiteTexts.get('cours.acceder'));
                 link.href = url.href;
                 cell.append(link);
             }
-            if (!count) cell.textContent = SiteTexts.get('cours.bientot');
+            if (!count) {
+                const recordings = columns[0] === 'video_link_1';
+                cell.textContent = recordings ? '—' : SiteTexts.get('cours.bientot');
+                if (recordings) {
+                    cell.title = SiteTexts.get('cours.enregistrements_indisponibles');
+                    cell.setAttribute('aria-label', cell.title);
+                }
+            }
             tr.append(cell);
         }
         fragment.append(tr);
