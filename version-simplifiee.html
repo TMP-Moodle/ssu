@@ -55,21 +55,22 @@ button, input, a { touch-action: manipulation; }
 .accordion-button:not(.collapsed) { box-shadow: none; border-radius: 0; }
 .accordion-button:focus-visible { outline-offset: -4px; }
 .accordion-body { padding: 0 20px 12px; }
-.course-notice { display: block; margin: 0; padding: 16px 0 0; color: var(--muted); font-weight: 400; font-size: 12px; }
 .list-group { --bs-list-group-border-radius: 0; --bs-list-group-bg: transparent; --bs-list-group-color: var(--ink); --bs-list-group-border-color: var(--line); }
 .list-group-item { display: grid; grid-template-columns: minmax(0, 1fr) 224px; column-gap: var(--space-24); row-gap: var(--space-8); padding: 16px 0; border: 0; border-top: 1px solid var(--line); }
 .list-group-item:first-child { border-top: 0; }
 .list-group > .list-group-item + .list-group-item { border-top: 1px solid var(--line); }
-.course-notice + .list-group { margin-top: 12px; border-top: 1px solid var(--line); }
-.course-notice + .list-group > .list-group-item:first-child { padding-top: 12px; }
 .course-title { color: var(--ink); font-size: 14px; line-height: 1.6; font-weight: 550; grid-column: 1; }
 .course-heading { grid-column: 1; grid-row: 1; display: flex; align-items: center; min-height: 32px; }
 .course-report { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; min-width: 32px; min-height: 32px; margin: 0; color: var(--muted); background: transparent; box-shadow: inset 0 0 0 1px var(--line); transition: background-color .15s ease, color .15s ease, box-shadow .15s ease; border-radius: 6px; font-size: 18px; }
 .course-report:hover { color: var(--accent); background: var(--soft); text-decoration: none; }
 .course-links { grid-column: 1; grid-row: 2; display: flex; flex-wrap: wrap; gap: var(--space-8); margin: 0; align-items: center; }
-.course-links a.badge { background: var(--soft) !important; color: var(--accent); border: 1px solid var(--line); border-radius: 7px; font-size: 11px; font-weight: 500; padding: 8px 10px; }
-.course-links a.badge:hover { border-color: var(--accent); text-decoration: none; }
-.course-links span.badge { background: transparent !important; color: var(--muted); font-size: 11px; white-space: normal; text-align: left; padding: 4px 0; font-weight: 400; }
+.course-links a.badge { display: inline-flex; align-items: center; gap: 6px; background: var(--due-bg) !important; color: var(--due-ink); border: 1px solid var(--due-border); border-radius: 7px; font-size: 11px; font-weight: 500; padding: 8px 10px; }
+.resource-label { min-width: 0; }
+.resource-icon { display: inline-block; flex: 0 0 14px; width: 14px; height: 14px; background: currentColor; -webkit-mask: var(--resource-symbol) center / contain no-repeat; mask: var(--resource-symbol) center / contain no-repeat; }
+.resource-icon-video { --resource-symbol: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='5' width='13' height='14' rx='2'/%3E%3Cpath d='m15 9 7-4v14l-7-4'/%3E%3C/svg%3E"); }
+.resource-icon-document { --resource-symbol: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z'/%3E%3Cpath d='M14 2v6h6M8 13h8M8 17h6'/%3E%3C/svg%3E"); }
+.course-links a.badge:hover { border-color: var(--due-ink); text-decoration: none; }
+.resource-unavailable { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; background: var(--upcoming-bg) !important; color: var(--upcoming-ink); border: 1px solid var(--upcoming-border); border-radius: 7px; font-size: 11px; font-weight: 400; white-space: normal; text-align: left; padding: 8px 10px; }
 /* Les éléments du suivi suivent les mêmes lignes que le titre et les ressources. */
 .course-completion { display: contents; }
 .course-schedule { grid-column: 2; grid-row: 1; align-self: center; justify-self: end; display: flex; align-items: center; gap: 6px; min-width: 0; max-width: 100%; }
@@ -146,19 +147,21 @@ footer p { max-width: 740px; margin: 0; }
     .course-accordion summary.accordion-button::after { width: 8px; height: 8px; justify-self: center; margin: 0; }
     .accordion-body { padding: 0 var(--space-12) var(--space-8); }
     .course-accordion .accordion-body { padding-inline: var(--space-8); }
-    .course-notice { padding-top: var(--space-12); }
-    .course-notice + .list-group { margin-top: var(--space-8); }
     .table { font-size: 12px; margin-block: 10px 0; }
     .table th, .table td { padding: 12px 4px; }
     .table td a { white-space: nowrap; }
-    .list-group-item { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-8); }
-    .course-notice + .list-group > .list-group-item:first-child { padding-top: var(--space-8); }
-    .course-links { grid-row: 3; }
-    .course-completion { grid-column: 1; grid-row: 2; display: grid; grid-template-columns: minmax(0, 1fr) max-content; align-items: center; justify-content: start; gap: var(--space-8); width: 100%; max-width: 296px; }
-    .course-schedule { grid-column: 1; grid-row: 2; justify-self: start; gap: 4px; }
-    .course-completion > .course-schedule { grid-column: 1; grid-row: 1; }
-    .course-completion > label { grid-column: 2; grid-row: 1; justify-self: start; white-space: nowrap; }
+    /* Même présentation que sur ordinateur, répartie sur la largeur disponible. */
+    .course-accordion .accordion-body { padding-inline: var(--space-12); }
+    .list-group-item { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-8); padding-block: var(--space-12); }
+    .course-heading { min-width: 0; min-height: 0; }
+    .course-completion { grid-column: 1; grid-row: 2; display: grid; grid-template-columns: minmax(0, max-content) max-content; justify-content: start; align-items: center; gap: 4px; min-width: 0; }
+    .course-completion > .course-schedule { grid-column: 1; grid-row: 1; justify-self: start; gap: 4px; }
+    .course-completion > label { grid-column: 2; grid-row: 1; justify-self: end; position: relative; min-height: calc(11px * 1.5 + 10px); padding: 4px 8px; border-radius: 6px; background: transparent; box-shadow: inset 0 0 0 1px var(--line); font-size: 11px; line-height: 1.5; white-space: nowrap; }
+    .course-completion > label::after { content: ''; position: absolute; top: calc(50% - 22px); left: 0; width: 100%; height: 44px; }
     .course-completion .completion-feedback { grid-column: 1 / -1; grid-row: 2; }
+    .course-links { grid-column: 1; grid-row: 3; min-width: 0; }
+    .course-links .badge { display: inline-flex; align-items: center; min-height: calc(11px * 1.5 + 10px); max-width: 100%; padding: 4px 8px; line-height: 1.5; }
+    .list-group-item > .course-schedule { grid-column: 1; grid-row: 2; justify-self: start; }
     #accordionOtherSemester .accordion-button { padding-block: var(--space-8); min-height: 44px; }
     footer { margin-top: var(--space-16); padding-block: var(--space-8); }
 }
@@ -167,7 +170,6 @@ footer p { max-width: 740px; margin: 0; }
 [data-texte],
 #theme-toggle,
 #courses-status,
-.course-notice,
 .course-links .badge,
 .form-check-label,
 .completion-feedback,
@@ -181,20 +183,20 @@ footer p { max-width: 740px; margin: 0; }
 
 /* Une teinte discrète distingue uniquement les liens vers les ressources antérieures. */
 :root, [data-bs-theme="light"] {
-    --previous-bg: #f0edf5;
-    --previous-ink: #68577d;
-    --previous-border: #dcd4e5;
+    --previous-bg: #f7f1e6;
+    --previous-ink: #79520b;
+    --previous-border: #e3d7bf;
 }
 [data-bs-theme="dark"] {
-    --previous-bg: #302b38;
-    --previous-ink: #c9bbdb;
-    --previous-border: #4f445e;
+    --previous-bg: #332f26;
+    --previous-ink: #e8c886;
+    --previous-border: #5c513c;
 }
 @media (prefers-color-scheme: dark) {
     :root:not([data-bs-theme]) {
-        --previous-bg: #302b38;
-        --previous-ink: #c9bbdb;
-        --previous-border: #4f445e;
+        --previous-bg: #332f26;
+        --previous-ink: #e8c886;
+        --previous-border: #5c513c;
     }
 }
 .table a.link-anterieur,
@@ -204,15 +206,15 @@ footer p { max-width: 740px; margin: 0; }
     border: 1px solid var(--previous-border);
     border-radius: 7px;
 }
+.course-links a.badge.link-anterieur:hover { border-color: var(--previous-ink); }
 .table a.link-anterieur { display: inline-block; padding: 4px 8px; }
-.previous-year-legend { white-space: pre-wrap; overflow-wrap: anywhere; }
 
 .course-label { min-width: 0; overflow-wrap: anywhere; }
 .course-date { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 400; line-height: 1.5; }
 
 .course-completion .course-date { margin: 0; }
 
-/* Le bleu ardoise distingue les dates arrivées du vert et du mauve existants. */
+/* Le bleu ardoise distingue les dates arrivées des dates à venir. */
 :root, [data-bs-theme="light"] {
     --visio-bg: #fbefdf; --visio-ink: #89521e; --visio-border: #e9cfaa;
     --session-bg: #f8eaea; --session-ink: #8b4149; --session-border: #e9c9cd;
@@ -366,214 +368,212 @@ details.accordion-item[open] > summary { background: var(--soft); border-radius:
 <div class="intro"><div class="semester-heading"><h1 id="semestre-3">Semestre 3</h1><span>Vidéos &amp; PDF</span></div></div>
 <div class="course-accordion" aria-label="Cours du semestre 3">
 <details class="accordion-item"><summary class="accordion-button"><span class="ue-title"><span class="ue-number">UE 1.2</span><span class="ue-separator"> — </span><span class="ue-name">Santé publique et économie de la santé</span></span></summary><div class="accordion-body">
-<p class="course-notice previous-year-legend">⚠️  Les liens sur fond mauve correspondent aux enregistrements et aux PDF de l’année précédente. Le contenu du cours peut avoir changé depuis.</p>
 <ul class="list-group">
 <li class="list-group-item" id="S3_UE1.2_COURS1"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235524251" class="course-title">1. Introduction aux biostatistiques et à l&#x27;épidémiologie</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%201.2%20Introduction%20aux%20biostatistiques%20et%20%C3%A0%20l%27%C3%A9pid%C3%A9miologie" class="course-report" title="Signaler un lien inaccessible — 1. Introduction aux biostatistiques et à l&#x27;épidémiologie (S3_UE1.2_COURS1)" aria-label="Signaler un lien inaccessible — 1. Introduction aux biostatistiques et à l&#x27;épidémiologie (S3_UE1.2_COURS1)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-10-16">Programmé le 16/10/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235524251" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=e195cbd5-fab7-41cb-8b4c-a2ae149a4ce2" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235524251" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=e195cbd5-fab7-41cb-8b4c-a2ae149a4ce2" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE1.2_COURS2"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235524028" class="course-title">2. Enjeux de santé publique en périnatalité</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%201.2%20Enjeux%20de%20sant%C3%A9%20publique%20en%20p%C3%A9rinatalit%C3%A9" class="course-report" title="Signaler un lien inaccessible — 2. Enjeux de santé publique en périnatalité (S3_UE1.2_COURS2)" aria-label="Signaler un lien inaccessible — 2. Enjeux de santé publique en périnatalité (S3_UE1.2_COURS2)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-05">Programmé le 05/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235524028" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=0bcce203-9aba-44ff-ae15-b3a93cbc1336&amp;r=view" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235524028" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=0bcce203-9aba-44ff-ae15-b3a93cbc1336&amp;r=view" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE1.2_COURS3"><div class="course-heading"><div class="course-label"><a href="https://mega.nz/file/yuhlnDqL#pfwZpNzH1DqAH5idMNocv7Fm4t7cgmuzL9dTbhPF6IE" class="course-title">3. Santé des femmes</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%201.2%20Sant%C3%A9%20des%20femmes" class="course-report" title="Signaler un lien inaccessible — 3. Santé des femmes (S3_UE1.2_COURS3)" aria-label="Signaler un lien inaccessible — 3. Santé des femmes (S3_UE1.2_COURS3)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-02">Programmé le 02/11/2026</time></div><div class="course-links">
-<a href="https://mega.nz/file/yuhlnDqL#pfwZpNzH1DqAH5idMNocv7Fm4t7cgmuzL9dTbhPF6IE" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=e385a1bc-2156-4936-bb3e-38ce0b308d75&amp;r=view" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://mega.nz/file/yuhlnDqL#pfwZpNzH1DqAH5idMNocv7Fm4t7cgmuzL9dTbhPF6IE" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=e385a1bc-2156-4936-bb3e-38ce0b308d75&amp;r=view" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE1.2_COURS4"><div class="course-heading"><div class="course-label"><a href="https://smallpdf.com/file#s=b51f7541-980c-43ec-8008-5cdcd8affee1" class="course-title">4. Impact des maladies infectieuses en santé</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%201.2%20Impact%20des%20maladies%20infectieuses%20en%20sant%C3%A9" class="course-report" title="Signaler un lien inaccessible — 4. Impact des maladies infectieuses en santé (S3_UE1.2_COURS4)" aria-label="Signaler un lien inaccessible — 4. Impact des maladies infectieuses en santé (S3_UE1.2_COURS4)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-upcoming" datetime="2026-11-09">Prévu le 09/11/2026</time></div><div class="course-links">
-<span class="badge">Pas d’enregistrement disponible</span>
-<a href="https://smallpdf.com/file#s=b51f7541-980c-43ec-8008-5cdcd8affee1" class="badge link-anterieur">PDF (année précédente)</a>
+<span class="badge resource-unavailable"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Pas d’enregistrement disponible</span></span>
+<a href="https://smallpdf.com/file#s=b51f7541-980c-43ec-8008-5cdcd8affee1" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE1.2_COURS5"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235524291" class="course-title">5. Le vieillissement, un défi à relever pour la santé</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%201.2%20Le%20vieillissement%2C%20un%20d%C3%A9fi%20%C3%A0%20relever%20pour%20la%20sant%C3%A9" class="course-report" title="Signaler un lien inaccessible — 5. Le vieillissement, un défi à relever pour la santé (S3_UE1.2_COURS5)" aria-label="Signaler un lien inaccessible — 5. Le vieillissement, un défi à relever pour la santé (S3_UE1.2_COURS5)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-upcoming" datetime="2026-11-10">Prévu le 10/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235524291" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=c804659c-b4d2-438b-a6c1-21f9d97361c5&amp;r=view" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235524291" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=c804659c-b4d2-438b-a6c1-21f9d97361c5&amp;r=view" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 </ul></div></details>
 <details class="accordion-item"><summary class="accordion-button"><span class="ue-title"><span class="ue-number">UE 2.5</span><span class="ue-separator"> — </span><span class="ue-name">Processus inflammatoires et infectieux</span></span></summary><div class="accordion-body">
-<p class="course-notice previous-year-legend">⚠️  Les liens sur fond mauve correspondent aux enregistrements et aux PDF de l’année précédente. Le contenu du cours peut avoir changé depuis.</p>
 <ul class="list-group">
 <li class="list-group-item" id="S3_UE2.5_COURS1"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235533525" class="course-title">1. Infections du voyageur</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Infections%20du%20voyageur" class="course-report" title="Signaler un lien inaccessible — 1. Infections du voyageur (S3_UE2.5_COURS1)" aria-label="Signaler un lien inaccessible — 1. Infections du voyageur (S3_UE2.5_COURS1)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-05">Programmé le 05/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235533525" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=0befe73b-4bcc-4ed0-9d87-ff823d6d37e3" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235533525" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=0befe73b-4bcc-4ed0-9d87-ff823d6d37e3" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS2"><div class="course-heading"><div class="course-label"><a href="https://mega.nz/file/mvAGyRyL#d35y7rGkN9adUVyDtziQOkf2RXTOAWUBiaI8bNPCS6c" class="course-title">2. Infection par le VIH-SIDA</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Infection%20par%20le%20VIH-SIDA" class="course-report" title="Signaler un lien inaccessible — 2. Infection par le VIH-SIDA (S3_UE2.5_COURS2)" aria-label="Signaler un lien inaccessible — 2. Infection par le VIH-SIDA (S3_UE2.5_COURS2)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-30">Présentiel le 30/11/2026</time></div><div class="course-links">
-<a href="https://mega.nz/file/mvAGyRyL#d35y7rGkN9adUVyDtziQOkf2RXTOAWUBiaI8bNPCS6c" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=73af0325-5abb-44d5-ad5e-8764191e8760" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://mega.nz/file/mvAGyRyL#d35y7rGkN9adUVyDtziQOkf2RXTOAWUBiaI8bNPCS6c" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=73af0325-5abb-44d5-ad5e-8764191e8760" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS3"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235533077" class="course-title">3. Traitements anti-rétroviraux</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Traitements%20anti-r%C3%A9troviraux" class="course-report" title="Signaler un lien inaccessible — 3. Traitements anti-rétroviraux (S3_UE2.5_COURS3)" aria-label="Signaler un lien inaccessible — 3. Traitements anti-rétroviraux (S3_UE2.5_COURS3)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-30">Présentiel le 30/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235533077" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=d87d87a9-7832-4108-9c81-a92b393edf6e" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235533077" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=d87d87a9-7832-4108-9c81-a92b393edf6e" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS4"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235533042" class="course-title">4. Infection du sujet âgé</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Infection%20du%20sujet%20%C3%A2g%C3%A9" class="course-report" title="Signaler un lien inaccessible — 4. Infection du sujet âgé (S3_UE2.5_COURS4)" aria-label="Signaler un lien inaccessible — 4. Infection du sujet âgé (S3_UE2.5_COURS4)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-09">Présentiel le 09/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235533042" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=50e92ff0-5bb2-43dd-8aff-10f2bf73d585" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235533042" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=50e92ff0-5bb2-43dd-8aff-10f2bf73d585" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS5"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235533638" class="course-title">5. Mécanisme inflammatoire et immunité</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20M%C3%A9canisme%20inflammatoire%20et%20immunit%C3%A9" class="course-report" title="Signaler un lien inaccessible — 5. Mécanisme inflammatoire et immunité (S3_UE2.5_COURS5)" aria-label="Signaler un lien inaccessible — 5. Mécanisme inflammatoire et immunité (S3_UE2.5_COURS5)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-17">Présentiel le 17/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235533638" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=0c069698-06b4-4050-a55f-151e78ecfabe" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235533638" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=0c069698-06b4-4050-a55f-151e78ecfabe" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS6"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235533792" class="course-title">6. Processus infectieux</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Processus%20infectieux" class="course-report" title="Signaler un lien inaccessible — 6. Processus infectieux (S3_UE2.5_COURS6)" aria-label="Signaler un lien inaccessible — 6. Processus infectieux (S3_UE2.5_COURS6)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-02">Programmé le 02/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235533792" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=76fbbbc0-937e-47a3-95fb-533936e08517" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235533792" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=76fbbbc0-937e-47a3-95fb-533936e08517" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS7"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235533806" class="course-title">7. Fièvre et septicémie</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Fi%C3%A8vre%20et%20septic%C3%A9mie" class="course-report" title="Signaler un lien inaccessible — 7. Fièvre et septicémie (S3_UE2.5_COURS7)" aria-label="Signaler un lien inaccessible — 7. Fièvre et septicémie (S3_UE2.5_COURS7)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-02">Programmé le 02/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235533806" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=d36964bd-0c36-48c9-a3cc-c83ca74dd056" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235533806" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=d36964bd-0c36-48c9-a3cc-c83ca74dd056" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS8"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235533921" class="course-title">8. Pneumopathie</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Pneumopathie" class="course-report" title="Signaler un lien inaccessible — 8. Pneumopathie (S3_UE2.5_COURS8)" aria-label="Signaler un lien inaccessible — 8. Pneumopathie (S3_UE2.5_COURS8)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-17">Présentiel le 17/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235533921" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=51014ae5-2422-4f06-88d9-2106b65e6bb5" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235533921" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=51014ae5-2422-4f06-88d9-2106b65e6bb5" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS9"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235534000" class="course-title">9. Infection chez la femme enceinte</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Infection%20chez%20la%20femme%20enceinte" class="course-report" title="Signaler un lien inaccessible — 9. Infection chez la femme enceinte (S3_UE2.5_COURS9)" aria-label="Signaler un lien inaccessible — 9. Infection chez la femme enceinte (S3_UE2.5_COURS9)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-10">Présentiel le 10/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235534000" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=6afc52ab-c21b-43a9-a9b4-2ed792f6bbdd" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235534000" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=6afc52ab-c21b-43a9-a9b4-2ed792f6bbdd" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS10"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235534039" class="course-title">10. Infections urinaires et infections ostéo-articulaires</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Infections%20urinaires%20et%20infections%20ost%C3%A9o-articulaires" class="course-report" title="Signaler un lien inaccessible — 10. Infections urinaires et infections ostéo-articulaires (S3_UE2.5_COURS10)" aria-label="Signaler un lien inaccessible — 10. Infections urinaires et infections ostéo-articulaires (S3_UE2.5_COURS10)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session course-date-visio" datetime="2026-11-09">Visio le 09/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235534039" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=99727925-02cb-434b-8ac8-461ad906f723" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235534039" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=99727925-02cb-434b-8ac8-461ad906f723" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS11"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235534100" class="course-title">11. Infections liées aux soins</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Infections%20li%C3%A9es%20aux%20soins" class="course-report" title="Signaler un lien inaccessible — 11. Infections liées aux soins (S3_UE2.5_COURS11)" aria-label="Signaler un lien inaccessible — 11. Infections liées aux soins (S3_UE2.5_COURS11)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-05">Programmé le 05/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235534100" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=90d35a48-5c3c-4150-b530-b47010a3c31b" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235534100" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=90d35a48-5c3c-4150-b530-b47010a3c31b" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS12"><div class="course-heading"><div class="course-label"><a href="https://smallpdf.com/file#s=f1335fbf-2385-4ebd-b497-abc2d8d1f09c" class="course-title">12. Hépatites virales</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20H%C3%A9patites%20virales" class="course-report" title="Signaler un lien inaccessible — 12. Hépatites virales (S3_UE2.5_COURS12)" aria-label="Signaler un lien inaccessible — 12. Hépatites virales (S3_UE2.5_COURS12)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-12">Présentiel le 12/11/2026</time></div><div class="course-links">
-<span class="badge">Pas d’enregistrement disponible</span>
-<a href="https://smallpdf.com/file#s=f1335fbf-2385-4ebd-b497-abc2d8d1f09c" class="badge link-anterieur">PDF (année précédente)</a>
+<span class="badge resource-unavailable"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Pas d’enregistrement disponible</span></span>
+<a href="https://smallpdf.com/file#s=f1335fbf-2385-4ebd-b497-abc2d8d1f09c" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS13"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235534219" class="course-title">13. Tuberculose</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Tuberculose" class="course-report" title="Signaler un lien inaccessible — 13. Tuberculose (S3_UE2.5_COURS13)" aria-label="Signaler un lien inaccessible — 13. Tuberculose (S3_UE2.5_COURS13)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-27">Présentiel le 27/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235534219" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=38d3d19c-213f-44f9-9f9b-5c75736e2a1f" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235534219" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=38d3d19c-213f-44f9-9f9b-5c75736e2a1f" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS14"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235534356" class="course-title">14. Méningites / Encéphalites</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20M%C3%A9ningites%20%2F%20Enc%C3%A9phalites" class="course-report" title="Signaler un lien inaccessible — 14. Méningites / Encéphalites (S3_UE2.5_COURS14)" aria-label="Signaler un lien inaccessible — 14. Méningites / Encéphalites (S3_UE2.5_COURS14)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-27">Présentiel le 27/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235534356" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=9349e30f-581f-4e6a-ab68-1e8a4a7a0f5e" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235534356" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=9349e30f-581f-4e6a-ab68-1e8a4a7a0f5e" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS15"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235534442" class="course-title">15. Bactéries multirésistantes</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Bact%C3%A9ries%20multir%C3%A9sistantes" class="course-report" title="Signaler un lien inaccessible — 15. Bactéries multirésistantes (S3_UE2.5_COURS15)" aria-label="Signaler un lien inaccessible — 15. Bactéries multirésistantes (S3_UE2.5_COURS15)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-13">Présentiel le 13/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235534442" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=c4c1db90-463f-47ce-a23d-a5fd6e8f1806" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235534442" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=c4c1db90-463f-47ce-a23d-a5fd6e8f1806" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS16"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235534458" class="course-title">16. Infection chez l&#x27;immunodéprimé</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Infection%20chez%20l%27immunod%C3%A9prim%C3%A9" class="course-report" title="Signaler un lien inaccessible — 16. Infection chez l&#x27;immunodéprimé (S3_UE2.5_COURS16)" aria-label="Signaler un lien inaccessible — 16. Infection chez l&#x27;immunodéprimé (S3_UE2.5_COURS16)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-13">Présentiel le 13/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235534458" class="badge link-anterieur">Enregistrement (première partie, année précédente)</a>
-<a href="https://vimeo.com/1235534484" class="badge link-anterieur">Enregistrement (seconde partie, année précédente)</a>
-<a href="https://smallpdf.com/file#s=3861174f-dfd0-4d1f-9435-656f2beb31e9" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235534458" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (première partie, antérieur)</span></a>
+<a href="https://vimeo.com/1235534484" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (seconde partie, antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=3861174f-dfd0-4d1f-9435-656f2beb31e9" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS17"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235534624" class="course-title">17. Grippe</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Grippe" class="course-report" title="Signaler un lien inaccessible — 17. Grippe (S3_UE2.5_COURS17)" aria-label="Signaler un lien inaccessible — 17. Grippe (S3_UE2.5_COURS17)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-17">Présentiel le 17/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235534624" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=57f7ab8b-0411-440f-9e09-5629f3e5b501" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235534624" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=57f7ab8b-0411-440f-9e09-5629f3e5b501" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS18"><div class="course-heading"><div class="course-label"><a href="https://mega.nz/file/X2R1yLpT#qUco4C1RstNLaoy9UquFLehdseKXiAdQTKbTnAWukRE" class="course-title">18. Infections des parties molles - IST</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Infections%20des%20parties%20molles%20-%20IST" class="course-report" title="Signaler un lien inaccessible — 18. Infections des parties molles - IST (S3_UE2.5_COURS18)" aria-label="Signaler un lien inaccessible — 18. Infections des parties molles - IST (S3_UE2.5_COURS18)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-05">Programmé le 05/11/2026</time></div><div class="course-links">
-<a href="https://mega.nz/file/X2R1yLpT#qUco4C1RstNLaoy9UquFLehdseKXiAdQTKbTnAWukRE" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=0662d089-a607-4e60-b9a4-9a79e327504f" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://mega.nz/file/X2R1yLpT#qUco4C1RstNLaoy9UquFLehdseKXiAdQTKbTnAWukRE" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=0662d089-a607-4e60-b9a4-9a79e327504f" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS19"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235534750" class="course-title">19. Particularités des infections chez les enfants</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Particularit%C3%A9s%20des%20infections%20chez%20les%20enfants" class="course-report" title="Signaler un lien inaccessible — 19. Particularités des infections chez les enfants (S3_UE2.5_COURS19)" aria-label="Signaler un lien inaccessible — 19. Particularités des infections chez les enfants (S3_UE2.5_COURS19)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-12">Présentiel le 12/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235534750" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=a39cc01a-0fe5-4a2e-af07-b7678b472599" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235534750" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=a39cc01a-0fe5-4a2e-af07-b7678b472599" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.5_COURS20"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235534753" class="course-title">20. Vaccinations</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Vaccinations" class="course-report" title="Signaler un lien inaccessible — 20. Vaccinations (S3_UE2.5_COURS20)" aria-label="Signaler un lien inaccessible — 20. Vaccinations (S3_UE2.5_COURS20)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-session" datetime="2026-11-12">Présentiel le 12/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235534753" class="badge link-anterieur">Enregistrement (année précédente)</a>
-<a href="https://smallpdf.com/file#s=e7fa0fe6-8e70-4709-a3ba-ca9830dae625" class="badge link-anterieur">PDF (année précédente)</a>
+<a href="https://vimeo.com/1235534753" class="badge link-anterieur"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement (antérieur)</span></a>
+<a href="https://smallpdf.com/file#s=e7fa0fe6-8e70-4709-a3ba-ca9830dae625" class="badge link-anterieur"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF (antérieur)</span></a>
 </div></li>
 </ul></div></details>
 <details class="accordion-item"><summary class="accordion-button"><span class="ue-title"><span class="ue-number">UE 2.8</span><span class="ue-separator"> — </span><span class="ue-name">Processus obstructifs</span></span></summary><div class="accordion-body">
 <ul class="list-group">
 <li class="list-group-item" id="S3_UE2.8_COURS1"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235312729" class="course-title">1. Introduction à l&#x27;UE</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Introduction%20%C3%A0%20l%27UE" class="course-report" title="Signaler un lien inaccessible — 1. Introduction à l&#x27;UE (S3_UE2.8_COURS1)" aria-label="Signaler un lien inaccessible — 1. Introduction à l&#x27;UE (S3_UE2.8_COURS1)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-10-07">Programmé le 07/10/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235312729" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=499a0687-39b0-45c8-af61-42997b64f2bc&amp;r=view" class="badge">PDF</a>
+<a href="https://vimeo.com/1235312729" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=499a0687-39b0-45c8-af61-42997b64f2bc&amp;r=view" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS2"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235313012" class="course-title">2. BPCO</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20BPCO" class="course-report" title="Signaler un lien inaccessible — 2. BPCO (S3_UE2.8_COURS2)" aria-label="Signaler un lien inaccessible — 2. BPCO (S3_UE2.8_COURS2)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-10-29">Programmé le 29/10/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235313012" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=efc339e1-35a2-4726-bec4-c6de85785b5e" class="badge">PDF</a>
+<a href="https://vimeo.com/1235313012" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=efc339e1-35a2-4726-bec4-c6de85785b5e" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS3"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235313224" class="course-title">3. Troubles obstructifs digestifs en pédiatrie</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Troubles%20obstructifs%20digestifs%20en%20p%C3%A9diatrie" class="course-report" title="Signaler un lien inaccessible — 3. Troubles obstructifs digestifs en pédiatrie (S3_UE2.8_COURS3)" aria-label="Signaler un lien inaccessible — 3. Troubles obstructifs digestifs en pédiatrie (S3_UE2.8_COURS3)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-upcoming" datetime="2026-11-09">Prévu le 09/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235313224" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=ccab25f8-e662-47a9-94d6-70b9451b236f" class="badge">PDF</a>
+<a href="https://vimeo.com/1235313224" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=ccab25f8-e662-47a9-94d6-70b9451b236f" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS4"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235313355" class="course-title">4. Appareil urinaire</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Appareil%20urinaire" class="course-report" title="Signaler un lien inaccessible — 4. Appareil urinaire (S3_UE2.8_COURS4)" aria-label="Signaler un lien inaccessible — 4. Appareil urinaire (S3_UE2.8_COURS4)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-upcoming" datetime="2026-11-12">Prévu le 12/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235313355" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=18af779b-61a7-4467-8135-eed370694bec" class="badge">PDF</a>
+<a href="https://vimeo.com/1235313355" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=18af779b-61a7-4467-8135-eed370694bec" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS5"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235313480" class="course-title">5. Infarctus du myocarde</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Infarctus%20du%20myocarde" class="course-report" title="Signaler un lien inaccessible — 5. Infarctus du myocarde (S3_UE2.8_COURS5)" aria-label="Signaler un lien inaccessible — 5. Infarctus du myocarde (S3_UE2.8_COURS5)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-10-22">Programmé le 22/10/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235313480" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=55e22654-23c5-4982-80dc-e6f9293a41a3" class="badge">PDF</a>
+<a href="https://vimeo.com/1235313480" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=55e22654-23c5-4982-80dc-e6f9293a41a3" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS6"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235313619" class="course-title">6. AVC</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20AVC" class="course-report" title="Signaler un lien inaccessible — 6. AVC (S3_UE2.8_COURS6)" aria-label="Signaler un lien inaccessible — 6. AVC (S3_UE2.8_COURS6)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-10-20">Programmé le 20/10/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235313619" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=f599caf2-5881-4c55-b301-cc1311c27fc9" class="badge">PDF</a>
+<a href="https://vimeo.com/1235313619" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=f599caf2-5881-4c55-b301-cc1311c27fc9" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS7"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235313795" class="course-title">7. Troubles obstructifs respiratoires en pédiatrie</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Troubles%20obstructifs%20respiratoires%20en%20p%C3%A9diatrie" class="course-report" title="Signaler un lien inaccessible — 7. Troubles obstructifs respiratoires en pédiatrie (S3_UE2.8_COURS7)" aria-label="Signaler un lien inaccessible — 7. Troubles obstructifs respiratoires en pédiatrie (S3_UE2.8_COURS7)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-upcoming" datetime="2026-11-10">Prévu le 10/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235313795" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=434b05f5-f4f1-4aad-bbc9-bbf936d0a93e" class="badge">PDF</a>
+<a href="https://vimeo.com/1235313795" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=434b05f5-f4f1-4aad-bbc9-bbf936d0a93e" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS8"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235313902" class="course-title">8. Thrombose et embolie pulmonaire</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Thrombose%20et%20embolie%20pulmonaire" class="course-report" title="Signaler un lien inaccessible — 8. Thrombose et embolie pulmonaire (S3_UE2.8_COURS8)" aria-label="Signaler un lien inaccessible — 8. Thrombose et embolie pulmonaire (S3_UE2.8_COURS8)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-10-16">Programmé le 16/10/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235313902" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=2ae3878b-4b5d-46a9-9f64-edb0022db4d3" class="badge">PDF</a>
+<a href="https://vimeo.com/1235313902" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=2ae3878b-4b5d-46a9-9f64-edb0022db4d3" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS9"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235313908" class="course-title">9. Asthme</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Asthme" class="course-report" title="Signaler un lien inaccessible — 9. Asthme (S3_UE2.8_COURS9)" aria-label="Signaler un lien inaccessible — 9. Asthme (S3_UE2.8_COURS9)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-10-22">Programmé le 22/10/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235313908" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=aabe7296-dcaa-42cf-b5e5-e84a07479433" class="badge">PDF</a>
+<a href="https://vimeo.com/1235313908" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=aabe7296-dcaa-42cf-b5e5-e84a07479433" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS10"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235308564" class="course-title">10. Occlusion intestinale aigüe</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Occlusion%20intestinale%20aig%C3%BCe" class="course-report" title="Signaler un lien inaccessible — 10. Occlusion intestinale aigüe (S3_UE2.8_COURS10)" aria-label="Signaler un lien inaccessible — 10. Occlusion intestinale aigüe (S3_UE2.8_COURS10)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-10-13">Programmé le 13/10/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235308564" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=fe9f4669-a090-4f7e-9b3c-43ace8aa4465" class="badge">PDF</a>
+<a href="https://vimeo.com/1235308564" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=fe9f4669-a090-4f7e-9b3c-43ace8aa4465" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS11"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235313935" class="course-title">11. Pathologies obstructives</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Pathologies%20obstructives" class="course-report" title="Signaler un lien inaccessible — 11. Pathologies obstructives (S3_UE2.8_COURS11)" aria-label="Signaler un lien inaccessible — 11. Pathologies obstructives (S3_UE2.8_COURS11)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-10-20">Programmé le 20/10/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235313935" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=249ed4ec-1cc7-4236-bc65-9515777448f8" class="badge">PDF</a>
+<a href="https://vimeo.com/1235313935" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=249ed4ec-1cc7-4236-bc65-9515777448f8" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS12"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235314061" class="course-title">12. Maladies inflammatoires du tube digestif</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Maladies%20inflammatoires%20du%20tube%20digestif" class="course-report" title="Signaler un lien inaccessible — 12. Maladies inflammatoires du tube digestif (S3_UE2.8_COURS12)" aria-label="Signaler un lien inaccessible — 12. Maladies inflammatoires du tube digestif (S3_UE2.8_COURS12)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-upcoming" datetime="2026-11-12">Prévu le 12/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235314061" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=996736d0-f11d-4259-b545-2166dede8054" class="badge">PDF</a>
+<a href="https://vimeo.com/1235314061" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=996736d0-f11d-4259-b545-2166dede8054" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS13"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235314559" class="course-title">13. Artérite des membres inférieurs</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Art%C3%A9rite%20des%20membres%20inf%C3%A9rieurs" class="course-report" title="Signaler un lien inaccessible — 13. Artérite des membres inférieurs (S3_UE2.8_COURS13)" aria-label="Signaler un lien inaccessible — 13. Artérite des membres inférieurs (S3_UE2.8_COURS13)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-upcoming" datetime="2026-11-19">Prévu le 19/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235314559" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=bfce5be3-6225-4576-a253-13160da6212b" class="badge">PDF</a>
+<a href="https://vimeo.com/1235314559" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=bfce5be3-6225-4576-a253-13160da6212b" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.8_COURS14"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235314577" class="course-title">14. Pancreatite aigüe</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Pancreatite%20aig%C3%BCe" class="course-report" title="Signaler un lien inaccessible — 14. Pancreatite aigüe (S3_UE2.8_COURS14)" aria-label="Signaler un lien inaccessible — 14. Pancreatite aigüe (S3_UE2.8_COURS14)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-02">Programmé le 02/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235314577" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=a4f18233-9cf2-4f1d-a23f-b66e1ebd7f39" class="badge">PDF</a>
+<a href="https://vimeo.com/1235314577" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=a4f18233-9cf2-4f1d-a23f-b66e1ebd7f39" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 </ul></div></details>
 <details class="accordion-item"><summary class="accordion-button"><span class="ue-title"><span class="ue-number">UE 2.11</span><span class="ue-separator"> — </span><span class="ue-name">Pharmacologie et thérapeutiques</span></span></summary><div class="accordion-body">
 <ul class="list-group">
 <li class="list-group-item" id="S3_UE2.11_COURS1"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235341258" class="course-title">1. Antiviraux</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.11%20Antiviraux" class="course-report" title="Signaler un lien inaccessible — 1. Antiviraux (S3_UE2.11_COURS1)" aria-label="Signaler un lien inaccessible — 1. Antiviraux (S3_UE2.11_COURS1)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-04">Programmé le 04/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235341258" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=95602bb4-c5c9-4f79-a369-f07a19c61756" class="badge">PDF</a>
+<a href="https://vimeo.com/1235341258" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=95602bb4-c5c9-4f79-a369-f07a19c61756" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.11_COURS2"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235341325" class="course-title">2. Psychopharmacologie neuropharmacologie</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.11%20Psychopharmacologie%20neuropharmacologie" class="course-report" title="Signaler un lien inaccessible — 2. Psychopharmacologie neuropharmacologie (S3_UE2.11_COURS2)" aria-label="Signaler un lien inaccessible — 2. Psychopharmacologie neuropharmacologie (S3_UE2.11_COURS2)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-05">Programmé le 05/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235341325" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=d0fe2252-3609-4e71-a92b-710131d9dfee" class="badge">PDF</a>
+<a href="https://vimeo.com/1235341325" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=d0fe2252-3609-4e71-a92b-710131d9dfee" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.11_COURS3"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235341314" class="course-title">3. Antidiabétiques, médicaments de la thyroïde</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.11%20Antidiab%C3%A9tiques%2C%20m%C3%A9dicaments%20de%20la%20thyro%C3%AFde" class="course-report" title="Signaler un lien inaccessible — 3. Antidiabétiques, médicaments de la thyroïde (S3_UE2.11_COURS3)" aria-label="Signaler un lien inaccessible — 3. Antidiabétiques, médicaments de la thyroïde (S3_UE2.11_COURS3)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-04">Programmé le 04/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235341314" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=6834fd2d-4ec6-484c-bd84-6c4dafe21f27" class="badge">PDF</a>
+<a href="https://vimeo.com/1235341314" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=6834fd2d-4ec6-484c-bd84-6c4dafe21f27" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.11_COURS4"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235341366" class="course-title">4. Médicaments du tube digestif</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.11%20M%C3%A9dicaments%20du%20tube%20digestif" class="course-report" title="Signaler un lien inaccessible — 4. Médicaments du tube digestif (S3_UE2.11_COURS4)" aria-label="Signaler un lien inaccessible — 4. Médicaments du tube digestif (S3_UE2.11_COURS4)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-04">Programmé le 04/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235341366" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=021ea1c8-4ddf-4fda-a29a-aea3339f53b7" class="badge">PDF</a>
+<a href="https://vimeo.com/1235341366" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=021ea1c8-4ddf-4fda-a29a-aea3339f53b7" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.11_COURS5"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235341524" class="course-title">5. Dérivés nitrés, antagonistes calciques, bêta-bloquants médicaments de l’angor</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.11%20D%C3%A9riv%C3%A9s%20nitr%C3%A9s%2C%20antagonistes%20calciques%2C%20b%C3%AAta-bloquants%20m%C3%A9dicaments%20de%20l%E2%80%99angor" class="course-report" title="Signaler un lien inaccessible — 5. Dérivés nitrés, antagonistes calciques, bêta-bloquants médicaments de l’angor (S3_UE2.11_COURS5)" aria-label="Signaler un lien inaccessible — 5. Dérivés nitrés, antagonistes calciques, bêta-bloquants médicaments de l’angor (S3_UE2.11_COURS5)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-04">Programmé le 04/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235341524" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=cd5ed31e-408a-4763-be2c-f0cdc2418d7d" class="badge">PDF</a>
+<a href="https://vimeo.com/1235341524" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=cd5ed31e-408a-4763-be2c-f0cdc2418d7d" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.11_COURS6"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235341612" class="course-title">6. Médicaments de l’urgence</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.11%20M%C3%A9dicaments%20de%20l%E2%80%99urgence" class="course-report" title="Signaler un lien inaccessible — 6. Médicaments de l’urgence (S3_UE2.11_COURS6)" aria-label="Signaler un lien inaccessible — 6. Médicaments de l’urgence (S3_UE2.11_COURS6)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-06">Programmé le 06/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235341612" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=5ce3b8d8-dbb7-437c-a2b0-1db26e64c588" class="badge">PDF</a>
+<a href="https://vimeo.com/1235341612" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=5ce3b8d8-dbb7-437c-a2b0-1db26e64c588" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.11_COURS7"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235341634" class="course-title">7. Diurétiques</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.11%20Diur%C3%A9tiques" class="course-report" title="Signaler un lien inaccessible — 7. Diurétiques (S3_UE2.11_COURS7)" aria-label="Signaler un lien inaccessible — 7. Diurétiques (S3_UE2.11_COURS7)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-06">Programmé le 06/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235341634" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=039718ae-c261-47ff-a703-76f2c1352916" class="badge">PDF</a>
+<a href="https://vimeo.com/1235341634" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=039718ae-c261-47ff-a703-76f2c1352916" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.11_COURS8"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235341662" class="course-title">8. Principes des topiques en dermatologie</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.11%20Principes%20des%20topiques%20en%20dermatologie" class="course-report" title="Signaler un lien inaccessible — 8. Principes des topiques en dermatologie (S3_UE2.11_COURS8)" aria-label="Signaler un lien inaccessible — 8. Principes des topiques en dermatologie (S3_UE2.11_COURS8)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-02">Programmé le 02/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235341662" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=2751c175-6981-412c-aeb7-b1c07e0e87ed" class="badge">PDF</a>
+<a href="https://vimeo.com/1235341662" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=2751c175-6981-412c-aeb7-b1c07e0e87ed" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.11_COURS9"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235341890" class="course-title">9. Médicaments de l’asthme</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.11%20M%C3%A9dicaments%20de%20l%E2%80%99asthme" class="course-report" title="Signaler un lien inaccessible — 9. Médicaments de l’asthme (S3_UE2.11_COURS9)" aria-label="Signaler un lien inaccessible — 9. Médicaments de l’asthme (S3_UE2.11_COURS9)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-06">Programmé le 06/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235341890" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=c79778a9-eb2c-45c5-805b-8b9ca14057a4" class="badge">PDF</a>
+<a href="https://vimeo.com/1235341890" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=c79778a9-eb2c-45c5-805b-8b9ca14057a4" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 <li class="list-group-item" id="S3_UE2.11_COURS10"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235341993" class="course-title">10. Médicaments de la contraception</a></div></div><div class="course-schedule"><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.11%20M%C3%A9dicaments%20de%20la%20contraception" class="course-report" title="Signaler un lien inaccessible — 10. Médicaments de la contraception (S3_UE2.11_COURS10)" aria-label="Signaler un lien inaccessible — 10. Médicaments de la contraception (S3_UE2.11_COURS10)" target="_blank" rel="noopener noreferrer">⚑</a><time class="course-date course-date-due" datetime="2026-11-06">Programmé le 06/11/2026</time></div><div class="course-links">
-<a href="https://vimeo.com/1235341993" class="badge">Enregistrement</a>
-<a href="https://smallpdf.com/file#s=01b37f59-1c40-4910-920d-e86820aa4011" class="badge">PDF</a>
+<a href="https://vimeo.com/1235341993" class="badge"><span class="resource-icon resource-icon-video" aria-hidden="true"></span><span class="resource-label">Enregistrement</span></a>
+<a href="https://smallpdf.com/file#s=01b37f59-1c40-4910-920d-e86820aa4011" class="badge"><span class="resource-icon resource-icon-document" aria-hidden="true"></span><span class="resource-label">PDF</span></a>
 </div></li>
 </ul></div></details>
 </div></section>

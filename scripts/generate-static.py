@@ -65,10 +65,6 @@ def courses_by_day(courses, today):
     return days
 
 
-def has_previous_links(sources):
-    return any(row[column] for row in sources for column in LINKS if column.endswith('_anterieur'))
-
-
 STATIC_CSS = """
 /* Une nuance bleu-gris distingue discrètement la version simplifiée. */
 :root {
@@ -114,6 +110,9 @@ def generate(read):
         if not isinstance(value, str):
             raise ValueError(f'Texte incorrect : {key}')
         return html.escape(re.sub(r'\{(\w+)\}', lambda m: str(values.get(m[1], m[0])), value), quote=True)
+
+    def unavailable_resource(kind, key):
+        return f'<span class="badge resource-unavailable"><span class="resource-icon resource-icon-{kind}" aria-hidden="true"></span><span class="resource-label">{t(key)}</span></span>'
 
     def link(url, label, attrs=''):
         return f'<a href="{html.escape(url, quote=True)}"{attrs}>{label}</a>'
@@ -220,8 +219,6 @@ def generate(read):
                      f'<span class="ue-separator"> — </span>'
                      f'<span class="ue-name">{html.escape(name)}</span>')
             parts.append(f'<details class="accordion-item"><summary class="accordion-button"><span class="ue-title">{title}</span></summary><div class="accordion-body">')
-            if has_previous_links(group):
-                parts.append(f'<p class="course-notice previous-year-legend">{t("cours.legende_anterieurs")}</p>')
             parts.append('<ul class="list-group">')
             for row in group:
                 title = f"{row['cours_numero']}. {row['cours_nom']}"
@@ -243,17 +240,20 @@ def generate(read):
                 labels = ('premiere_partie' if split else 'enregistrement', 'seconde_partie',
                           'anterieur_premiere_partie' if split else 'video_anterieure', 'anterieur_seconde_partie', 'pdf', 'pdf_anterieur')
                 if not any(row[k] for k in LINKS[:4]):
-                    parts.append(f'<span class="badge">{t("cours.sans_enregistrement")}</span>')
+                    parts.append(unavailable_resource('video', 'cours.sans_enregistrement'))
                 for column, label in zip(LINKS, labels):
                     if row[column]:
                         css_class = 'badge link-anterieur' if column.endswith('_anterieur') else 'badge'
-                        parts.append(link(row[column], t('cours.' + label), f' class="{css_class}"'))
+                        icon = 'video' if column.startswith('video') else 'document'
+                        resource_label = f'<span class="resource-icon resource-icon-{icon}" aria-hidden="true"></span><span class="resource-label">{t("cours." + label)}</span>'
+                        parts.append(link(row[column], resource_label, f' class="{css_class}"'))
+                if not any(row[k] for k in LINKS[4:]):
+                    parts.append(unavailable_resource('document', 'cours.sans_pdf'))
                 parts.append('</div></li>')
             parts.append('</ul></div></details>')
         parts.append('</div></section>')
     if resources:
-        legend = f'<p class="course-notice previous-year-legend">{t("cours.legende_anterieurs")}</p>' if has_previous_links(resources) else ''
-        parts.append(f'''<details class="accordion-item" id="accordionOtherSemester"><summary class="accordion-button">{t('navigation.autres_semestres')}</summary><div class="accordion-body">{legend}<table class="table"><thead><tr><th scope="col">{t('navigation.colonne_semestre')}</th><th scope="col">{t('navigation.enregistrements')}</th><th scope="col">{t('navigation.pdf')}</th></tr></thead><tbody>''')
+        parts.append(f'''<details class="accordion-item" id="accordionOtherSemester"><summary class="accordion-button">{t('navigation.autres_semestres')}</summary><div class="accordion-body"><table class="table"><thead><tr><th scope="col">{t('navigation.colonne_semestre')}</th><th scope="col">{t('navigation.enregistrements')}</th><th scope="col">{t('navigation.pdf')}</th></tr></thead><tbody>''')
         for row in sorted(resources, key=lambda r: int(r['semestre'])):
             parts.append(f'<tr><th scope="row">S{row["semestre"]}</th>')
             for columns in (LINKS[:4], LINKS[4:]):

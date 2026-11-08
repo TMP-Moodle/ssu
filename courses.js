@@ -5,8 +5,6 @@ const COURSE_COLUMNS = [
     'UE', 'cours', 'video_link_1', 'video_link_2',
     'video_link_1_anterieur', 'video_link_2_anterieur', 'pdf_link', 'pdf_link_anterieur',
 ];
-const PREVIOUS_LINK_COLUMNS = COURSE_COLUMNS.slice(2).filter(column => column.endsWith('_anterieur'));
-const hasPreviousLinks = sources => sources.some(source => PREVIOUS_LINK_COLUMNS.some(column => source[column]));
 const PROGRESS_PREFIX = 'tmp-moodle:completed:';
 
 // Prend en charge les virgules, retours à la ligne et guillemets dans les champs.
@@ -129,6 +127,14 @@ function element(tag, className, text) {
     return node;
 }
 
+function unavailableResource(kind, textKey) {
+    const badge = element('span', 'badge resource-unavailable');
+    const icon = element('span', `resource-icon resource-icon-${kind}`);
+    icon.setAttribute('aria-hidden', 'true');
+    badge.append(icon, element('span', 'resource-label', SiteTexts.get(textKey)));
+    return badge;
+}
+
 function renderCourse(course) {
     const item = element('li', 'list-group-item');
     const primaryColumn = ['video_link_1', 'video_link_2', 'pdf_link',
@@ -161,13 +167,19 @@ function renderCourse(course) {
         ['pdf_link_anterieur', SiteTexts.get('cours.pdf_anterieur')],
     ];
     if (!COURSE_COLUMNS.slice(2, 6).some(column => course[column])) {
-        links.append(element('span', 'badge bg-danger', SiteTexts.get('cours.sans_enregistrement')));
+        links.append(unavailableResource('video', 'cours.sans_enregistrement'));
     }
     for (const [column, label] of labels) {
         if (!course[column]) continue;
-        const link = element('a', column.endsWith('_anterieur') ? 'badge link-anterieur' : 'badge bg-secondary', label);
+        const link = element('a', column.endsWith('_anterieur') ? 'badge link-anterieur' : 'badge bg-secondary');
+        const icon = element('span', `resource-icon resource-icon-${column.startsWith('video') ? 'video' : 'document'}`);
+        icon.setAttribute('aria-hidden', 'true');
+        link.append(icon, element('span', 'resource-label', label));
         link.href = course[column];
         links.append(link);
+    }
+    if (!course.pdf_link && !course.pdf_link_anterieur) {
+        links.append(unavailableResource('document', 'cours.sans_pdf'));
     }
     item.append(links);
 
@@ -352,9 +364,6 @@ function renderUEs(courses, accordion) {
         panel.setAttribute('aria-labelledby', heading.id);
         panel.setAttribute('data-bs-parent', `#${accordion.id}`);
         const body = element('div', 'accordion-body');
-        if (hasPreviousLinks(group)) {
-            body.append(element('p', 'course-notice previous-year-legend', SiteTexts.get('cours.legende_anterieurs')));
-        }
         const list = element('ul', 'list-group');
         for (const course of group) list.append(renderCourse(course));
         function updateProgress() {
@@ -378,7 +387,6 @@ function renderOtherSemesters(text) {
     const fragment = document.createDocumentFragment();
     const sources = readSources(text).filter(source => !source.cours_nom)
         .sort((a, b) => Number(a.semestre) - Number(b.semestre));
-    document.getElementById("other-semesters-legend").hidden = !hasPreviousLinks(sources);
     for (const source of sources) {
         const tr = element("tr");
         const heading = element("th", "", `S${source.semestre}`);
