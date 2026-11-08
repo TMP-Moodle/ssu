@@ -206,9 +206,9 @@ footer p { max-width: 740px; margin: 0; }
 
 .course-completion .course-date { margin: 0; }
 
-/* Le bleu ardoise distingue les dates arrivées des dates à venir. */
+/* Couleurs des ressources et des modalités de cours. */
 :root, [data-bs-theme="light"] {
-    --visio-bg: #fbefdf; --visio-ink: #89521e; --visio-border: #e9cfaa;
+    --visio-bg: #f8e8da; --visio-ink: #87451f; --visio-border: #e2bd9f;
     --session-bg: #f8eaea; --session-ink: #8b4149; --session-border: #e9c9cd;
     --upcoming-bg: #f0f1f2; --upcoming-ink: #60666c; --upcoming-border: #d9dde1;
     --due-bg: #e9eff5;
@@ -216,7 +216,7 @@ footer p { max-width: 740px; margin: 0; }
     --due-border: #cbd8e4;
 }
 [data-bs-theme="dark"] {
-    --visio-bg: #3e3023; --visio-ink: #edc18e; --visio-border: #6c5032;
+    --visio-bg: #422e22; --visio-ink: #e8ad7d; --visio-border: #795034;
     --session-bg: #402b30; --session-ink: #efb9bf; --session-border: #69434c;
     --upcoming-bg: #2b3034; --upcoming-ink: #b9c0c6; --upcoming-border: #454d54;
     --due-bg: #263543;
@@ -225,7 +225,7 @@ footer p { max-width: 740px; margin: 0; }
 }
 @media (prefers-color-scheme: dark) {
     :root:not([data-bs-theme]) {
-        --visio-bg: #3e3023; --visio-ink: #edc18e; --visio-border: #6c5032;
+        --visio-bg: #422e22; --visio-ink: #e8ad7d; --visio-border: #795034;
         --session-bg: #402b30; --session-ink: #efb9bf; --session-border: #69434c;
         --upcoming-bg: #2b3034; --upcoming-ink: #b9c0c6; --upcoming-border: #454d54;
         --due-bg: #263543;
@@ -243,20 +243,10 @@ footer p { max-width: 740px; margin: 0; }
     padding: 4px 8px;
     border: 1px solid var(--due-border);
     border-radius: 6px;
-    background: var(--due-bg);
+    background: transparent;
     color: var(--due-ink);
     font-weight: 400;
     font-variant-numeric: tabular-nums;
-}
-.course-date-upcoming::before,
-.course-date-due::before,
-.course-date-session::before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background: currentColor;
 }
 
 .course-date.course-date-session {
@@ -312,8 +302,8 @@ footer p { max-width: 740px; margin: 0; }
 .schedule-mode-presentiel { background: var(--session-bg); color: var(--session-ink); border-color: var(--session-border); }
 .schedule-mode-visio { background: var(--visio-bg); color: var(--visio-ink); border-color: var(--visio-border); }
 
-.course-date.course-date-upcoming { background: var(--upcoming-bg); color: var(--upcoming-ink); border-color: var(--upcoming-border); }
+.course-date.course-date-due,
+.course-date.course-date-upcoming { background: transparent; color: var(--muted); border-color: var(--line); }
 @media (max-width: 360px) {
     .course-schedule .course-date { padding-inline: 6px; }
-    .course-schedule .course-date::before { display: none; }
 }
