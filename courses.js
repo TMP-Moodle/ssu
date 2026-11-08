@@ -97,8 +97,8 @@ function courseScheduleStyle(course, isoDate, today = new Date()) {
     const todayISO = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     const presentiel = Boolean(course.Presentiel?.trim());
     const visio = Boolean(course.Visio?.trim());
-    if (isoDate >= todayISO && (presentiel || visio)) {
-        return { key: presentiel && visio ? 'cours.date_hybride' : presentiel ? 'cours.date_presentiel' : 'cours.date_visio', className: presentiel ? 'course-date-session' : 'course-date-session course-date-visio' };
+    if (presentiel || visio) {
+        return { key: presentiel && visio ? 'cours.date_hybride' : presentiel ? 'cours.date_presentiel' : 'cours.date_visio', className: isoDate < todayISO ? 'course-date-due' : presentiel ? 'course-date-session' : 'course-date-session course-date-visio' };
     }
     const due = isCourseDue(isoDate, today);
     return { key: due ? 'cours.date_programmee' : 'cours.date_prevue', className: due ? 'course-date-due' : 'course-date-upcoming' };

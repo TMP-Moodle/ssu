@@ -57,9 +57,10 @@ def parse_course_date(value):
 
 def course_schedule_style(row, iso, today):
     presentiel, visio = bool(row['Presentiel'].strip()), bool(row['Visio'].strip())
-    if iso >= today and (presentiel or visio):
+    if presentiel or visio:
         key = 'date_hybride' if presentiel and visio else 'date_presentiel' if presentiel else 'date_visio'
-        css = 'course-date course-date-session' + ('' if presentiel else ' course-date-visio')
+        css = ('course-date course-date-due' if iso < today else
+               'course-date course-date-session' + ('' if presentiel else ' course-date-visio'))
         return css, 'cours.' + key
     due = iso <= today
     return ('course-date course-date-due' if due else 'course-date course-date-upcoming',
