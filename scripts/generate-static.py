@@ -67,6 +67,14 @@ def course_schedule_style(row, iso, today):
             'cours.date_programmee' if due else 'cours.date_prevue')
 
 
+def resource_icon(kind):
+    shapes = ('<rect x="2" y="5" width="13" height="14" rx="2"/><path d="m15 9 7-4v14l-7-4"/>'
+              if kind == 'video' else
+              '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/>')
+    return (f'<span class="resource-icon resource-icon-{kind}" aria-hidden="true">'
+            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" focusable="false">{shapes}</svg></span>')
+
+
 def course_order_key(row):
     scheduled = parse_course_date(row['date'])
     return (tuple(map(int, row['ue_numero'].split('.'))),
@@ -120,7 +128,7 @@ def generate(read):
         return html.escape(re.sub(r'\{(\w+)\}', lambda m: str(values.get(m[1], m[0])), value), quote=True)
 
     def unavailable_resource(kind, key):
-        return f'<span class="badge resource-unavailable"><span class="resource-icon resource-icon-{kind}" aria-hidden="true"></span><span class="resource-label">{t(key)}</span></span>'
+        return f'<span class="badge resource-unavailable">{resource_icon(kind)}<span class="resource-label">{t(key)}</span></span>'
 
     def link(url, label, attrs=''):
         return f'<a href="{html.escape(url, quote=True)}"{attrs}>{label}</a>'
@@ -221,7 +229,7 @@ def generate(read):
                     if row.get(column):
                         css_class = 'badge link-anterieur' if column.endswith('_anterieur') else 'badge'
                         icon = 'video' if column.startswith('video') else 'document'
-                        resource_label = f'<span class="resource-icon resource-icon-{icon}" aria-hidden="true"></span><span class="resource-label">{t("cours." + label)}</span>'
+                        resource_label = f'{resource_icon(icon)}<span class="resource-label">{t("cours." + label)}</span>'
                         parts.append(link(row[column], resource_label, f' class="{css_class}"'))
                 if not any(row[k] for k in LINKS[4:]):
                     parts.append(unavailable_resource('document', 'cours.sans_pdf'))

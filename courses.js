@@ -163,11 +163,20 @@ function element(tag, className, text) {
     return node;
 }
 
-function unavailableResource(kind, textKey) {
-    const badge = element('span', 'badge resource-unavailable');
+// Dessiner directement le SVG évite les artefacts des masques CSS sur iOS.
+function resourceIcon(kind) {
     const icon = element('span', `resource-icon resource-icon-${kind}`);
     icon.setAttribute('aria-hidden', 'true');
-    badge.append(icon, element('span', 'resource-label', SiteTexts.get(textKey)));
+    const shapes = kind === 'video'
+        ? '<rect x="2" y="5" width="13" height="14" rx="2"/><path d="m15 9 7-4v14l-7-4"/>'
+        : '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/>';
+    icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" focusable="false">${shapes}</svg>`;
+    return icon;
+}
+
+function unavailableResource(kind, textKey) {
+    const badge = element('span', 'badge resource-unavailable');
+    badge.append(resourceIcon(kind), element('span', 'resource-label', SiteTexts.get(textKey)));
     return badge;
 }
 
@@ -225,8 +234,7 @@ function renderCourse(course) {
         if (column.startsWith('video_link_') && !videoColumns.includes(column)) continue;
         if (column.startsWith('pdf_link') && !pdfColumns.includes(column)) continue;
         const link = element('a', column.endsWith('_anterieur') ? 'badge link-anterieur' : 'badge bg-secondary');
-        const icon = element('span', `resource-icon resource-icon-${column.startsWith('video') ? 'video' : 'document'}`);
-        icon.setAttribute('aria-hidden', 'true');
+        const icon = resourceIcon(column.startsWith('video') ? 'video' : 'document');
         link.append(icon, element('span', 'resource-label', label));
         link.href = course[column];
         links.append(link);
