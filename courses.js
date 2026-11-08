@@ -218,30 +218,56 @@ function renderCourse(course) {
 }
 
 function coursesByDay(courses, today = new Date()) {
-    return [0, 1].map(offset => {
+    return [-1, 0, 1].map(offset => {
         const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset, 12);
         const iso = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
-        return { offset, courses: courses.filter(course => course.semestre === '3' && parseCourseDate(course.date)?.iso === iso)
+        const todayISO = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        return { offset, courses: courses.filter(course => {
+            const scheduled = parseCourseDate(course.date);
+            if (course.semestre !== '3' || !scheduled) return false;
+            if (offset !== -1) return scheduled.iso === iso;
+            if (scheduled.iso >= todayISO) return false;
+            const checkbox = document.getElementById(`completed-${course.id}`);
+            if (checkbox) return !checkbox.checked;
+            try { return localStorage.getItem(`${PROGRESS_PREFIX}${course.id}`) !== 'true'; }
+            catch { return true; }
+        })
             .sort((a, b) => a.ue_numero.localeCompare(b.ue_numero, 'fr', { numeric: true }) || Number(a.cours_numero) - Number(b.cours_numero)) };
     });
 }
 
 function renderDailySchedule(courses) {
-    const schedule = element('section', 'daily-schedule');
+    const schedule = element('details', 'daily-schedule');
     schedule.setAttribute('aria-label', SiteTexts.get('planning.titre'));
-    for (const day of coursesByDay(courses)) {
+    const days = coursesByDay(courses);
+    const summary = element('summary', 'daily-schedule-summary');
+    for (const day of days) {
+        const label = SiteTexts.get(day.offset === -1 ? 'planning.rattraper' : day.offset === 1 ? 'planning.demain' : 'planning.aujourdhui');
+        const count = SiteTexts.get('planning.nombre_cours', { nombre: day.courses.length });
+        const part = element('span', 'daily-schedule-count');
+        part.append(element('span', '', label), element('span', '', count));
+        summary.append(part);
+    }
+    schedule.append(summary);
+    for (const day of days) {
         const row = element('div', 'daily-schedule-day');
-        row.append(element('h3', 'daily-schedule-heading', SiteTexts.get(day.offset ? 'planning.demain' : 'planning.aujourdhui')));
+        row.append(element('h3', 'daily-schedule-heading', SiteTexts.get(day.offset === -1 ? 'planning.rattraper' : day.offset === 1 ? 'planning.demain' : 'planning.aujourdhui')));
+        const content = element('div', 'daily-schedule-content');
+        row.append(content);
         if (!day.courses.length) {
-            row.append(element('p', 'daily-schedule-empty', SiteTexts.get('planning.aucun')));
+            content.append(element('p', 'daily-schedule-empty', SiteTexts.get(day.offset === -1 ? 'planning.aucun_rattraper' : 'planning.aucun')));
         } else {
             const list = element('ul', 'daily-schedule-list');
-            for (const course of day.courses) {
+            const entries = day.offset === -1
+                ? [...day.courses.reduce((counts, course) => counts.set(course.ue_numero, (counts.get(course.ue_numero) || 0) + 1), new Map())]
+                    .map(([ue, count]) => ({ ue, label: SiteTexts.get('planning.nombre_cours', { nombre: count }) }))
+                : day.courses.map(course => ({ ue: course.ue_numero, label: course.cours_nom }));
+            for (const entry of entries) {
                 const item = element('li', 'daily-schedule-course');
-                item.append(element('span', 'daily-schedule-ue', `UE ${course.ue_numero}`), element('span', '', course.cours_nom));
+                item.append(element('span', 'daily-schedule-ue', `UE ${entry.ue}`), element('span', '', entry.label));
                 list.append(item);
             }
-            row.append(list);
+            content.append(list);
         }
         schedule.append(row);
     }
@@ -295,7 +321,7 @@ function renderUEs(courses, accordion) {
         const heading = element('h2', 'accordion-header');
         heading.id = `heading-${id}`;
         const button = element('button', 'accordion-button collapsed');
-        button.append(element('span', 'ue-title', ue));
+        button.append(element('span', 'ue-title', `UE ${group[0].ue_numero} — ${group[0].ue_nom}`));
         const progress = element('span', 'ue-progress');
         button.append(progress);
         button.type = 'button';
@@ -380,6 +406,14 @@ async function loadCourses() {
         const courses = readCourses(text);
         renderOtherSemesters(text);
         renderCourses(courses);
+        document.getElementById('course-semesters').addEventListener('change', event => {
+            if (!event.target.matches('.form-check-input')) return;
+            const previous = document.querySelector('.daily-schedule');
+            if (!previous) return;
+            const updated = renderDailySchedule(courses);
+            updated.open = previous.open;
+            previous.replaceWith(updated);
+        });
         status.textContent = courses.length ? '' : SiteTexts.get('messages.aucun_cours');
         status.hidden = courses.length > 0;
     } catch (error) {

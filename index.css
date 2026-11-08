@@ -9,39 +9,42 @@
     --page: #141c19; --surface: #1c2722; --ink: #e6eee7; --muted: #a7b6ab;
     --line: #35453b; --accent: #a2d4b2; --soft: #293c30;
 }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--page); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; -webkit-font-smoothing: antialiased; }
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 button, input, a { touch-action: manipulation; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
 .site-header, main, footer { width: min(100% - 48px, 1000px); margin-inline: auto; }
-.site-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 26px; border-bottom: 1px solid var(--line); }
+.site-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 18px; border-bottom: 1px solid var(--line); }
 .wordmark { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 650; letter-spacing: -.4px; white-space: nowrap; }
 .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: var(--accent); color: var(--page); font-size: 23px; font-weight: 700; }
 .theme-toggle { border: 1px solid var(--line); border-radius: 100px; background: transparent; color: var(--ink); padding: 9px 15px; font-size: 13px; white-space: nowrap; flex-shrink: 0; }
 .theme-toggle:hover { background: var(--soft); }
-.intro { padding-block: 28px 20px; }
+.intro { padding-block: 20px 14px; }
 .semester-heading h1, .semester-heading h2 { font-size: 30px; font-weight: 600; letter-spacing: -1px; line-height: 1.2; margin: 0; }
 .intro-description { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 8px 0 0; }
 .semester-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .semester-heading > span { font-size: 12px; color: var(--muted); }
 .accordion { --bs-accordion-bg: var(--surface); --bs-accordion-color: var(--ink); --bs-accordion-border-color: var(--line); --bs-accordion-btn-color: var(--ink); --bs-accordion-active-color: var(--ink); --bs-accordion-active-bg: var(--soft); --bs-accordion-btn-focus-box-shadow: none; }
-.course-accordion { display: grid; gap: 12px; }
+.course-accordion { display: grid; gap: 8px; }
 .accordion-item, .accordion-item:first-of-type, .accordion-item:last-of-type { border: 1px solid var(--line); border-radius: 16px; overflow: clip; }
 /* Le conteneur découpe les coins extérieurs ; aucun arrondi à la jonction du contenu. */
 .accordion-button, .accordion-item:first-of-type > .accordion-header .accordion-button, .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed { border-radius: 0; }
-.accordion-button { gap: 16px; padding: 24px; font-size: 16px; font-weight: 600; line-height: 1.5; background: var(--surface); }
+.accordion-button { gap: 12px; padding: 16px 20px; font-size: 16px; font-weight: 600; line-height: 1.5; background: var(--surface); }
 .ue-title { flex: 1; min-width: 0; }
 .ue-progress { flex-shrink: 0; color: var(--muted); font-size: 12px; font-weight: 400; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .course-accordion .accordion-button::after { margin-left: 0; }
 .accordion-button:hover { background: var(--soft); }
 .accordion-button:not(.collapsed) { box-shadow: none; border-radius: 0; }
 .accordion-button:focus-visible { outline-offset: -4px; }
-.accordion-body { padding: 0 24px 12px; }
+.accordion-body { padding: 0 20px 12px; }
 .course-notice { display: block; margin: 0; padding: 16px 0 0; color: var(--muted); font-weight: 400; font-size: 12px; }
 .list-group { --bs-list-group-border-radius: 0; --bs-list-group-bg: transparent; --bs-list-group-color: var(--ink); --bs-list-group-border-color: var(--line); }
-.list-group-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 20px; padding: 16.5px 0; border: 0; border-top: 1px solid var(--line); }
+.list-group-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 20px; padding: 16px 0; border: 0; border-top: 1px solid var(--line); }
 .list-group-item:first-child { border-top: 0; }
+.list-group > .list-group-item + .list-group-item { border-top: 1px solid var(--line); }
 .course-notice + .list-group { margin-top: 12px; border-top: 1px solid var(--line); }
 .course-notice + .list-group > .list-group-item:first-child { padding-top: 12px; }
 .course-title { color: var(--ink); font-size: 14px; line-height: 1.6; font-weight: 550; grid-column: 1; }
@@ -68,34 +71,39 @@ button, input, a { touch-action: manipulation; }
 @keyframes show-loading-help {
     to { visibility: visible; }
 }
-#accordionOtherSemester { margin-top: 28px; }
-#accordionOtherSemester .accordion-button { font-size: 14px; color: var(--muted); padding-block: 18px; }
+#accordionOtherSemester { margin-top: 16px; }
+#accordionOtherSemester .accordion-button { font-size: 14px; color: var(--muted); padding-block: 14px; }
 .table { --bs-table-bg: transparent; --bs-table-color: var(--ink); --bs-table-border-color: var(--line); font-size: 13px; margin-top: 16px; }
-.table th, .table td { padding: 14px 8px; }
-footer { margin-top: 28px; padding-top: 16px; padding-bottom: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.6; }
-.footer-navigation { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; margin-bottom: 8px; }
-.footer-navigation a { color: var(--muted); }
-footer p { max-width: 740px; margin-bottom: 10px; }
-.site-information summary { cursor: pointer; width: fit-content; }
-.site-information p { margin-top: 10px; }
+.table th, .table td { padding: 14px 8px; vertical-align: middle; }
+.table th { white-space: nowrap; }
+.table td a { display: inline-block; }
+footer { display: grid; gap: 8px; margin-top: 16px; padding-top: 10px; padding-bottom: 8px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.6; }
+.footer-navigation { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; margin-bottom: 0; }
+.footer-navigation a { color: var(--muted); overflow-wrap: anywhere; }
+footer p { max-width: 740px; margin: 0; }
+.site-information summary { cursor: pointer; width: fit-content; padding: 0; }
+.site-information p { margin-top: 6px; }
 @media (max-width: 600px) {
     .site-header, main, footer { width: calc(100% - 32px); }
-    .site-header { padding-block: 12px; gap: 8px; }
+    .site-header { padding-block: 8px; gap: 8px; }
     .wordmark { font-size: 14px; }
-    .theme-toggle { font-size: 12px; padding: 8px 11px; }
-    .intro { padding-block: 22px 18px; }
-    .semester-heading h1, .semester-heading h2 { font-size: 26px; }
+    .theme-toggle { font-size: 12px; padding: 8px 11px; min-height: 44px; }
+    .intro { padding-block: 14px 10px; }
+    .semester-heading h1, .semester-heading h2 { font-size: 24px; }
     .intro-description { font-size: 13px; }
-    .course-accordion { gap: 8px; }
-    .accordion-button { padding: 14px 16px; font-size: 14px; line-height: 1.4; min-height: 52px; }
-    .accordion-body { padding-inline: 16px; }
+    .course-accordion { gap: 6px; }
+    .accordion-button { padding: 10px 12px; font-size: 14px; line-height: 1.4; min-height: 48px; }
+    .accordion-body { padding-inline: 12px; }
+    .table { font-size: 12px; margin-block: 10px 0; }
+    .table th, .table td { padding: 12px 4px; }
+    .table td a { white-space: nowrap; }
     .list-group-item { display: block; padding-block: 9px; }
     .course-notice + .list-group > .list-group-item:first-child { padding-top: 9px; }
     .course-links { margin-top: 6px; }
     .course-completion { margin-top: 10px; max-width: none; width: 100%; justify-self: start; justify-content: flex-start; text-align: left; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
-    #accordionOtherSemester { margin-top: 16px; }
-    #accordionOtherSemester .accordion-button { padding-block: 12px; }
-    footer { margin-top: 20px; padding-block: 12px 16px; }
+    #accordionOtherSemester { margin-top: 10px; }
+    #accordionOtherSemester .accordion-button { padding-block: 10px; min-height: 44px; }
+    footer { margin-top: 10px; padding-block: 8px 6px; }
 }
 
 /* Respecte les espaces et retours à la ligne des textes personnalisables. */
@@ -142,7 +150,7 @@ footer p { max-width: 740px; margin-bottom: 10px; }
 .table a.link-anterieur { display: inline-block; padding: 4px 8px; }
 .previous-year-legend { white-space: pre-wrap; overflow-wrap: anywhere; }
 
-.course-label { min-width: 0; }
+.course-label { min-width: 0; overflow-wrap: anywhere; }
 .course-date { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 400; line-height: 1.5; }
 
 .course-completion .course-date { margin: 0 0 6px; }
@@ -172,8 +180,8 @@ footer p { max-width: 740px; margin-bottom: 10px; }
 @media (prefers-color-scheme: dark) {
     :root:not([data-bs-theme]) {
         --visio-bg: #3e3023; --visio-ink: #edc18e; --visio-border: #6c5032;
-    --session-bg: #402b30; --session-ink: #efb9bf; --session-border: #69434c;
-    --due-bg: #263543;
+        --session-bg: #402b30; --session-ink: #efb9bf; --session-border: #69434c;
+        --due-bg: #263543;
         --due-ink: #b0c8df;
         --due-border: #41596e;
     }
@@ -215,17 +223,51 @@ footer p { max-width: 740px; margin-bottom: 10px; }
     border-color: var(--visio-border);
 }
 
-/* Aperçu compact des deux prochains jours, au-dessus du bloc du semestre 3. */
-.daily-schedule { margin-top: 18px; padding: 4px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
-.daily-schedule-day { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 16px; padding-block: 12px; }
+/* Planning : colonnes stables, puis empilement sur les petits écrans. */
+.daily-schedule { margin-top: 14px; padding-inline: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.daily-schedule-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; align-items: center; gap: 16px; min-height: 48px; padding-block: 12px; cursor: pointer; list-style: none; color: var(--ink); font-size: 12px; line-height: 1.6; }
+.daily-schedule-summary::-webkit-details-marker { display: none; }
+.daily-schedule-count { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 6px; min-width: 0; }
+.daily-schedule-count > span:last-child { flex-shrink: 0; color: var(--muted); font-variant-numeric: tabular-nums; }
+.daily-schedule-summary::after { content: ""; width: 8px; height: 8px; margin-right: 3px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg); }
+.daily-schedule[open] > .daily-schedule-summary { border-bottom: 1px solid var(--line); }
+.daily-schedule[open] > .daily-schedule-summary::after { transform: rotate(225deg); }
+.daily-schedule-day { display: grid; grid-template-columns: 145px minmax(0, 1fr); align-items: start; gap: 16px; padding-block: 12px; }
 .daily-schedule-day + .daily-schedule-day { border-top: 1px solid var(--line); }
-.daily-schedule-heading { margin: 0; color: var(--ink); font-size: 12px; line-height: 1.6; font-weight: 600; }
-.daily-schedule-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
-.daily-schedule-course { display: flex; align-items: baseline; gap: 10px; color: var(--ink); font-size: 12px; line-height: 1.6; }
-.daily-schedule-ue { flex-shrink: 0; color: var(--muted); font-size: 11px; }
+.daily-schedule-heading { margin: 0; color: var(--ink); font-size: 12px; line-height: 1.6; font-weight: 600; overflow-wrap: anywhere; }
+.daily-schedule-content { display: grid; gap: 8px; min-width: 0; }
+.daily-schedule-list { display: grid; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.daily-schedule-course { display: grid; grid-template-columns: 58px minmax(0, 1fr); align-items: baseline; gap: 10px; color: var(--ink); font-size: 12px; line-height: 1.6; }
+.daily-schedule-ue { color: var(--muted); font-size: 11px; white-space: nowrap; }
 .daily-schedule-course > span:last-child { overflow-wrap: anywhere; }
 .daily-schedule-empty { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+@media (max-width: 760px) {
+    .daily-schedule-summary { grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; padding-block: 10px; }
+    .daily-schedule-count { grid-column: 1; justify-content: space-between; flex-wrap: nowrap; }
+    .daily-schedule-summary::after { grid-column: 2; grid-row: 1 / 4; }
+    .daily-schedule-day { grid-template-columns: 1fr; gap: 6px; }
+}
 @media (max-width: 600px) {
-    .daily-schedule { margin-top: 14px; padding-inline: 12px; }
-    .daily-schedule-day { grid-template-columns: 1fr; gap: 5px; padding-block: 10px; }
+    .daily-schedule { margin-top: 10px; padding-inline: 12px; }
+    .daily-schedule-summary { min-height: 44px; font-size: 11px; }
+    .daily-schedule-day { padding-block: 10px; }
+}
+
+/* Aération légère, adaptée à la hauteur disponible. */
+@media (min-height: 700px) {
+    .course-accordion { gap: 10px; }
+    #accordionOtherSemester { margin-top: 18px; }
+}
+@media (min-height: 700px) and (max-width: 600px) {
+    .course-accordion { gap: 8px; }
+    #accordionOtherSemester { margin-top: 12px; }
+}
+/* Avec quatre UE : 3 × 2 px entre UE et 4 px avant les autres semestres. */
+@media (max-height: 699px) {
+    .course-accordion { gap: 10px; }
+    #accordionOtherSemester { margin-top: 20px; }
+}
+@media (max-height: 699px) and (max-width: 600px) {
+    .course-accordion { gap: 8px; }
+    #accordionOtherSemester { margin-top: 14px; }
 }

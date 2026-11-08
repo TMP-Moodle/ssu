@@ -44,10 +44,11 @@ def course_schedule_style(row, iso, today):
 
 def courses_by_day(courses, today):
     days = []
-    for offset in (0, 1):
+    for offset in (-1, 0, 1):
         iso = (date.fromisoformat(today) + timedelta(days=offset)).isoformat()
         group = [row for row in courses if row['semestre'] == '3'
-                 and row['date'] and parse_course_date(row['date'])[0] == iso]
+                 and row['date'] and (parse_course_date(row['date'])[0] < today if offset == -1
+                                      else parse_course_date(row['date'])[0] == iso)]
         group.sort(key=lambda row: (tuple(map(int, row['ue_numero'].split('.'))), int(row['cours_numero'])))
         days.append((offset, group))
     return days
@@ -66,9 +67,12 @@ STATIC_CSS = """
 * { box-sizing: border-box; }
 body { font-size: 16px; line-height: 1.5; }
 summary { cursor: pointer; }
-summary.accordion-button { display: list-item; list-style-position: inside; }
-details[open] > summary { background: var(--soft); border-radius: 16px 16px 0 0; }
-.ue-title { margin-left: 8px; }
+summary.accordion-button { display: flex; align-items: center; list-style: none; }
+summary.accordion-button::-webkit-details-marker { display: none; }
+summary.accordion-button::after { content: ""; flex-shrink: 0; width: 8px; height: 8px; margin-left: auto; margin-right: 3px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg); }
+details[open] > summary.accordion-button::after { transform: rotate(225deg); }
+details.accordion-item[open] > summary { background: var(--soft); border-radius: 16px 16px 0 0; }
+.ue-title { margin-left: 0; }
 .list-group { padding: 0; margin: 0; list-style: none; }
 .course-heading { grid-column: 1 / -1; }
 .course-title { margin-right: auto; }
@@ -154,21 +158,37 @@ def generate(read):
     for semester in semesters:
         schedule = ''
         if semester == '3':
-            schedule = f'<section class="daily-schedule" aria-label="{t("planning.titre")}">'
-            for offset, day_courses in courses_by_day(courses, today):
-                day_title = t('planning.demain' if offset else 'planning.aujourdhui')
-                schedule += f'<div class="daily-schedule-day"><h3 class="daily-schedule-heading">{day_title}</h3>'
+            days = courses_by_day(courses, today)
+            schedule = f'<details class="daily-schedule" aria-label="{t("planning.titre")}"><summary class="daily-schedule-summary">'
+            for offset, day_courses in days:
+                day_title = t('planning.rattraper' if offset == -1 else 'planning.demain' if offset == 1 else 'planning.aujourdhui')
+                count = t('planning.nombre_cours', nombre=len(day_courses))
+                schedule += f'<span class="daily-schedule-count"><span>{day_title}</span><span>{count}</span></span>'
+            schedule += '</summary>'
+            for offset, day_courses in days:
+                day_title = t('planning.rattraper' if offset == -1 else 'planning.demain' if offset == 1 else 'planning.aujourdhui')
+                schedule += f'<div class="daily-schedule-day"><h3 class="daily-schedule-heading">{day_title}</h3><div class="daily-schedule-content">'
+                if offset == -1:
+                    schedule += f'<p class="daily-schedule-empty">{t("planning.sans_suivi")}</p>'
                 if day_courses:
                     schedule += '<ul class="daily-schedule-list">'
-                    for course in day_courses:
-                        ue = html.escape(course['ue_numero'])
-                        name = html.escape(course['cours_nom'])
+                    if offset == -1:
+                        counts = {}
+                        for course in day_courses:
+                            ue = course['ue_numero']
+                            counts[ue] = counts.get(ue, 0) + 1
+                        entries = [(ue, t('planning.nombre_cours', nombre=count)) for ue, count in counts.items()]
+                    else:
+                        entries = [(course['ue_numero'], html.escape(course['cours_nom'])) for course in day_courses]
+                    for number, name in entries:
+                        ue = html.escape(number)
                         schedule += f'<li class="daily-schedule-course"><span class="daily-schedule-ue">UE {ue}</span><span>{name}</span></li>'
                     schedule += '</ul>'
                 else:
-                    schedule += f'<p class="daily-schedule-empty">{t("planning.aucun")}</p>'
-                schedule += '</div>'
-            schedule += '</section>'
+                    empty_text = t('planning.aucun_rattraper' if offset == -1 else 'planning.aucun')
+                    schedule += f'<p class="daily-schedule-empty">{empty_text}</p>'
+                schedule += '</div></div>'
+            schedule += '</details>'
         tag = 'h1' if semester == semesters[0] else 'h2'
         parts.append(f'''{schedule}<section aria-labelledby="semestre-{semester}">
 <div class="intro"><div class="semester-heading"><{tag} id="semestre-{semester}">{t('navigation.semestre', semestre=semester)}</{tag}><span>{t('navigation.sous_titre')}</span></div></div>
@@ -179,7 +199,7 @@ def generate(read):
         for row in ordered:
             groups.setdefault((row['ue_numero'], row['ue_nom']), []).append(row)
         for (number, name), group in groups.items():
-            title = html.escape(f'S{semester} UE {number} - {name}')
+            title = html.escape(f'UE {number} — {name}')
             parts.append(f'<details class="accordion-item"><summary class="accordion-button"><span class="ue-title">{title}</span></summary><div class="accordion-body">')
             if has_previous_links(group):
                 parts.append(f'<p class="course-notice previous-year-legend">{t("cours.legende_anterieurs")}</p>')
@@ -228,8 +248,8 @@ def generate(read):
         parts.append('</tbody></table></div></details>')
     parts.append(f'''</main>
 <footer><p>{t('pied_de_page.signalement')}</p>
-<div class="footer-navigation"><a href="https://tally.so/r/xVVJkJ">{t('pied_de_page.reclamation')}</a><a href="index.html">{t('pied_de_page.version_normale')}</a></div>
-<details class="site-information"><summary>{t('pied_de_page.titre_a_propos')}</summary><p>{t('pied_de_page.a_propos')}</p></details>
+<div class="footer-navigation"><a href="index.html">{t('pied_de_page.version_normale')}</a></div>
+<details class="site-information"><summary>{t('pied_de_page.titre_a_propos')}</summary><p>{t('pied_de_page.a_propos')}</p><p><a href="https://tally.so/r/xVVJkJ">{t('pied_de_page.reclamation')}</a></p></details>
 </footer></body></html>''')
     return '\n'.join(parts) + '\n'
 

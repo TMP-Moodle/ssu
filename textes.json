@@ -11,7 +11,7 @@
     "version_simplifiee": "Les cours ne chargent pas ? Version simplifiée ↗",
     "version_normale": "Revenir à la version complète",
     "titre_a_propos": "À propos de cette plateforme",
-    "a_propos": "Plateforme indépendante non affiliée à l’université ou à l’IFSI, mise à disposition temporairement pour permettre l’accès aux cours de la faculté en raison d’un dysfonctionnement du Moodle SSU. Ce site peut comporter des erreurs."
+    "a_propos": "Plateforme indépendante non affiliée à l’université ou à l’IFSI, mise à disposition temporairement pour permettre l’accès aux cours de la faculté en raison des multiples dysfonctionnements du Moodle SSU. Ce site peut comporter des erreurs."
   },
   "navigation": {
     "autres_semestres": "Autres semestres",
@@ -65,9 +65,13 @@
     "activer_sombre": "Activer le mode sombre"
   },
   "planning": {
-    "titre": "Cours d’aujourd’hui et de demain",
-    "aujourdhui": "Aujourd’hui",
-    "demain": "Demain",
-    "aucun": "Aucun cours programmé sur l'EDT."
+    "titre": "Cours à rattraper et programmés",
+    "aujourdhui": "Programmé aujourd’hui",
+    "demain": "Programmé demain",
+    "aucun": "Aucun cours programmé sur l'EDT.",
+    "nombre_cours": "{nombre} cours",
+    "rattraper": "Cours à rattraper",
+    "aucun_rattraper": "Aucun cours à rattraper.",
+    "sans_suivi": "Cette version affiche tous les cours passés ; le suivi « Terminé » est disponible dans la version complète."
   }
 }
