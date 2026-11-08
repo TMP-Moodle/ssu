@@ -6,7 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Plateforme temporaire d’accès aux cours.">
 <title>TMP Moodle (version simplifiée sans Javascript)</title>
-<style>:root, [data-bs-theme="light"] {
+<style>:root {
+    --space-8: 8px;
+    --space-12: 12px;
+    --space-16: 16px;
+    --space-24: 24px;
+    --space-32: 32px;
+}
+:root, [data-bs-theme="light"] {
     color-scheme: light;
     --page: #f7f8f4; --surface: #fff; --ink: #1e302b; --muted: #65736b;
     --line: #dce3da; --accent: #28634e; --soft: #eaf1e9;
@@ -96,22 +103,42 @@ footer p { max-width: 740px; margin: 0; }
     .site-header { padding-block: 8px; gap: 8px; }
     .wordmark { font-size: 14px; }
     .theme-toggle { font-size: 12px; padding: 8px 11px; min-height: 44px; }
-    .intro { padding-block: 14px 10px; }
+    .intro { padding-block: var(--space-12); }
     .semester-heading h1, .semester-heading h2 { font-size: 24px; }
     .intro-description { font-size: 13px; }
-    .course-accordion { gap: 6px; }
-    .accordion-button { padding: 10px 12px; font-size: 14px; line-height: 1.4; min-height: 48px; }
-    .accordion-body { padding-inline: 12px; }
+    .course-accordion { gap: var(--space-12); }
+    .accordion-button { padding: var(--space-8) var(--space-12); font-size: 14px; line-height: 1.4; min-height: 44px; }
+    /* Le titre absorbe l’espace restant ; compteur et chevron gardent leur largeur. */
+    .course-accordion .accordion-button {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) max-content 16px;
+        align-items: center;
+        gap: var(--space-8);
+        padding-inline: var(--space-8);
+    }
+    .course-accordion .ue-title { white-space: normal; overflow-wrap: anywhere; }
+    .course-accordion .ue-number { display: block; margin-bottom: 2px; color: var(--muted); font-size: 11px; line-height: 1.4; font-weight: 400; white-space: nowrap; }
+    .course-accordion .ue-separator { display: none; }
+    .course-accordion .ue-name { display: block; }
+    .course-accordion .ue-progress { justify-self: end; white-space: nowrap; }
+    .course-accordion .accordion-button::after { width: 16px; height: 16px; margin: 0; background-size: 16px; }
+    /* La version simplifiée n’a pas de compteur de progression. */
+    .course-accordion summary.accordion-button { grid-template-columns: minmax(0, 1fr) 16px; }
+    .course-accordion summary.accordion-button::after { width: 8px; height: 8px; justify-self: center; margin: 0; }
+    .accordion-body { padding: 0 var(--space-12) var(--space-8); }
+    .course-accordion .accordion-body { padding-inline: var(--space-8); }
+    .course-notice { padding-top: var(--space-12); }
+    .course-notice + .list-group { margin-top: var(--space-8); }
     .table { font-size: 12px; margin-block: 10px 0; }
     .table th, .table td { padding: 12px 4px; }
     .table td a { white-space: nowrap; }
-    .list-group-item { display: block; padding-block: 9px; }
-    .course-notice + .list-group > .list-group-item:first-child { padding-top: 9px; }
-    .course-links { margin-top: 6px; }
-    .course-completion { margin-top: 10px; max-width: none; width: 100%; justify-self: start; justify-content: flex-start; text-align: left; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
-    #accordionOtherSemester { margin-top: 10px; }
-    #accordionOtherSemester .accordion-button { padding-block: 10px; min-height: 44px; }
-    footer { margin-top: 10px; padding-block: 8px 6px; }
+    .list-group-item { display: block; padding-block: var(--space-8); }
+    .course-notice + .list-group > .list-group-item:first-child { padding-top: var(--space-8); }
+    .course-links { margin-top: var(--space-8); }
+    .course-completion { margin-top: var(--space-8); max-width: none; width: 100%; justify-self: start; justify-content: flex-start; text-align: left; flex-direction: row; flex-wrap: wrap; align-items: center; gap: var(--space-8) var(--space-16); }
+    #accordionOtherSemester { margin-top: var(--space-24); }
+    #accordionOtherSemester .accordion-button { padding-block: var(--space-8); min-height: 44px; }
+    footer { margin-top: var(--space-16); padding-block: var(--space-8); }
 }
 
 /* Respecte les espaces et retours à la ligne des textes personnalisables. */
@@ -256,28 +283,20 @@ footer p { max-width: 740px; margin: 0; }
     .daily-schedule-day { grid-template-columns: 1fr; gap: 6px; }
 }
 @media (max-width: 600px) {
-    .daily-schedule { margin-top: 10px; padding-inline: 12px; }
-    .daily-schedule-summary { min-height: 44px; font-size: 11px; }
-    .daily-schedule-day { padding-block: 10px; }
+    .daily-schedule { margin-top: var(--space-12); padding-inline: var(--space-12); }
+    .daily-schedule-summary { padding-block: var(--space-8); min-height: 44px; font-size: 11px; }
+    .daily-schedule-day { padding-block: var(--space-12); gap: var(--space-8); }
 }
 
-/* Aération légère, adaptée à la hauteur disponible. */
-@media (min-height: 700px) {
+/* Conserve les espacements desktop ; les petits écrans utilisent l’échelle ci-dessus. */
+@media (min-width: 601px) {
     .course-accordion { gap: 10px; }
+}
+@media (min-width: 601px) and (min-height: 700px) {
     #accordionOtherSemester { margin-top: 18px; }
 }
-@media (min-height: 700px) and (max-width: 600px) {
-    .course-accordion { gap: 8px; }
-    #accordionOtherSemester { margin-top: 12px; }
-}
-/* Avec quatre UE : 3 × 2 px entre UE et 4 px avant les autres semestres. */
-@media (max-height: 699px) {
-    .course-accordion { gap: 10px; }
+@media (min-width: 601px) and (max-height: 699px) {
     #accordionOtherSemester { margin-top: 20px; }
-}
-@media (max-height: 699px) and (max-width: 600px) {
-    .course-accordion { gap: 8px; }
-    #accordionOtherSemester { margin-top: 14px; }
 }
 
 /* Une nuance bleu-gris distingue discrètement la version simplifiée. */
@@ -321,7 +340,7 @@ details.accordion-item[open] > summary { background: var(--soft); border-radius:
 <details class="daily-schedule" aria-label="Cours à rattraper et programmés"><summary class="daily-schedule-summary"><span class="daily-schedule-count"><span>Cours à rattraper</span><span>27 cours</span></span><span class="daily-schedule-count"><span>Programmé aujourd’hui</span><span>0 cours</span></span><span class="daily-schedule-count"><span>Programmé demain</span><span>4 cours</span></span></summary><div class="daily-schedule-day"><h3 class="daily-schedule-heading">Cours à rattraper</h3><div class="daily-schedule-content"><p class="daily-schedule-empty">Cette version affiche tous les cours passés ; le suivi « Terminé » est disponible dans la version complète.</p><ul class="daily-schedule-list"><li class="daily-schedule-course"><span class="daily-schedule-ue">UE 1.2</span><span>3 cours</span></li><li class="daily-schedule-course"><span class="daily-schedule-ue">UE 2.5</span><span>5 cours</span></li><li class="daily-schedule-course"><span class="daily-schedule-ue">UE 2.8</span><span>9 cours</span></li><li class="daily-schedule-course"><span class="daily-schedule-ue">UE 2.11</span><span>10 cours</span></li></ul></div></div><div class="daily-schedule-day"><h3 class="daily-schedule-heading">Programmé aujourd’hui</h3><div class="daily-schedule-content"><p class="daily-schedule-empty">Aucun cours programmé sur l&#x27;EDT.</p></div></div><div class="daily-schedule-day"><h3 class="daily-schedule-heading">Programmé demain</h3><div class="daily-schedule-content"><ul class="daily-schedule-list"><li class="daily-schedule-course"><span class="daily-schedule-ue">UE 1.2</span><span>Impact des maladies infectieuses en santé</span></li><li class="daily-schedule-course"><span class="daily-schedule-ue">UE 2.5</span><span>Infection du sujet âgé</span></li><li class="daily-schedule-course"><span class="daily-schedule-ue">UE 2.5</span><span>Infections urinaires et infections ostéo-articulaires</span></li><li class="daily-schedule-course"><span class="daily-schedule-ue">UE 2.8</span><span>Troubles obstructifs digestifs en pédiatrie</span></li></ul></div></div></details><section aria-labelledby="semestre-3">
 <div class="intro"><div class="semester-heading"><h1 id="semestre-3">Semestre 3</h1><span>Vidéos &amp; PDF</span></div></div>
 <div class="course-accordion" aria-label="Cours du semestre 3">
-<details class="accordion-item"><summary class="accordion-button"><span class="ue-title">UE 1.2 — Santé publique et économie de la santé</span></summary><div class="accordion-body">
+<details class="accordion-item"><summary class="accordion-button"><span class="ue-title"><span class="ue-number">UE 1.2</span><span class="ue-separator"> — </span><span class="ue-name">Santé publique et économie de la santé</span></span></summary><div class="accordion-body">
 <p class="course-notice previous-year-legend">⚠️  Les liens sur fond mauve correspondent aux enregistrements et aux PDF de l’année précédente. Le contenu du cours peut avoir changé depuis.</p>
 <ul class="list-group">
 <li class="list-group-item" id="S3_UE1.2_COURS1"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235524251" class="course-title">1. Introduction aux biostatistiques et à l&#x27;épidémiologie</a><time class="course-date course-date-due" datetime="2026-10-16">Programmé le 16/10/2026</time></div><a href="https://tally.so/r/X554dL?cours=S3%20UE%201.2%20Introduction%20aux%20biostatistiques%20et%20%C3%A0%20l%27%C3%A9pid%C3%A9miologie" class="course-report" title="Signaler un lien inaccessible — 1. Introduction aux biostatistiques et à l&#x27;épidémiologie (S3_UE1.2_COURS1)" aria-label="Signaler un lien inaccessible — 1. Introduction aux biostatistiques et à l&#x27;épidémiologie (S3_UE1.2_COURS1)" target="_blank" rel="noopener noreferrer">⚑</a></div><div class="course-links">
@@ -345,7 +364,7 @@ details.accordion-item[open] > summary { background: var(--soft); border-radius:
 <a href="https://smallpdf.com/file#s=c804659c-b4d2-438b-a6c1-21f9d97361c5&amp;r=view" class="badge link-anterieur">PDF (année précédente)</a>
 </div></li>
 </ul></div></details>
-<details class="accordion-item"><summary class="accordion-button"><span class="ue-title">UE 2.5 — Processus inflammatoires et infectieux</span></summary><div class="accordion-body">
+<details class="accordion-item"><summary class="accordion-button"><span class="ue-title"><span class="ue-number">UE 2.5</span><span class="ue-separator"> — </span><span class="ue-name">Processus inflammatoires et infectieux</span></span></summary><div class="accordion-body">
 <p class="course-notice previous-year-legend">⚠️  Les liens sur fond mauve correspondent aux enregistrements et aux PDF de l’année précédente. Le contenu du cours peut avoir changé depuis.</p>
 <ul class="list-group">
 <li class="list-group-item" id="S3_UE2.5_COURS1"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235533525" class="course-title">1. Infections du voyageur</a><time class="course-date course-date-due" datetime="2026-11-05">Programmé le 05/11/2026</time></div><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.5%20Infections%20du%20voyageur" class="course-report" title="Signaler un lien inaccessible — 1. Infections du voyageur (S3_UE2.5_COURS1)" aria-label="Signaler un lien inaccessible — 1. Infections du voyageur (S3_UE2.5_COURS1)" target="_blank" rel="noopener noreferrer">⚑</a></div><div class="course-links">
@@ -430,7 +449,7 @@ details.accordion-item[open] > summary { background: var(--soft); border-radius:
 <a href="https://smallpdf.com/file#s=e7fa0fe6-8e70-4709-a3ba-ca9830dae625" class="badge link-anterieur">PDF (année précédente)</a>
 </div></li>
 </ul></div></details>
-<details class="accordion-item"><summary class="accordion-button"><span class="ue-title">UE 2.8 — Processus obstructifs</span></summary><div class="accordion-body">
+<details class="accordion-item"><summary class="accordion-button"><span class="ue-title"><span class="ue-number">UE 2.8</span><span class="ue-separator"> — </span><span class="ue-name">Processus obstructifs</span></span></summary><div class="accordion-body">
 <ul class="list-group">
 <li class="list-group-item" id="S3_UE2.8_COURS1"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235312729" class="course-title">1. Introduction à l&#x27;UE</a><time class="course-date course-date-due" datetime="2026-10-07">Programmé le 07/10/2026</time></div><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.8%20Introduction%20%C3%A0%20l%27UE" class="course-report" title="Signaler un lien inaccessible — 1. Introduction à l&#x27;UE (S3_UE2.8_COURS1)" aria-label="Signaler un lien inaccessible — 1. Introduction à l&#x27;UE (S3_UE2.8_COURS1)" target="_blank" rel="noopener noreferrer">⚑</a></div><div class="course-links">
 <a href="https://vimeo.com/1235312729" class="badge">Enregistrement</a>
@@ -489,7 +508,7 @@ details.accordion-item[open] > summary { background: var(--soft); border-radius:
 <a href="https://smallpdf.com/file#s=a4f18233-9cf2-4f1d-a23f-b66e1ebd7f39" class="badge">PDF</a>
 </div></li>
 </ul></div></details>
-<details class="accordion-item"><summary class="accordion-button"><span class="ue-title">UE 2.11 — Pharmacologie et thérapeutiques</span></summary><div class="accordion-body">
+<details class="accordion-item"><summary class="accordion-button"><span class="ue-title"><span class="ue-number">UE 2.11</span><span class="ue-separator"> — </span><span class="ue-name">Pharmacologie et thérapeutiques</span></span></summary><div class="accordion-body">
 <ul class="list-group">
 <li class="list-group-item" id="S3_UE2.11_COURS1"><div class="course-heading"><div class="course-label"><a href="https://vimeo.com/1235341258" class="course-title">1. Antiviraux</a><time class="course-date course-date-due" datetime="2026-11-04">Programmé le 04/11/2026</time></div><a href="https://tally.so/r/X554dL?cours=S3%20UE%202.11%20Antiviraux" class="course-report" title="Signaler un lien inaccessible — 1. Antiviraux (S3_UE2.11_COURS1)" aria-label="Signaler un lien inaccessible — 1. Antiviraux (S3_UE2.11_COURS1)" target="_blank" rel="noopener noreferrer">⚑</a></div><div class="course-links">
 <a href="https://vimeo.com/1235341258" class="badge">Enregistrement</a>

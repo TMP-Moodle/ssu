@@ -321,7 +321,13 @@ function renderUEs(courses, accordion) {
         const heading = element('h2', 'accordion-header');
         heading.id = `heading-${id}`;
         const button = element('button', 'accordion-button collapsed');
-        button.append(element('span', 'ue-title', `UE ${group[0].ue_numero} — ${group[0].ue_nom}`));
+        const ueTitle = element('span', 'ue-title');
+        ueTitle.append(
+            element('span', 'ue-number', `UE ${group[0].ue_numero}`),
+            element('span', 'ue-separator', ' — '),
+            element('span', 'ue-name', group[0].ue_nom),
+        );
+        button.append(ueTitle);
         const progress = element('span', 'ue-progress');
         button.append(progress);
         button.type = 'button';

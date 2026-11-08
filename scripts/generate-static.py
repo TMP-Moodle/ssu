@@ -199,7 +199,9 @@ def generate(read):
         for row in ordered:
             groups.setdefault((row['ue_numero'], row['ue_nom']), []).append(row)
         for (number, name), group in groups.items():
-            title = html.escape(f'UE {number} — {name}')
+            title = (f'<span class="ue-number">UE {html.escape(number)}</span>'
+                     f'<span class="ue-separator"> — </span>'
+                     f'<span class="ue-name">{html.escape(name)}</span>')
             parts.append(f'<details class="accordion-item"><summary class="accordion-button"><span class="ue-title">{title}</span></summary><div class="accordion-body">')
             if has_previous_links(group):
                 parts.append(f'<p class="course-notice previous-year-legend">{t("cours.legende_anterieurs")}</p>')
