@@ -324,6 +324,11 @@ function renderDailySchedule(courses) {
         part.append(element('span', '', label), element('span', '', count));
         summary.append(part);
     }
+    const toggle = element('span', 'daily-schedule-toggle');
+    const toggleIcon = element('span', 'daily-schedule-toggle-icon');
+    toggleIcon.setAttribute('aria-hidden', 'true');
+    toggle.append(toggleIcon);
+    summary.append(toggle);
     schedule.append(summary);
     for (const day of days) {
         const row = element('div', 'daily-schedule-day');

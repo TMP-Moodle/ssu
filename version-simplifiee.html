@@ -97,7 +97,7 @@ button, input, a { touch-action: manipulation; }
 /* Navigation entre semestres : un titre séparé, sans la forme des cartes UE. */
 #accordionOtherSemester { margin-top: var(--space-24); padding-top: var(--space-8); border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; overflow: visible; }
 #accordionOtherSemester > .accordion-item { border: 0; border-radius: 0; background: transparent; overflow: visible; }
-#accordionOtherSemester .accordion-button { padding: var(--space-12) 0; min-height: 48px; border-radius: 0; background: transparent; color: var(--ink); font-size: 18px; font-weight: 600; box-shadow: none; }
+#accordionOtherSemester .accordion-button { padding: var(--space-12) 21px var(--space-12) 0; min-height: 48px; border-radius: 0; background: transparent; color: var(--ink); font-size: 18px; font-weight: 600; box-shadow: none; }
 #accordionOtherSemester .accordion-button:hover { color: var(--accent); }
 #accordionOtherSemester .accordion-body { padding: 0 0 var(--space-8); }
 #accordionOtherSemester .table { margin-block: var(--space-8) 0; }
@@ -162,7 +162,8 @@ footer p { max-width: 740px; margin: 0; }
     .course-links a.badge,
     .course-links .resource-unavailable { display: inline-flex; align-items: center; min-height: calc(11px * 1.5 + 10px); max-width: 100%; padding: 4px 8px; line-height: 1.5; }
     .list-group-item > .course-schedule { grid-column: 1; grid-row: 2; justify-self: start; }
-    #accordionOtherSemester .accordion-button { padding-block: var(--space-8); min-height: 44px; }
+    #accordionOtherSemester .accordion-button { padding-block: var(--space-8); padding-right: 9px; min-height: 44px; }
+    #accordionOtherSemester .accordion-button::after { width: 16px; height: 16px; background-size: 16px; }
     footer { margin-top: var(--space-16); padding-block: var(--space-8); }
 }
 
@@ -271,14 +272,17 @@ footer p { max-width: 740px; margin: 0; }
 }
 
 /* Planning : colonnes stables, puis empilement sur les petits écrans. */
-.daily-schedule { margin-top: 14px; padding-inline: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.daily-schedule { margin-top: 14px; padding-inline: 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
 .daily-schedule-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) auto; align-items: center; gap: 16px; min-height: 48px; padding-block: 12px; cursor: pointer; list-style: none; color: var(--ink); font-size: 12px; line-height: 1.6; }
 .daily-schedule-summary::-webkit-details-marker { display: none; }
 .daily-schedule-count { display: flex; align-items: baseline; flex-wrap: wrap; gap: 2px 6px; min-width: 0; }
 .daily-schedule-count > span:last-child { flex-shrink: 0; color: var(--muted); font-variant-numeric: tabular-nums; }
-.daily-schedule-summary::after { content: ""; width: 8px; height: 8px; margin-right: 3px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg); }
+/* Un plus discret devient une croix, sur l’axe des icônes des UE. */
+.daily-schedule-toggle { display: inline-flex; align-items: center; justify-self: end; color: var(--muted); }
+.daily-schedule-toggle-icon { display: grid; place-items: center; width: 20px; height: 20px; }
+.daily-schedule-toggle-icon::before { content: ""; width: 10px; height: 10px; background: linear-gradient(currentColor, currentColor) center / 10px 1px no-repeat, linear-gradient(currentColor, currentColor) center / 1px 10px no-repeat; transition: transform .2s ease; }
 .daily-schedule[open] > .daily-schedule-summary { border-bottom: 1px solid var(--line); }
-.daily-schedule[open] > .daily-schedule-summary::after { transform: rotate(225deg); }
+.daily-schedule[open] .daily-schedule-toggle-icon::before { transform: rotate(45deg); }
 .daily-schedule-day { display: grid; grid-template-columns: 145px minmax(0, 1fr); align-items: start; gap: 16px; padding-block: 12px; }
 .daily-schedule-day + .daily-schedule-day { border-top: 1px solid var(--line); }
 .daily-schedule-heading { margin: 0; color: var(--ink); font-size: 12px; line-height: 1.6; font-weight: 600; overflow-wrap: anywhere; }
@@ -291,11 +295,12 @@ footer p { max-width: 740px; margin: 0; }
 @media (max-width: 760px) {
     .daily-schedule-summary { grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; padding-block: 10px; }
     .daily-schedule-count { grid-column: 1; justify-content: space-between; flex-wrap: nowrap; }
-    .daily-schedule-summary::after { grid-column: 2; grid-row: 1 / 4; }
+    .daily-schedule-toggle { grid-column: 2; grid-row: 1 / 4; }
     .daily-schedule-day { grid-template-columns: 1fr; gap: 6px; }
 }
 @media (max-width: 600px) {
-    .daily-schedule { margin-top: var(--space-12); padding-inline: var(--space-12); }
+    .daily-schedule { margin-top: var(--space-12); padding-inline: var(--space-8); }
+    .daily-schedule-toggle-icon { width: 16px; height: 16px; }
     .daily-schedule-summary { padding-block: var(--space-8); min-height: 44px; font-size: 11px; }
     .daily-schedule-day { padding-block: var(--space-12); gap: var(--space-8); }
 }
@@ -328,6 +333,9 @@ summary.accordion-button { display: flex; align-items: center; list-style: none;
 summary.accordion-button::-webkit-details-marker { display: none; }
 summary.accordion-button::after { content: ""; flex-shrink: 0; width: 8px; height: 8px; margin-left: auto; margin-right: 3px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg); }
 details[open] > summary.accordion-button::after { transform: rotate(225deg); }
+@media (max-width: 600px) {
+  #accordionOtherSemester > summary.accordion-button::after { width: 8px; height: 8px; margin-right: 4px; }
+}
 details.accordion-item[open] > summary { background: var(--soft); border-radius: 16px 16px 0 0; }
 .ue-title { margin-left: 0; }
 .list-group { padding: 0; margin: 0; list-style: none; }

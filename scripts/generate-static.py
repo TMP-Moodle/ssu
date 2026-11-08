@@ -94,6 +94,9 @@ summary.accordion-button { display: flex; align-items: center; list-style: none;
 summary.accordion-button::-webkit-details-marker { display: none; }
 summary.accordion-button::after { content: ""; flex-shrink: 0; width: 8px; height: 8px; margin-left: auto; margin-right: 3px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg); }
 details[open] > summary.accordion-button::after { transform: rotate(225deg); }
+@media (max-width: 600px) {
+  #accordionOtherSemester > summary.accordion-button::after { width: 8px; height: 8px; margin-right: 4px; }
+}
 details.accordion-item[open] > summary { background: var(--soft); border-radius: 16px 16px 0 0; }
 .ue-title { margin-left: 0; }
 .list-group { padding: 0; margin: 0; list-style: none; }
