@@ -2,7 +2,7 @@
 """Prépare la page autonome sans JS et le manifeste de version du site."""
 import argparse
 import csv
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 import html
 import hashlib
 import io
@@ -70,18 +70,6 @@ def course_order_key(row):
     scheduled = parse_course_date(row['date'])
     return (tuple(map(int, row['ue_numero'].split('.'))),
             scheduled[0] if scheduled else '\uffff', int(row['cours_numero']))
-
-
-def courses_by_day(courses, today):
-    days = []
-    for offset in (-1, 0, 1):
-        iso = (date.fromisoformat(today) + timedelta(days=offset)).isoformat()
-        group = [row for row in courses if row['semestre'] == '3'
-                 and row['date'] and (parse_course_date(row['date'])[0] < today if offset == -1
-                                      else parse_course_date(row['date'])[0] == iso)]
-        group.sort(key=course_order_key)
-        days.append((offset, group))
-    return days
 
 
 STATIC_CSS = """
@@ -159,7 +147,7 @@ def generate(read):
         if (not re.fullmatch(r'\d+(?:\.\d+)*', row['ue_numero'])
                 or not re.fullmatch(r'[1-9]\d*', row['cours_numero'])
                 or not row['ue_nom'] or not row['cours_nom']
-                or not re.fullmatch(r'S\d+_UE\d+(?:\.\d+)*_COURS\d+', row['id'])
+                or not re.fullmatch(r'S\d+_UE\d+(?:\.\d+)*_COURS\d+(?:ET\d+)*', row['id'])
                 or row['id'] in ids):
             raise ValueError(f'UE, cours ou identifiant incorrect à la ligne {line}')
         ids.add(row['id'])
@@ -185,47 +173,8 @@ def generate(read):
     if not courses:
         parts.append(f'<p>{t("messages.aucun_cours")}</p>')
     for semester in semesters:
-        schedule = ''
-        if semester == '3':
-            days = courses_by_day(courses, today)
-            schedule = f'<details class="daily-schedule" aria-label="{t("planning.titre")}"><summary class="daily-schedule-summary">'
-            for offset, day_courses in days:
-                day_title = t('planning.rattraper' if offset == -1 else 'planning.demain' if offset == 1 else 'planning.aujourdhui')
-                count = t('planning.nombre_cours', nombre=len(day_courses))
-                schedule += f'<span class="daily-schedule-count"><span>{day_title}</span><span>{count}</span></span>'
-            schedule += '</summary>'
-            for offset, day_courses in days:
-                day_title = t('planning.rattraper' if offset == -1 else 'planning.demain' if offset == 1 else 'planning.aujourdhui')
-                schedule += f'<div class="daily-schedule-day"><h3 class="daily-schedule-heading">{day_title}</h3><div class="daily-schedule-content">'
-                if offset == -1:
-                    schedule += f'<p class="daily-schedule-empty">{t("planning.sans_suivi")}</p>'
-                if day_courses:
-                    schedule += '<ul class="daily-schedule-list">'
-                    if offset == -1:
-                        counts = {}
-                        for course in day_courses:
-                            ue = course['ue_numero']
-                            counts[ue] = counts.get(ue, 0) + 1
-                        entries = [(ue, t('planning.nombre_cours', nombre=count), '') for ue, count in counts.items()]
-                    else:
-                        entries = []
-                        for course in day_courses:
-                            modes = ''
-                            for column, css, key in (('Presentiel', 'presentiel', 'planning.presentiel'), ('Visio', 'visio', 'planning.visio')):
-                                if course[column].strip():
-                                    modes += f'<span class="schedule-mode schedule-mode-{css}">{t(key)}</span>'
-                            entries.append((course['ue_numero'], html.escape(course['cours_nom']), modes))
-                    for number, name, modes in entries:
-                        ue = html.escape(number)
-                        schedule += f'<li class="daily-schedule-course"><span class="daily-schedule-ue">UE {ue}</span><span class="daily-schedule-label">{name}{modes}</span></li>'
-                    schedule += '</ul>'
-                else:
-                    empty_text = t('planning.aucun_rattraper' if offset == -1 else 'planning.aucun')
-                    schedule += f'<p class="daily-schedule-empty">{empty_text}</p>'
-                schedule += '</div></div>'
-            schedule += '</details>'
         tag = 'h1' if semester == semesters[0] else 'h2'
-        parts.append(f'''{schedule}<section aria-labelledby="semestre-{semester}">
+        parts.append(f'''<section aria-labelledby="semestre-{semester}">
 <div class="intro"><div class="semester-heading"><{tag} id="semestre-{semester}">{t('navigation.semestre', semestre=semester)}</{tag}><span>{t('navigation.sous_titre')}</span></div></div>
 <div class="course-accordion" aria-label="{t('navigation.cours_semestre', semestre=semester)}">''')
         groups = {}

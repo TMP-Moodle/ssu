@@ -27,8 +27,9 @@ test('les intitulés affichés ne comportent plus de préfixe numérique ; les i
     context.csv = fs.readFileSync(path.join(root, 'sources.csv'), 'utf8');
     const courses = vm.runInContext('readCourses(csv)', context);
     assert.ok(courses.length > 0);
+    const rawIds = vm.runInContext("(() => { const [headers, ...rows] = parseCSV(csv); return rows.filter(row => row[headers.indexOf('cours_nom')]?.trim()).map(row => row[headers.indexOf('id')].trim()); })()", context);
+    assert.deepEqual(Array.from(courses, course => course.id), Array.from(rawIds));
     for (const course of courses) {
         assert.equal(course.cours, course.cours_nom);
-        assert.equal(course.id, `S${course.semestre}_UE${course.ue_numero}_COURS${course.cours_numero}`);
     }
 });

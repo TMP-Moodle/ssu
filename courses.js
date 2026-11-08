@@ -7,6 +7,35 @@ const COURSE_COLUMNS = [
 ];
 const VIDEO_BACKUP_COLUMNS = ['video_link_1_backup', 'video_link_2_backup'];
 const PROGRESS_PREFIX = 'tmp-moodle:completed:';
+const COURSE_ID_PATTERN = /^(S\d+_UE\d+(?:\.\d+)*_COURS)(\d+(?:ET\d+)*)$/;
+const completionControls = new Map();
+const progressListeners = new Set();
+
+// Les groupes partagent les clés de suivi des cours individuels, sans état distinct.
+function courseComponentIds(id) {
+    const match = COURSE_ID_PATTERN.exec(id);
+    return match ? [...new Set(match[2].split('ET'))].map(number => `${match[1]}${number}`) : [id];
+}
+
+function isCourseCompleted(id) {
+    return courseComponentIds(id).every(component => localStorage.getItem(`${PROGRESS_PREFIX}${component}`) === 'true');
+}
+
+function setCourseCompleted(id, completed) {
+    for (const component of courseComponentIds(id)) {
+        const key = `${PROGRESS_PREFIX}${component}`;
+        if (completed) localStorage.setItem(key, 'true');
+        else localStorage.removeItem(key);
+    }
+}
+
+function syncCourseProgress() {
+    for (const [id, { checkbox, feedback }] of completionControls) {
+        try { checkbox.checked = isCourseCompleted(id); }
+        catch { feedback.textContent = SiteTexts.get('messages.stockage'); }
+    }
+    for (const updateProgress of progressListeners) updateProgress();
+}
 
 // Prend en charge les virgules, retours à la ligne et guillemets dans les champs.
 function parseCSV(text) {
@@ -109,7 +138,7 @@ function readSources(text) {
         // L’identifiant reste celui du CSV, même si le nom ou le numéro change.
         course.UE = `S${course.semestre} UE ${course.ue_numero} - ${course.ue_nom}`;
         course.cours = course.cours_nom;
-        if (!/^S\d+_UE\d+(?:\.\d+)*_COURS\d+$/.test(course.id) || ids.has(course.id)) {
+        if (!COURSE_ID_PATTERN.test(course.id) || ids.has(course.id)) {
             throw new Error(`Identifiant absent, incorrect ou dupliqué à la ligne ${index + 2}.`);
         }
         ids.add(course.id);
@@ -230,25 +259,25 @@ function renderCourse(course) {
     feedback.id = `feedback-${course.id}`;
     feedback.setAttribute('role', 'status');
     checkbox.setAttribute('aria-describedby', feedback.id);
-    const key = `${PROGRESS_PREFIX}${course.id}`;
 
     function showStorageError() {
         feedback.textContent = SiteTexts.get('messages.stockage');
     }
 
     try {
-        checkbox.checked = localStorage.getItem(key) === 'true';
+        checkbox.checked = isCourseCompleted(course.id);
     } catch {
         showStorageError();
     }
+    completionControls.set(course.id, { checkbox, feedback });
     checkbox.addEventListener('change', () => {
         try {
-            if (checkbox.checked) localStorage.setItem(key, 'true');
-            else localStorage.removeItem(key);
+            setCourseCompleted(course.id, checkbox.checked);
             feedback.textContent = '';
         } catch {
             showStorageError();
         }
+        syncCourseProgress();
     });
     label.append(checkbox, element('span', 'form-check-label', SiteTexts.get('cours.termine')));
     completion.append(label, feedback);
@@ -268,7 +297,7 @@ function coursesByDay(courses, today = new Date()) {
             if (scheduled.iso >= todayISO) return false;
             const checkbox = document.getElementById(`completed-${course.id}`);
             if (checkbox) return !checkbox.checked;
-            try { return localStorage.getItem(`${PROGRESS_PREFIX}${course.id}`) !== 'true'; }
+            try { return !isCourseCompleted(course.id); }
             catch { return true; }
         })
             .sort(compareCourses) };
@@ -321,6 +350,8 @@ function renderDailySchedule(courses) {
 }
 
 function renderCourses(courses) {
+    completionControls.clear();
+    progressListeners.clear();
     const semesters = new Map();
     for (const course of courses) {
         if (!semesters.has(course.semestre)) semesters.set(course.semestre, []);
@@ -390,12 +421,13 @@ function renderUEs(courses, accordion) {
         const list = element('ul', 'list-group');
         for (const course of group) list.append(renderCourse(course));
         function updateProgress() {
+            // Une ligne du CSV vaut un cours, même si son ID regroupe plusieurs numéros.
             const completed = list.querySelectorAll('.form-check-input:checked').length;
             progress.textContent = `${completed}/${group.length}`;
             progress.setAttribute('aria-label', SiteTexts.get('cours.progression', { faits: completed, total: group.length }));
             progress.title = SiteTexts.get('cours.progression', { faits: completed, total: group.length });
         }
-        list.addEventListener('change', updateProgress);
+        progressListeners.add(updateProgress);
         updateProgress();
         body.append(list);
         panel.append(body);
