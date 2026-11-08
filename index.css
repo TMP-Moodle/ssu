@@ -152,7 +152,8 @@ footer p { max-width: 740px; margin: 0; }
     .course-completion > label::after { content: ''; position: absolute; top: calc(50% - 22px); left: 0; width: 100%; height: 44px; }
     .course-completion .completion-feedback { grid-column: 1 / -1; grid-row: 2; }
     .course-links { grid-column: 1; grid-row: 3; min-width: 0; }
-    .course-links .badge { display: inline-flex; align-items: center; min-height: calc(11px * 1.5 + 10px); max-width: 100%; padding: 4px 8px; line-height: 1.5; }
+    .course-links a.badge,
+    .course-links .resource-unavailable { display: inline-flex; align-items: center; min-height: calc(11px * 1.5 + 10px); max-width: 100%; padding: 4px 8px; line-height: 1.5; }
     .list-group-item > .course-schedule { grid-column: 1; grid-row: 2; justify-self: start; }
     #accordionOtherSemester .accordion-button { padding-block: var(--space-8); min-height: 44px; }
     footer { margin-top: var(--space-16); padding-block: var(--space-8); }

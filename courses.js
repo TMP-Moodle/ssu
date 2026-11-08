@@ -1,10 +1,11 @@
-/* Les intitulés et les six liens de chaque cours proviennent de sources.csv. */
+/* Les intitulés et les liens de chaque cours proviennent de sources.csv. */
 'use strict';
 
 const COURSE_COLUMNS = [
     'UE', 'cours', 'video_link_1', 'video_link_2',
     'video_link_1_anterieur', 'video_link_2_anterieur', 'pdf_link', 'pdf_link_anterieur',
 ];
+const VIDEO_BACKUP_COLUMNS = ['video_link_1_backup', 'video_link_2_backup'];
 const PROGRESS_PREFIX = 'tmp-moodle:completed:';
 
 // Prend en charge les virgules, retours à la ligne et guillemets dans les champs.
@@ -90,7 +91,7 @@ function readSources(text) {
         if (!/^[1-9]\d*$/.test(course.semestre)) {
             throw new Error(`Semestre incorrect à la ligne ${index + 2}.`);
         }
-        for (const column of COURSE_COLUMNS.slice(2)) {
+        for (const column of [...COURSE_COLUMNS.slice(2), ...VIDEO_BACKUP_COLUMNS]) {
             if (!course[column]) continue;
             const url = new URL(course[column]);
             if (!['https:', 'http:'].includes(url.protocol)) {
@@ -107,7 +108,7 @@ function readSources(text) {
         // Les libellés sont composés pour afficher le même contenu dans les deux versions.
         // L’identifiant reste celui du CSV, même si le nom ou le numéro change.
         course.UE = `S${course.semestre} UE ${course.ue_numero} - ${course.ue_nom}`;
-        course.cours = `${course.cours_numero}. ${course.cours_nom}`;
+        course.cours = course.cours_nom;
         if (!/^S\d+_UE\d+(?:\.\d+)*_COURS\d+$/.test(course.id) || ids.has(course.id)) {
             throw new Error(`Identifiant absent, incorrect ou dupliqué à la ligne ${index + 2}.`);
         }
@@ -118,6 +119,12 @@ function readSources(text) {
 
 function readCourses(text) {
     return readSources(text).filter(source => source.cours_nom);
+}
+
+function compareCourses(a, b) {
+    return a.ue_numero.localeCompare(b.ue_numero, 'fr', { numeric: true })
+        || (parseCourseDate(a.date)?.iso || '\uffff').localeCompare(parseCourseDate(b.date)?.iso || '\uffff')
+        || Number(a.cours_numero) - Number(b.cours_numero);
 }
 
 function element(tag, className, text) {
@@ -135,9 +142,20 @@ function unavailableResource(kind, textKey) {
     return badge;
 }
 
+function videoLinkColumns(source) {
+    const primary = source.video_link_1 || source.video_link_2
+        ? ['video_link_1', 'video_link_2']
+        : ['video_link_1_anterieur', 'video_link_2_anterieur'];
+    return [...primary, ...VIDEO_BACKUP_COLUMNS];
+}
+
+function pdfLinkColumns(source) {
+    return source.pdf_link ? ['pdf_link'] : ['pdf_link_anterieur'];
+}
+
 function renderCourse(course) {
     const item = element('li', 'list-group-item');
-    const primaryColumn = ['video_link_1', 'video_link_2', 'pdf_link',
+    const primaryColumn = ['video_link_1', 'video_link_2', ...VIDEO_BACKUP_COLUMNS, 'pdf_link',
         'video_link_1_anterieur', 'video_link_2_anterieur', 'pdf_link_anterieur']
         .find(column => course[column]);
     const primary = course[primaryColumn];
@@ -157,20 +175,26 @@ function renderCourse(course) {
     item.append(heading);
 
     const links = element('div', 'course-links');
-    const split = Boolean(course.video_link_2 || course.video_link_2_anterieur);
+    const videoColumns = videoLinkColumns(course);
+    const pdfColumns = pdfLinkColumns(course);
+    const split = Boolean(course[videoColumns[1]] || course.video_link_2_backup);
     const labels = [
         ['video_link_1', split ? SiteTexts.get('cours.premiere_partie') : SiteTexts.get('cours.enregistrement')],
         ['video_link_2', SiteTexts.get('cours.seconde_partie')],
+        ['video_link_1_backup', SiteTexts.get(split ? 'cours.secours_premiere_partie' : 'cours.video_secours')],
+        ['video_link_2_backup', SiteTexts.get('cours.secours_seconde_partie')],
         ['video_link_1_anterieur', split ? SiteTexts.get('cours.anterieur_premiere_partie') : SiteTexts.get('cours.video_anterieure')],
         ['video_link_2_anterieur', SiteTexts.get('cours.anterieur_seconde_partie')],
         ['pdf_link', SiteTexts.get('cours.pdf')],
         ['pdf_link_anterieur', SiteTexts.get('cours.pdf_anterieur')],
     ];
-    if (!COURSE_COLUMNS.slice(2, 6).some(column => course[column])) {
+    if (!videoColumns.some(column => course[column])) {
         links.append(unavailableResource('video', 'cours.sans_enregistrement'));
     }
     for (const [column, label] of labels) {
         if (!course[column]) continue;
+        if (column.startsWith('video_link_') && !videoColumns.includes(column)) continue;
+        if (column.startsWith('pdf_link') && !pdfColumns.includes(column)) continue;
         const link = element('a', column.endsWith('_anterieur') ? 'badge link-anterieur' : 'badge bg-secondary');
         const icon = element('span', `resource-icon resource-icon-${column.startsWith('video') ? 'video' : 'document'}`);
         icon.setAttribute('aria-hidden', 'true');
@@ -247,7 +271,7 @@ function coursesByDay(courses, today = new Date()) {
             try { return localStorage.getItem(`${PROGRESS_PREFIX}${course.id}`) !== 'true'; }
             catch { return true; }
         })
-            .sort((a, b) => a.ue_numero.localeCompare(b.ue_numero, 'fr', { numeric: true }) || Number(a.cours_numero) - Number(b.cours_numero)) };
+            .sort(compareCourses) };
     });
 }
 
@@ -317,9 +341,8 @@ function renderCourses(courses) {
         const accordion = element('div', 'accordion course-accordion');
         accordion.id = `accordionS${semester}`;
         accordion.setAttribute('aria-label', SiteTexts.get('navigation.cours_semestre', { semestre: semester }));
-        // Les numéros déterminent l’ordre, indépendamment de celui des lignes du CSV.
-        group.sort((a, b) => a.ue_numero.localeCompare(b.ue_numero, 'fr', { numeric: true })
-            || Number(a.cours_numero) - Number(b.cours_numero));
+        // Dans chaque UE : date croissante, puis numéro ; les cours sans date viennent à la fin.
+        group.sort(compareCourses);
         renderUEs(group, accordion);
         section.append(intro, accordion);
         fragment.append(section);
@@ -392,7 +415,7 @@ function renderOtherSemesters(text) {
         const heading = element("th", "", `S${source.semestre}`);
         heading.scope = "row";
         tr.append(heading);
-        for (const columns of [["video_link_1", "video_link_2", "video_link_1_anterieur", "video_link_2_anterieur"], ["pdf_link", "pdf_link_anterieur"]]) {
+        for (const columns of [videoLinkColumns(source), pdfLinkColumns(source)]) {
             const cell = element("td");
             let count = 0;
             for (const column of columns) {
@@ -400,12 +423,12 @@ function renderOtherSemesters(text) {
                 const url = new URL(source[column]);
                 if (!["https:", "http:"].includes(url.protocol)) throw new Error("Lien de semestre incorrect.");
                 if (count++) cell.append(element("span", "", " · "));
-                const link = element("a", column.endsWith("_anterieur") ? "link-anterieur" : "", column.endsWith("_anterieur") ? SiteTexts.get('cours.anterieur') : SiteTexts.get('cours.acceder'));
+                const link = element("a", column.endsWith("_anterieur") ? "link-anterieur" : "", SiteTexts.get(column.endsWith('_anterieur') ? 'cours.anterieur' : column.endsWith('_backup') ? 'cours.secours' : 'cours.acceder'));
                 link.href = url.href;
                 cell.append(link);
             }
             if (!count) {
-                const recordings = columns[0] === 'video_link_1';
+                const recordings = columns[0].startsWith('video_link_');
                 cell.textContent = recordings ? '—' : SiteTexts.get('cours.bientot');
                 if (recordings) {
                     cell.title = SiteTexts.get('cours.enregistrements_indisponibles');

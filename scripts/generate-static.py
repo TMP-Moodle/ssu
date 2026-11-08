@@ -17,6 +17,19 @@ from zoneinfo import ZoneInfo
 
 LINKS = ('video_link_1', 'video_link_2', 'video_link_1_anterieur',
          'video_link_2_anterieur', 'pdf_link', 'pdf_link_anterieur')
+
+BACKUP_LINKS = ('video_link_1_backup', 'video_link_2_backup')
+
+
+def video_link_columns(source):
+    primary = LINKS[:2] if any(source[k] for k in LINKS[:2]) else LINKS[2:4]
+    return primary + BACKUP_LINKS
+
+
+def pdf_link_columns(source):
+    return ('pdf_link',) if source['pdf_link'] else ('pdf_link_anterieur',)
+
+
 VERSION_INPUTS = ('index.html', 'index.css', 'courses.js', 'textes.js',
                   'textes.json', 'theme.js', 'sources.csv', 'scripts/generate-static.py')
 
@@ -53,6 +66,12 @@ def course_schedule_style(row, iso, today):
             'cours.date_programmee' if due else 'cours.date_prevue')
 
 
+def course_order_key(row):
+    scheduled = parse_course_date(row['date'])
+    return (tuple(map(int, row['ue_numero'].split('.'))),
+            scheduled[0] if scheduled else '\uffff', int(row['cours_numero']))
+
+
 def courses_by_day(courses, today):
     days = []
     for offset in (-1, 0, 1):
@@ -60,7 +79,7 @@ def courses_by_day(courses, today):
         group = [row for row in courses if row['semestre'] == '3'
                  and row['date'] and (parse_course_date(row['date'])[0] < today if offset == -1
                                       else parse_course_date(row['date'])[0] == iso)]
-        group.sort(key=lambda row: (tuple(map(int, row['ue_numero'].split('.'))), int(row['cours_numero'])))
+        group.sort(key=course_order_key)
         days.append((offset, group))
     return days
 
@@ -129,8 +148,8 @@ def generate(read):
         parse_course_date(row['date'])
         if not re.fullmatch(r'[1-9]\d*', row['semestre']):
             raise ValueError(f'Semestre incorrect à la ligne {line}')
-        for column in LINKS:
-            if row[column]:
+        for column in LINKS + BACKUP_LINKS:
+            if row.get(column):
                 url = urlsplit(row[column])
                 if url.scheme not in ('http', 'https') or not url.netloc:
                     raise ValueError(f'Lien incorrect à la ligne {line}')
@@ -210,8 +229,7 @@ def generate(read):
 <div class="intro"><div class="semester-heading"><{tag} id="semestre-{semester}">{t('navigation.semestre', semestre=semester)}</{tag}><span>{t('navigation.sous_titre')}</span></div></div>
 <div class="course-accordion" aria-label="{t('navigation.cours_semestre', semestre=semester)}">''')
         groups = {}
-        ordered = sorted((r for r in courses if r['semestre'] == semester),
-                         key=lambda r: (tuple(map(int, r['ue_numero'].split('.'))), int(r['cours_numero'])))
+        ordered = sorted((r for r in courses if r['semestre'] == semester), key=course_order_key)
         for row in ordered:
             groups.setdefault((row['ue_numero'], row['ue_nom']), []).append(row)
         for (number, name), group in groups.items():
@@ -221,8 +239,8 @@ def generate(read):
             parts.append(f'<details class="accordion-item"><summary class="accordion-button"><span class="ue-title">{title}</span></summary><div class="accordion-body">')
             parts.append('<ul class="list-group">')
             for row in group:
-                title = f"{row['cours_numero']}. {row['cours_nom']}"
-                primary_column = next((k for k in (LINKS[0], LINKS[1], LINKS[4], LINKS[2], LINKS[3], LINKS[5]) if row[k]), '')
+                title = row['cours_nom']
+                primary_column = next((k for k in (LINKS[0], LINKS[1], *BACKUP_LINKS, LINKS[4], LINKS[2], LINKS[3], LINKS[5]) if row.get(k)), '')
                 heading = link(row[primary_column], html.escape(title), ' class="course-title"') if primary_column else f'<span class="course-title">{html.escape(title)}</span>'
                 scheduled = parse_course_date(row['date'])
                 date_label = f'<span class="course-date">{t("cours.non_programme")}</span>'
@@ -236,13 +254,21 @@ def generate(read):
                 report_title = t('cours.signaler', cours=title, id=row['id'])
                 report = link(report_url, '⚑', f' class="course-report" title="{report_title}" aria-label="{report_title}" target="_blank" rel="noopener noreferrer"')
                 parts.append(f'<li class="list-group-item" id="{row["id"]}"><div class="course-heading">{heading}</div><div class="course-schedule">{report}{date_label}</div><div class="course-links">')
-                split = bool(row['video_link_2'] or row['video_link_2_anterieur'])
+                video_columns = video_link_columns(row)
+                split = bool(row[video_columns[1]] or row.get('video_link_2_backup'))
                 labels = ('premiere_partie' if split else 'enregistrement', 'seconde_partie',
                           'anterieur_premiere_partie' if split else 'video_anterieure', 'anterieur_seconde_partie', 'pdf', 'pdf_anterieur')
-                if not any(row[k] for k in LINKS[:4]):
+                if not any(row.get(k) for k in video_columns):
                     parts.append(unavailable_resource('video', 'cours.sans_enregistrement'))
-                for column, label in zip(LINKS, labels):
-                    if row[column]:
+                resource_labels = list(zip(LINKS, labels))
+                resource_labels[2:2] = [(BACKUP_LINKS[0], 'secours_premiere_partie' if split else 'video_secours'),
+                                        (BACKUP_LINKS[1], 'secours_seconde_partie')]
+                for column, label in resource_labels:
+                    if column.startswith('video_link_') and column not in video_columns:
+                        continue
+                    if column.startswith('pdf_link') and column not in pdf_link_columns(row):
+                        continue
+                    if row.get(column):
                         css_class = 'badge link-anterieur' if column.endswith('_anterieur') else 'badge'
                         icon = 'video' if column.startswith('video') else 'document'
                         resource_label = f'<span class="resource-icon resource-icon-{icon}" aria-hidden="true"></span><span class="resource-label">{t("cours." + label)}</span>'
@@ -256,9 +282,9 @@ def generate(read):
         parts.append(f'''<details class="accordion-item" id="accordionOtherSemester"><summary class="accordion-button">{t('navigation.autres_semestres')}</summary><div class="accordion-body"><table class="table"><thead><tr><th scope="col">{t('navigation.colonne_semestre')}</th><th scope="col">{t('navigation.enregistrements')}</th><th scope="col">{t('navigation.pdf')}</th></tr></thead><tbody>''')
         for row in sorted(resources, key=lambda r: int(r['semestre'])):
             parts.append(f'<tr><th scope="row">S{row["semestre"]}</th>')
-            for columns in (LINKS[:4], LINKS[4:]):
-                links = [link(row[k], t('cours.anterieur' if k.endswith('_anterieur') else 'cours.acceder'), ' class="link-anterieur"' if k.endswith('_anterieur') else '') for k in columns if row[k]]
-                if not links and columns == LINKS[:4]:
+            for columns in (video_link_columns(row), pdf_link_columns(row)):
+                links = [link(row[k], t('cours.anterieur' if k.endswith('_anterieur') else 'cours.secours' if k.endswith('_backup') else 'cours.acceder'), ' class="link-anterieur"' if k.endswith('_anterieur') else '') for k in columns if row.get(k)]
+                if not links and columns[0].startswith('video_link_'):
                     unavailable = t('cours.enregistrements_indisponibles')
                     parts.append(f'<td title="{unavailable}" aria-label="{unavailable}">—</td>')
                 else:
