@@ -430,9 +430,12 @@ async function loadCourses() {
         status.hidden = false;
         status.setAttribute('role', 'alert');
         status.className = 'alert alert-danger';
-        status.textContent = location.protocol === 'file:'
+        const message = location.protocol === 'file:'
             ? SiteTexts.get('messages.erreur_locale')
             : SiteTexts.get('messages.erreur_cours');
+        const fallback = element('a', 'alert-link', SiteTexts.get('messages.consulter_version_simplifiee'));
+        fallback.href = 'version-simplifiee.html';
+        status.replaceChildren(element('p', 'mb-2', message), fallback);
         console.error('Chargement des cours :', error);
     }
 }
