@@ -193,6 +193,7 @@ function pdfLinkColumns(source) {
 
 function renderCourse(course) {
     const item = element('li', 'list-group-item');
+    item.id = course.id;
     const primaryColumn = ['video_link_1', 'video_link_2', ...VIDEO_BACKUP_COLUMNS, 'pdf_link',
         'video_link_1_anterieur', 'video_link_2_anterieur', 'pdf_link_anterieur']
         .find(column => course[column]);
@@ -312,8 +313,46 @@ function coursesByDay(courses, today = new Date()) {
     });
 }
 
+// Attendre la fin du déploiement avant de rejoindre le cours dans son UE.
+function revealScheduledCourse(event, courseId) {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    const target = document.getElementById(courseId);
+    if (!target) return;
+    event.preventDefault();
+    const panel = target.closest('.accordion-collapse');
+    const scrollToCourse = () => {
+        target.scrollIntoView({
+            block: 'center',
+            behavior: globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+        });
+        // Relancer l’animation même si le même cours est sélectionné deux fois.
+        target.classList.remove('course-arrival');
+        void target.offsetWidth;
+        target.classList.add('course-arrival');
+        const finishArrival = event => {
+            if (event.target !== target || event.animationName !== 'course-arrival') return;
+            target.classList.remove('course-arrival');
+            target.removeEventListener('animationend', finishArrival);
+        };
+        target.addEventListener('animationend', finishArrival);
+    };
+    if (!panel || panel.classList.contains('show')) {
+        scrollToCourse();
+    } else if (globalThis.bootstrap?.Collapse) {
+        panel.addEventListener('shown.bs.collapse', scrollToCourse, { once: true });
+        bootstrap.Collapse.getOrCreateInstance(panel, { toggle: false }).show();
+    } else {
+        panel.classList.add('show');
+        const button = document.querySelector(`[aria-controls="${panel.id}"]`);
+        button?.classList.remove('collapsed');
+        button?.setAttribute('aria-expanded', 'true');
+        scrollToCourse();
+    }
+}
+
 function renderDailySchedule(courses) {
     const schedule = element('details', 'daily-schedule');
+    schedule.open = globalThis.matchMedia?.('(min-width: 761px)').matches ?? false;
     schedule.setAttribute('aria-label', SiteTexts.get('planning.titre'));
     const days = coursesByDay(courses);
     const summary = element('summary', 'daily-schedule-summary');
@@ -331,21 +370,27 @@ function renderDailySchedule(courses) {
     summary.append(toggle);
     schedule.append(summary);
     for (const day of days) {
-        const row = element('div', 'daily-schedule-day');
-        row.append(element('h3', 'daily-schedule-heading', SiteTexts.get(day.offset === -1 ? 'planning.rattraper' : day.offset === 1 ? 'planning.demain' : 'planning.aujourdhui')));
+        const row = element('div', day.offset === -1 ? 'daily-schedule-day daily-schedule-day-catchup' : 'daily-schedule-day');
+        const heading = element('h3', 'daily-schedule-heading', SiteTexts.get(day.offset === -1 ? 'planning.rattraper' : day.offset === 1 ? 'planning.demain' : 'planning.aujourdhui'));
+        heading.append(element('span', 'daily-schedule-heading-count', SiteTexts.get('planning.nombre_cours', { nombre: day.courses.length })));
+        row.append(heading);
         const content = element('div', 'daily-schedule-content');
         row.append(content);
         if (!day.courses.length) {
             content.append(element('p', 'daily-schedule-empty', SiteTexts.get(day.offset === -1 ? 'planning.aucun_rattraper' : 'planning.aucun')));
         } else {
-            const list = element('ul', 'daily-schedule-list');
+            const list = element('ul', day.offset === -1 ? 'daily-schedule-list daily-schedule-catchup' : 'daily-schedule-list');
             const entries = day.offset === -1
                 ? [...day.courses.reduce((counts, course) => counts.set(course.ue_numero, (counts.get(course.ue_numero) || 0) + 1), new Map())]
                     .map(([ue, count]) => ({ ue, label: SiteTexts.get('planning.nombre_cours', { nombre: count }) }))
                 : day.courses.map(course => ({ ue: course.ue_numero, label: course.cours_nom, course }));
             for (const entry of entries) {
                 const item = element('li', 'daily-schedule-course');
-                const label = element('span', 'daily-schedule-label', entry.label);
+                const label = element(entry.course ? 'a' : 'span', 'daily-schedule-label', entry.label);
+                if (entry.course) {
+                    label.href = `#${entry.course.id}`;
+                    label.addEventListener('click', event => revealScheduledCourse(event, entry.course.id));
+                }
                 if (entry.course?.Presentiel?.trim()) {
                     label.append(element('span', 'schedule-mode schedule-mode-presentiel', SiteTexts.get('planning.presentiel')));
                 }
@@ -498,6 +543,11 @@ async function loadCourses() {
         const courses = readCourses(text);
         renderOtherSemesters(text);
         renderCourses(courses);
+        // Le récapitulatif reste déployé sur ordinateur ; seul le mobile le replie.
+        globalThis.matchMedia?.('(min-width: 761px)').addEventListener('change', event => {
+            const schedule = document.querySelector('.daily-schedule');
+            if (schedule) schedule.open = event.matches;
+        });
         document.getElementById('course-semesters').addEventListener('change', event => {
             if (!event.target.matches('.form-check-input')) return;
             const previous = document.querySelector('.daily-schedule');
