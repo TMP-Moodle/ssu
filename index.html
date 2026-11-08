@@ -13,12 +13,110 @@
     </script>
 
     <meta charset="UTF-8" />
-    <script src="textes.js"></script>
-    <script src="theme.js"></script>
+    <script>
+    // Ce chargeur reste dans le HTML : aucun script ancien ne peut le mettre en cache séparément.
+    (() => {
+        let version = Date.now().toString(36);
+        let checking = false;
+        let refreshing = false;
+        const domReady = document.readyState === 'loading'
+            ? new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }))
+            : Promise.resolve();
+        const assetURL = name => {
+            const url = new URL(name, document.baseURI);
+            url.searchParams.set('v', version);
+            return url.href;
+        };
+        window.SiteAssets = { url: assetURL };
+
+        async function latestVersion() {
+            const url = new URL('version.json', document.baseURI);
+            url.searchParams.set('_', Date.now().toString(36));
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 5000);
+            try {
+                const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
+                if (!response.ok) throw new Error(`Version : HTTP ${response.status}`);
+                const manifest = await response.json();
+                if (!/^[a-f0-9]{20}$/.test(manifest.version)) throw new Error('Version du site incorrecte.');
+                return manifest.version;
+            } finally {
+                clearTimeout(timeout);
+            }
+        }
+
+        async function checkForUpdate() {
+            if (checking || refreshing || document.visibilityState === 'hidden') return;
+            checking = true;
+            try {
+                const latest = await latestVersion();
+                if (latest !== version) {
+                    refreshing = true;
+                    const url = new URL(location.href);
+                    url.searchParams.set('_v', latest);
+                    location.replace(url.href);
+                }
+            } catch {
+                // Une panne réseau ne doit pas interrompre la consultation.
+            } finally {
+                checking = false;
+            }
+        }
+
+        function loadScript(name) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = assetURL(name);
+                script.async = false;
+                script.onload = resolve;
+                script.onerror = () => reject(new Error(`Chargement impossible : ${name}`));
+                document.head.append(script);
+            });
+        }
+
+        async function start() {
+            try {
+                version = await latestVersion();
+            } catch {
+                // Même sans manifeste disponible, demander des fichiers frais.
+            }
+            await domReady;
+            document.getElementById('site-style').href = assetURL('index.css');
+            document.querySelectorAll('a[href="version-simplifiee.html"]').forEach(link => {
+                link.href = assetURL('version-simplifiee.html');
+            });
+            // Versions ordonnées : les textes précèdent le thème et les cours.
+            try {
+                await loadScript('textes.js');
+                await loadScript('theme.js');
+                await loadScript('courses.js');
+            } catch (error) {
+                const status = document.getElementById('courses-status');
+                const message = document.createElement('p');
+                message.textContent = 'Impossible de charger le site. Vous pouvez consulter la version simplifiée.';
+                const fallback = document.createElement('a');
+                fallback.href = assetURL('version-simplifiee.html');
+                fallback.textContent = 'Consulter la version simplifiée ↗';
+                status.hidden = false;
+                status.setAttribute('role', 'alert');
+                status.replaceChildren(message, fallback);
+                console.error(error);
+            }
+            if (location.protocol !== 'file:') {
+                setInterval(checkForUpdate, 60000);
+                document.addEventListener('visibilitychange', checkForUpdate);
+                window.addEventListener('pageshow', checkForUpdate);
+                window.addEventListener('focus', checkForUpdate);
+                window.addEventListener('online', checkForUpdate);
+            }
+        }
+        start();
+    })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title data-texte="site.nom">TMP Moodle</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="index.css" />
+    <link id="site-style" rel="stylesheet" href="index.css" />
     <link rel="icon" type="image/png" href="https://images.emojiterra.com/twitter/v14.0/512px/1f393.png">
 
     <meta property="og:title" data-texte-content="site.nom" content="TMP Moodle">
@@ -27,7 +125,6 @@
     <meta property="og:type" content="website">
 
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script defer src="courses.js"></script>
 
 </head>
 

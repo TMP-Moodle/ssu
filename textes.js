@@ -24,7 +24,7 @@ window.SiteTexts = (() => {
     const domReady = document.readyState === 'loading'
         ? new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }))
         : Promise.resolve();
-    const ready = fetch('textes.json', { cache: 'no-cache' }).then(async response => {
+    const ready = fetch(globalThis.SiteAssets?.url('textes.json') || 'textes.json', { cache: 'no-store' }).then(async response => {
         if (!response.ok) throw new Error(`textes.json : HTTP ${response.status}`);
         texts = await response.json();
         await domReady;

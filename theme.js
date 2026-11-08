@@ -13,7 +13,7 @@
         }
     };
     apply(explicit ? saved : preference.matches ? 'dark' : 'light');
-    document.addEventListener('DOMContentLoaded', () => {
+    function initializeButton() {
         apply(root.getAttribute('data-bs-theme'));
         document.getElementById('theme-toggle').addEventListener('click', () => {
             const theme = root.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
@@ -21,7 +21,9 @@
             apply(theme);
             try { localStorage.setItem('tmp-moodle:theme', theme); } catch {}
         });
-    });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeButton, { once: true });
+    else initializeButton();
     SiteTexts.ready.then(() => apply(root.getAttribute('data-bs-theme'))).catch(() => {});
     preference.addEventListener('change', event => {
         if (!explicit) apply(event.matches ? 'dark' : 'light');

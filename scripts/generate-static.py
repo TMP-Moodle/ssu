@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Construit une page autonome sans JS, avec la bibliothèque standard Python."""
+"""Prépare la page autonome sans JS et le manifeste de version du site."""
 import argparse
 import csv
 from datetime import date, datetime, timedelta
 import html
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -16,6 +17,16 @@ from zoneinfo import ZoneInfo
 
 LINKS = ('video_link_1', 'video_link_2', 'video_link_1_anterieur',
          'video_link_2_anterieur', 'pdf_link', 'pdf_link_anterieur')
+VERSION_INPUTS = ('index.html', 'index.css', 'courses.js', 'textes.js',
+                  'textes.json', 'theme.js', 'sources.csv', 'scripts/generate-static.py')
+
+
+def build_version(read, page):
+    digest = hashlib.sha256()
+    for name in VERSION_INPUTS:
+        digest.update(name.encode('utf-8') + b'\0' + read(name).encode('utf-8') + b'\0')
+    digest.update(page.encode('utf-8'))
+    return json.dumps({'version': digest.hexdigest()[:20]}, indent=2) + '\n'
 
 
 def parse_course_date(value):
@@ -38,7 +49,7 @@ def course_schedule_style(row, iso, today):
         css = 'course-date course-date-session' + ('' if presentiel else ' course-date-visio')
         return css, 'cours.' + key
     due = iso <= today
-    return ('course-date course-date-due' if due else 'course-date',
+    return ('course-date course-date-due' if due else 'course-date course-date-upcoming',
             'cours.date_programmee' if due else 'cours.date_prevue')
 
 
@@ -74,7 +85,7 @@ details[open] > summary.accordion-button::after { transform: rotate(225deg); }
 details.accordion-item[open] > summary { background: var(--soft); border-radius: 16px 16px 0 0; }
 .ue-title { margin-left: 0; }
 .list-group { padding: 0; margin: 0; list-style: none; }
-.course-heading { grid-column: 1 / -1; }
+.course-heading { grid-column: 1; }
 .course-title { margin-right: auto; }
 .course-links { grid-column: 1 / -1; }
 .badge { display: inline-block; line-height: 1.3; text-decoration: none; }
@@ -177,12 +188,18 @@ def generate(read):
                         for course in day_courses:
                             ue = course['ue_numero']
                             counts[ue] = counts.get(ue, 0) + 1
-                        entries = [(ue, t('planning.nombre_cours', nombre=count)) for ue, count in counts.items()]
+                        entries = [(ue, t('planning.nombre_cours', nombre=count), '') for ue, count in counts.items()]
                     else:
-                        entries = [(course['ue_numero'], html.escape(course['cours_nom'])) for course in day_courses]
-                    for number, name in entries:
+                        entries = []
+                        for course in day_courses:
+                            modes = ''
+                            for column, css, key in (('Presentiel', 'presentiel', 'planning.presentiel'), ('Visio', 'visio', 'planning.visio')):
+                                if course[column].strip():
+                                    modes += f'<span class="schedule-mode schedule-mode-{css}">{t(key)}</span>'
+                            entries.append((course['ue_numero'], html.escape(course['cours_nom']), modes))
+                    for number, name, modes in entries:
                         ue = html.escape(number)
-                        schedule += f'<li class="daily-schedule-course"><span class="daily-schedule-ue">UE {ue}</span><span>{name}</span></li>'
+                        schedule += f'<li class="daily-schedule-course"><span class="daily-schedule-ue">UE {ue}</span><span class="daily-schedule-label">{name}{modes}</span></li>'
                     schedule += '</ul>'
                 else:
                     empty_text = t('planning.aucun_rattraper' if offset == -1 else 'planning.aucun')
@@ -217,11 +234,11 @@ def generate(read):
                     date_class, date_key = course_schedule_style(row, iso, today)
                     date_text = t(date_key, date=label)
                     date_label = f'<time class="{date_class}" datetime="{iso}">{date_text}</time>'
-                heading = f'<div class="course-label">{heading}{date_label}</div>'
+                heading = f'<div class="course-label">{heading}</div>'
                 report_url = 'https://tally.so/r/X554dL?cours=' + quote(f"S{semester} UE {number} {row['cours_nom']}", safe='')
                 report_title = t('cours.signaler', cours=title, id=row['id'])
                 report = link(report_url, '⚑', f' class="course-report" title="{report_title}" aria-label="{report_title}" target="_blank" rel="noopener noreferrer"')
-                parts.append(f'<li class="list-group-item" id="{row["id"]}"><div class="course-heading">{heading}{report}</div><div class="course-links">')
+                parts.append(f'<li class="list-group-item" id="{row["id"]}"><div class="course-heading">{heading}</div><div class="course-schedule">{report}{date_label}</div><div class="course-links">')
                 split = bool(row['video_link_2'] or row['video_link_2_anterieur'])
                 labels = ('premiere_partie' if split else 'enregistrement', 'seconde_partie',
                           'anterieur_premiere_partie' if split else 'video_anterieure', 'anterieur_seconde_partie', 'pdf', 'pdf_anterieur')
@@ -269,13 +286,15 @@ def main():
 
     try:
         page = generate(read)
-        # Ne remplacer le fichier qu’une fois toutes les entrées validées.
-        target = root / 'version-simplifiee.html'
-        temporary = target.with_suffix('.html.tmp')
-        temporary.write_text(page, encoding='utf-8')
-        temporary.replace(target)
+        manifest = build_version(read, page)
+        # Ne remplacer les fichiers qu’une fois toutes les entrées validées.
+        for name, content in (('version-simplifiee.html', page), ('version.json', manifest)):
+            target = root / name
+            temporary = target.with_suffix(target.suffix + '.tmp')
+            temporary.write_text(content, encoding='utf-8')
+            temporary.replace(target)
     except (ValueError, KeyError, OSError, subprocess.CalledProcessError) as error:
-        print(f'Génération de la version simplifiée impossible : {error}', file=sys.stderr)
+        print(f'Préparation du site impossible : {error}', file=sys.stderr)
         return 1
     return 0
 

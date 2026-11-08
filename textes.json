@@ -73,6 +73,8 @@
     "nombre_cours": "{nombre} cours",
     "rattraper": "Cours à rattraper",
     "aucun_rattraper": "Aucun cours à rattraper.",
-    "sans_suivi": "Cette version affiche tous les cours passés ; le suivi « Terminé » est disponible dans la version complète."
+    "sans_suivi": "Cette version affiche tous les cours passés ; le suivi « Terminé » est disponible dans la version complète.",
+    "presentiel": "Présentiel",
+    "visio": "Visio"
   }
 }

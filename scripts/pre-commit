@@ -10,4 +10,4 @@ generator=$(mktemp)
 trap 'rm -f "$generator"' EXIT HUP INT TERM
 git show :scripts/generate-static.py > "$generator"
 python3 "$generator" --staged
-git add -- version-simplifiee.html
+git add -- version-simplifiee.html version.json

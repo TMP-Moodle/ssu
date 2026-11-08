@@ -73,7 +73,7 @@ function courseScheduleStyle(course, isoDate, today = new Date()) {
         return { key: presentiel && visio ? 'cours.date_hybride' : presentiel ? 'cours.date_presentiel' : 'cours.date_visio', className: presentiel ? 'course-date-session' : 'course-date-session course-date-visio' };
     }
     const due = isCourseDue(isoDate, today);
-    return { key: due ? 'cours.date_programmee' : 'cours.date_prevue', className: due ? 'course-date-due' : '' };
+    return { key: due ? 'cours.date_programmee' : 'cours.date_prevue', className: due ? 'course-date-due' : 'course-date-upcoming' };
 }
 
 function readSources(text) {
@@ -147,7 +147,7 @@ function renderCourse(course) {
     report.setAttribute('aria-label', report.title);
     const courseLabel = element('div', 'course-label');
     courseLabel.append(title);
-    heading.append(courseLabel, report);
+    heading.append(courseLabel);
     item.append(heading);
 
     const links = element('div', 'course-links');
@@ -172,16 +172,19 @@ function renderCourse(course) {
     item.append(links);
 
     const completion = element('div', 'course-completion');
+    const schedule = element('div', 'course-schedule');
+    schedule.append(report);
     const scheduledDate = parseCourseDate(course.date);
     if (scheduledDate) {
         const style = courseScheduleStyle(course, scheduledDate.iso);
         const date = element('time', 'course-date', SiteTexts.get(style.key, { date: scheduledDate.label }));
         date.dateTime = scheduledDate.iso;
         if (style.className) date.classList.add(...style.className.split(' '));
-        completion.append(date);
+        schedule.append(date);
     } else {
-        completion.append(element('span', 'course-date', SiteTexts.get('cours.non_programme')));
+        schedule.append(element('span', 'course-date', SiteTexts.get('cours.non_programme')));
     }
+    completion.append(schedule);
     const label = element('label', 'form-check');
     const checkbox = element('input', 'form-check-input');
     checkbox.type = 'checkbox';
@@ -261,10 +264,17 @@ function renderDailySchedule(courses) {
             const entries = day.offset === -1
                 ? [...day.courses.reduce((counts, course) => counts.set(course.ue_numero, (counts.get(course.ue_numero) || 0) + 1), new Map())]
                     .map(([ue, count]) => ({ ue, label: SiteTexts.get('planning.nombre_cours', { nombre: count }) }))
-                : day.courses.map(course => ({ ue: course.ue_numero, label: course.cours_nom }));
+                : day.courses.map(course => ({ ue: course.ue_numero, label: course.cours_nom, course }));
             for (const entry of entries) {
                 const item = element('li', 'daily-schedule-course');
-                item.append(element('span', 'daily-schedule-ue', `UE ${entry.ue}`), element('span', '', entry.label));
+                const label = element('span', 'daily-schedule-label', entry.label);
+                if (entry.course?.Presentiel?.trim()) {
+                    label.append(element('span', 'schedule-mode schedule-mode-presentiel', SiteTexts.get('planning.presentiel')));
+                }
+                if (entry.course?.Visio?.trim()) {
+                    label.append(element('span', 'schedule-mode schedule-mode-visio', SiteTexts.get('planning.visio')));
+                }
+                item.append(element('span', 'daily-schedule-ue', `UE ${entry.ue}`), label);
                 list.append(item);
             }
             content.append(list);
@@ -406,7 +416,7 @@ async function loadCourses() {
     const status = document.getElementById('courses-status');
     try {
         await SiteTexts.ready;
-        const response = await fetch('sources.csv', { cache: 'no-cache' });
+        const response = await fetch(globalThis.SiteAssets?.url('sources.csv') || 'sources.csv', { cache: 'no-store' });
         if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
         const text = await response.text();
         const courses = readCourses(text);
@@ -434,7 +444,7 @@ async function loadCourses() {
             ? SiteTexts.get('messages.erreur_locale')
             : SiteTexts.get('messages.erreur_cours');
         const fallback = element('a', 'alert-link', SiteTexts.get('messages.consulter_version_simplifiee'));
-        fallback.href = 'version-simplifiee.html';
+        fallback.href = globalThis.SiteAssets?.url('version-simplifiee.html') || 'version-simplifiee.html';
         status.replaceChildren(element('p', 'mb-2', message), fallback);
         console.error('Chargement des cours :', error);
     }
