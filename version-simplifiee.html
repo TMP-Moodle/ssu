@@ -404,6 +404,11 @@ a.daily-schedule-label:focus-visible { text-decoration: underline; text-decorati
     .course-schedule .course-date { padding-inline: 6px; }
 }
 
+/* Éloigne l’en-tête de la barre d’état dans la webapp mobile installée. */
+@media (display-mode: standalone) and (max-width: 760px) {
+    body { padding-top: calc(24px + env(safe-area-inset-top, 0px)); }
+}
+
 /* Une nuance bleu-gris distingue discrètement la version simplifiée. */
 :root {
   --page: #f5f7f8; --surface: #fff; --ink: #26343b; --muted: #65727a;
