@@ -342,6 +342,9 @@ footer p { max-width: 740px; margin: 0; }
     .daily-schedule-heading { display: flex; align-items: baseline; gap: 6px; white-space: nowrap; }
     .daily-schedule-heading-count { display: inline-flex; align-items: baseline; gap: 6px; color: var(--muted); font-weight: 400; font-variant-numeric: tabular-nums; }
     .daily-schedule-heading-count::before { content: "·"; }
+    .daily-schedule-day:not(.daily-schedule-day-catchup) .daily-schedule-heading { display: block; }
+    .daily-schedule-day:not(.daily-schedule-day-catchup) .daily-schedule-heading-count { display: block; margin-top: 4px; }
+    .daily-schedule-day:not(.daily-schedule-day-catchup) .daily-schedule-heading-count::before { content: none; }
 }
 .daily-schedule-content { display: grid; gap: 8px; min-width: 0; }
 .daily-schedule-list { display: grid; gap: 6px; list-style: none; margin: 0; padding: 0; }
@@ -353,6 +356,8 @@ footer p { max-width: 740px; margin: 0; }
     .daily-schedule-list { gap: 3px; }
     .daily-schedule-catchup { display: flex; flex-wrap: wrap; gap: 3px 16px; }
     .daily-schedule-catchup > .daily-schedule-course { display: flex; flex: 0 0 auto; gap: 6px; white-space: nowrap; }
+    .daily-schedule-catchup > .daily-schedule-course + .daily-schedule-course { position: relative; }
+    .daily-schedule-catchup > .daily-schedule-course + .daily-schedule-course::before { content: ""; position: absolute; inset-inline-start: -8px; top: 50%; width: 1px; height: 12px; background: var(--line); transform: translateY(-50%); }
 }
 .daily-schedule-empty { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
 @media (max-width: 760px) {
