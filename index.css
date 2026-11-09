@@ -350,6 +350,8 @@ footer p { max-width: 740px; margin: 0; }
 .daily-schedule-list { display: grid; gap: 6px; list-style: none; margin: 0; padding: 0; }
 .daily-schedule-course { display: grid; grid-template-columns: 58px minmax(0, 1fr); align-items: baseline; gap: 10px; color: var(--ink); font-size: 12px; line-height: 1.6; }
 .daily-schedule-label, .daily-schedule-label:hover { color: inherit; text-decoration: none; }
+a.daily-schedule-label:hover,
+a.daily-schedule-label:focus-visible { text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 60%, transparent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .daily-schedule-ue { color: var(--muted); font-size: 11px; white-space: nowrap; }
 .daily-schedule-course > span:last-child { overflow-wrap: anywhere; }
 @media (min-width: 761px) {
