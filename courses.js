@@ -313,18 +313,14 @@ function coursesByDay(courses, today = new Date()) {
     });
 }
 
-// Attendre la fin du déploiement avant de rejoindre le cours dans son UE.
+// Rejoindre le cours pendant le déploiement de son UE.
 function revealScheduledCourse(event, courseId) {
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     const target = document.getElementById(courseId);
     if (!target) return;
     event.preventDefault();
     const panel = target.closest('.accordion-collapse');
-    const scrollToCourse = () => {
-        target.scrollIntoView({
-            block: 'center',
-            behavior: globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-        });
+    const highlightCourse = () => {
         // Relancer l’animation même si le même cours est sélectionné deux fois.
         target.classList.remove('course-arrival');
         void target.offsetWidth;
@@ -336,18 +332,18 @@ function revealScheduledCourse(event, courseId) {
         };
         target.addEventListener('animationend', finishArrival);
     };
-    if (!panel || panel.classList.contains('show')) {
-        scrollToCourse();
-    } else if (globalThis.bootstrap?.Collapse) {
-        panel.addEventListener('shown.bs.collapse', scrollToCourse, { once: true });
-        bootstrap.Collapse.getOrCreateInstance(panel, { toggle: false }).show();
-    } else {
-        panel.classList.add('show');
-        const button = document.querySelector(`[aria-controls="${panel.id}"]`);
-        button?.classList.remove('collapsed');
-        button?.setAttribute('aria-expanded', 'true');
-        scrollToCourse();
+    if (panel && !panel.classList.contains('show')) {
+        if (globalThis.bootstrap?.Collapse) {
+            bootstrap.Collapse.getOrCreateInstance(panel, { toggle: false }).show();
+        } else {
+            panel.classList.add('show');
+            const button = document.querySelector(`[aria-controls="${panel.id}"]`);
+            button?.classList.remove('collapsed');
+            button?.setAttribute('aria-expanded', 'true');
+        }
     }
+    const targetTop = Math.max(16, (document.documentElement.clientHeight - target.getBoundingClientRect().height) / 2);
+    animateViewportPosition(target, panel, targetTop, highlightCourse);
 }
 
 function renderDailySchedule(courses) {
@@ -447,10 +443,18 @@ function positionOpeningUE(item, panel) {
     const top = item.getBoundingClientRect().top;
     const targetTop = document.documentElement.clientHeight * 0.2;
     if (top >= 0 && top <= targetTop) return;
+    animateViewportPosition(item, panel, targetTop);
+}
+
+function animateViewportPosition(item, panel, targetTop, onArrival) {
+    stopUEPositioning();
+    const top = item.getBoundingClientRect().top;
     const reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    const button = item.querySelector('.accordion-button');
+    const button = panel?.closest('.accordion-item')?.querySelector('.accordion-button');
     // Une trajectoire fixe, de même durée que le déploiement Bootstrap.
-    const duration = reducedMotion ? 0 : parseFloat(getComputedStyle(panel).transitionDuration) * 1000 || 0;
+    const duration = reducedMotion ? 0 : panel?.classList.contains('collapsing')
+        ? parseFloat(getComputedStyle(panel).transitionDuration) * 1000 || 0
+        : 400;
     const started = performance.now();
     const interruptions = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
     let frame;
@@ -462,7 +466,7 @@ function positionOpeningUE(item, panel) {
     stopUEPositioning = stop;
     for (const event of interruptions) window.addEventListener(event, stop, { passive: true });
     const step = time => {
-        if (!item.isConnected || button.getAttribute('aria-expanded') !== 'true') return stop();
+        if (!item.isConnected || (button && button.getAttribute('aria-expanded') !== 'true')) return stop();
         const progress = duration ? Math.min(1, Math.max(0, (time - started) / duration)) : 1;
         const eased = progress * progress * (3 - 2 * progress);
         const desiredTop = top + (targetTop - top) * eased;
@@ -470,7 +474,11 @@ function positionOpeningUE(item, panel) {
             top: Math.ceil(item.getBoundingClientRect().top - desiredTop),
             behavior: 'instant',
         });
-        if (progress === 1) return stop();
+        if (progress === 1) {
+            stop();
+            onArrival?.();
+            return;
+        }
         frame = requestAnimationFrame(step);
     };
     frame = requestAnimationFrame(step);

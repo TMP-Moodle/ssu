@@ -36,6 +36,9 @@ button, input, a { touch-action: manipulation; }
 .semester-heading > span { font-size: 12px; color: var(--muted); }
 .accordion { --bs-accordion-bg: var(--surface); --bs-accordion-color: var(--ink); --bs-accordion-border-color: var(--line); --bs-accordion-btn-color: var(--ink); --bs-accordion-active-color: var(--ink); --bs-accordion-active-bg: var(--soft); --bs-accordion-btn-focus-box-shadow: none; }
 .course-accordion { display: grid; gap: 8px; }
+@media (prefers-reduced-motion: no-preference) {
+    .course-accordion .collapsing { transition-duration: 0.4s; }
+}
 .accordion-item, .accordion-item:first-of-type, .accordion-item:last-of-type { border: 1px solid var(--line); border-radius: 16px; overflow: clip; }
 /* Le conteneur découpe les coins extérieurs ; aucun arrondi à la jonction du contenu. */
 .accordion-button, .accordion-item:first-of-type > .accordion-header .accordion-button, .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed { border-radius: 0; }
