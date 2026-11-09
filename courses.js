@@ -440,6 +440,42 @@ function renderCourses(courses) {
 }
 
 
+let stopUEPositioning = () => {};
+
+function positionOpeningUE(item, panel) {
+    stopUEPositioning();
+    const top = item.getBoundingClientRect().top;
+    const targetTop = document.documentElement.clientHeight * 0.2;
+    if (top >= 0 && top <= targetTop) return;
+    const reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const button = item.querySelector('.accordion-button');
+    // Une trajectoire fixe, de même durée que le déploiement Bootstrap.
+    const duration = reducedMotion ? 0 : parseFloat(getComputedStyle(panel).transitionDuration) * 1000 || 0;
+    const started = performance.now();
+    const interruptions = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
+    let frame;
+    const stop = () => {
+        cancelAnimationFrame(frame);
+        for (const event of interruptions) window.removeEventListener(event, stop);
+        if (stopUEPositioning === stop) stopUEPositioning = () => {};
+    };
+    stopUEPositioning = stop;
+    for (const event of interruptions) window.addEventListener(event, stop, { passive: true });
+    const step = time => {
+        if (!item.isConnected || button.getAttribute('aria-expanded') !== 'true') return stop();
+        const progress = duration ? Math.min(1, Math.max(0, (time - started) / duration)) : 1;
+        const eased = progress * progress * (3 - 2 * progress);
+        const desiredTop = top + (targetTop - top) * eased;
+        window.scrollBy({
+            top: Math.ceil(item.getBoundingClientRect().top - desiredTop),
+            behavior: 'instant',
+        });
+        if (progress === 1) return stop();
+        frame = requestAnimationFrame(step);
+    };
+    frame = requestAnimationFrame(step);
+}
+
 function renderUEs(courses, accordion) {
     const groups = new Map();
     for (const course of courses) {
@@ -475,6 +511,11 @@ function renderUEs(courses, accordion) {
         panel.id = id;
         panel.setAttribute('aria-labelledby', heading.id);
         panel.setAttribute('data-bs-parent', `#${accordion.id}`);
+        button.addEventListener('click', () => {
+            // Bootstrap traite le clic en capture et met déjà aria-expanded à jour.
+            if (button.getAttribute('aria-expanded') !== 'true') return;
+            positionOpeningUE(item, panel);
+        });
         const body = element('div', 'accordion-body');
         const list = element('ul', 'list-group');
         for (const course of group) list.append(renderCourse(course));

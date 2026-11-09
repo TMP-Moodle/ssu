@@ -158,6 +158,11 @@ footer { display: grid; gap: 8px; margin-top: 16px; padding-top: 10px; padding-b
 footer p { max-width: 740px; margin: 0; }
 .site-information summary { cursor: pointer; width: fit-content; padding: 0; }
 .site-information p { margin-top: 6px; }
+@media (min-width: 761px) {
+    .main-footer { grid-template-columns: minmax(0, 1fr) auto; column-gap: 24px; align-items: baseline; }
+    .main-footer > .footer-navigation { justify-content: flex-end; }
+    .main-footer > .site-information { grid-column: 1 / -1; }
+}
 @media (max-width: 600px) {
     .site-header, main, footer { width: calc(100% - 32px); }
     .site-header { padding-block: 8px; gap: 8px; }
@@ -179,7 +184,7 @@ footer p { max-width: 740px; margin: 0; }
     .course-accordion .ue-title { white-space: normal; overflow-wrap: anywhere; }
     .course-accordion .ue-number { display: block; margin-bottom: 2px; color: var(--muted); font-size: 11px; line-height: 1.4; font-weight: 400; white-space: nowrap; }
     .course-accordion .ue-separator { display: none; }
-    .course-accordion .ue-name { display: block; }
+    .course-accordion .ue-name { display: block; font-size: 13.4px; }
     .course-accordion .ue-progress { justify-self: end; white-space: nowrap; }
     .course-accordion .accordion-button::after { width: 16px; height: 16px; margin: 0; background-size: 16px; }
     /* La version simplifiée n’a pas de compteur de progression. */
