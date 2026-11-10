@@ -104,6 +104,7 @@ button, input, a { touch-action: manipulation; }
 .list-group-item:first-child { border-top: 0; }
 .list-group > .list-group-item + .list-group-item { border-top: 1px solid var(--line); }
 .course-title { color: var(--ink); font-size: 14px; line-height: 1.6; font-weight: 550; grid-column: 1; }
+.course-information { margin: 6px 0 0; padding: 8px 10px; border-left: 3px solid var(--line); border-radius: 4px; background: transparent; color: var(--muted); font-size: 13px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
 .course-heading { grid-column: 1; grid-row: 1; display: flex; align-items: center; min-height: 32px; }
 .course-report { display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; min-width: 32px; min-height: 32px; margin: 0; color: var(--muted); background: transparent; box-shadow: inset 0 0 0 1px var(--line); transition: background-color .15s ease, color .15s ease, box-shadow .15s ease; border-radius: 6px; font-size: 18px; }
 .course-report:hover { color: var(--accent); background: var(--soft); text-decoration: none; }
@@ -120,6 +121,11 @@ button, input, a { touch-action: manipulation; }
 .course-schedule .course-date { min-width: 0; max-width: 100%; }
 /* Une ligne de date (11 × 1,5) + 8 px de padding + 2 px de bordure. */
 .course-schedule .course-report { --date-pill-size: calc(11px * 1.5 + 10px); flex: 0 0 var(--date-pill-size); width: var(--date-pill-size); height: var(--date-pill-size); min-width: 0; min-height: 0; aspect-ratio: 1; font-size: 16px; line-height: 1; }
+@media (min-width: 601px) {
+    .course-heading { align-items: flex-start; }
+    .course-label > .course-title { display: block; min-height: 32px; padding-top: 4px; }
+    .course-schedule { align-self: start; margin-top: 3px; }
+}
 .course-completion > label { grid-column: 2; grid-row: 2; align-self: center; justify-self: end; min-height: 32px; }
 .course-completion .completion-feedback { grid-column: 1 / -1; grid-row: 3; }
 .course-completion .completion-feedback:empty { display: none; }

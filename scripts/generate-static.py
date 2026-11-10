@@ -216,6 +216,9 @@ def generate(read):
                     date_class, date_key = course_schedule_style(row, iso, today)
                     date_text = t(date_key, date=label)
                     date_label = f'<time class="{date_class}" datetime="{iso}">{date_text}</time>'
+                information = row.get('information', '')
+                if information:
+                    heading += f'<p class="course-information">{html.escape(information)}</p>'
                 heading = f'<div class="course-label">{heading}</div>'
                 report_url = 'https://tally.so/r/X554dL?cours=' + quote(f"S{semester} UE {number} {row['cours_nom']}", safe='')
                 report_title = t('cours.signaler', cours=title, id=row['id'])

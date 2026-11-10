@@ -210,6 +210,10 @@ function renderCourse(course) {
     report.setAttribute('aria-label', report.title);
     const courseLabel = element('div', 'course-label');
     courseLabel.append(title);
+    const information = course.information?.trim();
+    if (information) {
+        courseLabel.append(element('p', 'course-information', information));
+    }
     heading.append(courseLabel);
     item.append(heading);
 
