@@ -134,6 +134,12 @@ button, input, a { touch-action: manipulation; }
 .form-check-input { cursor: pointer; border-color: var(--muted); background-color: var(--surface); }
 .form-check-input:checked { background-color: #3d5f7c; border-color: var(--due-ink); }
 .completion-feedback:not(:empty) { display: block; margin: 0; font-size: 12px; }
+.availability-note { display: flex; align-items: baseline; gap: 8px; margin: 16px 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--soft); color: var(--ink); font-size: 13px; line-height: 1.5; }
+.availability-note p { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.availability-note strong { font-weight: 600; }
+.availability-note p > span { display: block; }
+.availability-verification { margin-top: 3px; color: var(--muted); font-size: 12px; }
+.availability-icon { flex-shrink: 0; color: var(--accent); font-weight: 700; }
 #courses-status { margin-block: 16px; }
 #courses-status:has(.loading-help) { white-space: normal; }
 .loading-help {

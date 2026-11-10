@@ -186,7 +186,8 @@ def generate(read):
 <a class="wordmark" href="index.html" aria-label="{t('site.accueil')}"><span class="brand-mark" aria-hidden="true">m.</span> {t('site.nom_simplifie')}</a>
 <a class="version-link" href="index.html">{t('pied_de_page.version_normale')}</a>
 </header>
-<main>''']
+<main>
+<aside class="availability-note"><span class="availability-icon" aria-hidden="true">✓</span><p><strong>{t('messages.disponibilite_titre')}</strong><span class="availability-verification">{t('messages.derniere_verification')}</span></p></aside>''']
     semesters = sorted({row['semestre'] for row in courses}, key=int)
     if not courses:
         parts.append(f'<p>{t("messages.aucun_cours")}</p>')
