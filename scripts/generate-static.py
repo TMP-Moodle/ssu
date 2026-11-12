@@ -31,7 +31,7 @@ def pdf_link_columns(source):
 
 
 VERSION_INPUTS = ('index.html', 'index.css', 'courses.js', 'textes.js',
-                  'textes.json', 'theme.js', 'sources.csv', 'scripts/generate-static.py',
+                  'textes.json', 'derniere-verification.json', 'theme.js', 'sources.csv', 'scripts/generate-static.py',
                   'manifest.webmanifest', 'scripts/generate-icons.swift')
 
 
@@ -121,6 +121,9 @@ details.accordion-item[open] > summary { background: var(--soft); border-radius:
 
 def generate(read):
     texts = json.loads(read('textes.json'))
+    verification = json.loads(read('derniere-verification.json'))
+    if not all(isinstance(verification.get(key), str) for key in ('date', 'heure')):
+        raise ValueError('derniere-verification.json : date et heure requises')
     today = datetime.now(ZoneInfo('Europe/Paris')).date().isoformat()
 
     def t(key, **values):
@@ -167,7 +170,7 @@ def generate(read):
         courses.append(row)
 
     parts = [f'''<!DOCTYPE html>
-<!-- Généré par scripts/generate-static.py ; modifier sources.csv, textes.json ou index.css. -->
+<!-- Généré par scripts/generate-static.py ; modifier sources.csv, textes.json, derniere-verification.json ou index.css. -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -187,7 +190,7 @@ def generate(read):
 <a class="version-link" href="index.html">{t('pied_de_page.version_normale')}</a>
 </header>
 <main>
-<aside class="availability-note"><span class="availability-icon" aria-hidden="true">✓</span><p><strong>{t('messages.disponibilite_titre')}</strong><span class="availability-verification">{t('messages.derniere_verification')}</span></p></aside>''']
+<aside class="availability-note"><span class="availability-icon" aria-hidden="true">✓</span><p><strong>{t('messages.disponibilite_titre')}</strong><span class="availability-verification">{t('messages.derniere_verification', **verification)}</span></p></aside>''']
     semesters = sorted({row['semestre'] for row in courses}, key=int)
     if not courses:
         parts.append(f'<p>{t("messages.aucun_cours")}</p>')

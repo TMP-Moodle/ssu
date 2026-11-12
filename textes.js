@@ -1,4 +1,4 @@
-/* Relie textes.json aux pages et aux libellés générés par JavaScript. */
+/* Relie les textes et la dernière vérification aux pages. */
 'use strict';
 window.SiteTexts = (() => {
     let texts;
@@ -24,9 +24,16 @@ window.SiteTexts = (() => {
     const domReady = document.readyState === 'loading'
         ? new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }))
         : Promise.resolve();
-    const ready = fetch(globalThis.SiteAssets?.url('textes.json') || 'textes.json', { cache: 'no-store' }).then(async response => {
-        if (!response.ok) throw new Error(`textes.json : HTTP ${response.status}`);
-        texts = await response.json();
+    const ready = Promise.all(['textes.json', 'derniere-verification.json'].map(async file => {
+        const response = await fetch(globalThis.SiteAssets?.url(file) || file, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`${file} : HTTP ${response.status}`);
+        return response.json();
+    })).then(async ([loadedTexts, verification]) => {
+        if (typeof verification.date !== 'string' || typeof verification.heure !== 'string') {
+            throw new Error('derniere-verification.json : date et heure requises');
+        }
+        texts = loadedTexts;
+        texts.messages.derniere_verification = get('messages.derniere_verification', verification);
         await domReady;
         apply();
     });
@@ -37,7 +44,7 @@ window.SiteTexts = (() => {
             status.hidden = false;
             status.setAttribute('role', 'alert');
             status.className = 'alert alert-danger';
-            status.textContent = 'Impossible de charger les textes. Vérifiez la syntaxe de textes.json puis rechargez la page avec un serveur web.';
+            status.textContent = 'Impossible de charger les textes. Vérifiez textes.json et derniere-verification.json puis rechargez la page avec un serveur web.';
         });
     });
     return { get, ready, get loaded() { return Boolean(texts); } };

@@ -55,12 +55,33 @@ async function browser({ failManifest = false, failScript = false } = {}) {
 test('scripts, styles et données utilisent la même version, dans le bon ordre', async () => {
     const b = await browser();
     assert.deepEqual(b.scripts.map(url => new URL(url).pathname.split('/').pop()), ['textes.js', 'theme.js', 'courses.js']);
-    for (const url of [...b.scripts, b.nodes['site-style'].href, b.context.SiteAssets.url('sources.csv'), b.context.SiteAssets.url('textes.json')]) {
+    for (const url of [...b.scripts, b.nodes['site-style'].href, b.context.SiteAssets.url('sources.csv'), b.context.SiteAssets.url('textes.json'), b.context.SiteAssets.url('derniere-verification.json')]) {
         assert.equal(new URL(url).searchParams.get('v'), initial);
         assert(new URL(url).pathname.startsWith('/ssu/'));
     }
     assert.equal(b.calls[0].options.cache, 'no-store');
     assert(new URL(b.calls[0].url).searchParams.has('_'));
+});
+
+test('la date de vérification affichée provient du fichier dédié', async () => {
+    const calls = [];
+    const node = { getAttribute: () => 'messages.derniere_verification' };
+    const context = {
+        document: { readyState: 'complete', querySelectorAll: selector => selector === '[data-texte]' ? [node] : [] },
+        SiteAssets: { url: file => `${file}?v=test` },
+        fetch: async (url, options) => {
+            calls.push(url);
+            assert.equal(options.cache, 'no-store');
+            return { ok: true, json: async () => url.startsWith('textes.json')
+                ? JSON.parse(fs.readFileSync(path.join(root, 'textes.json'), 'utf8'))
+                : { date: '15/11/2026', heure: '09h42' } };
+        },
+    };
+    context.window = context;
+    vm.runInNewContext(fs.readFileSync(path.join(root, 'textes.js'), 'utf8'), context);
+    await context.SiteTexts.ready;
+    assert.equal(node.textContent, 'Contenu à jour au 15/11/2026 à 09h42');
+    assert.deepEqual(calls, ['textes.json?v=test', 'derniere-verification.json?v=test']);
 });
 
 test('une version inchangée ne recharge pas la page', async () => {

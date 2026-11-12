@@ -1,6 +1,7 @@
 """Exécuter avec python3 scripts/test-version.py."""
 from pathlib import Path
 import runpy
+import json
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -8,6 +9,15 @@ GENERATOR = runpy.run_path(str(ROOT / 'scripts/generate-static.py'))
 
 
 class VersionTests(unittest.TestCase):
+    def test_static_verification_comes_from_dedicated_file(self):
+        def read(name):
+            if name == 'derniere-verification.json':
+                return json.dumps({'date': '15/11/2026', 'heure': '09h42'})
+            return (ROOT / name).read_text()
+        page = GENERATOR['generate'](read)
+        self.assertIn('Contenu à jour au 15/11/2026 à 09h42', page)
+        self.assertNotIn('{heure}', page)
+
     def test_identical_inputs_keep_the_same_version(self):
         read = lambda name: (ROOT / name).read_text()
         page = GENERATOR['generate'](read)
