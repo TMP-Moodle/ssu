@@ -11,14 +11,14 @@ const prefix = 'tmp-moodle:completed:';
 const id = number => `S3_UE2.5_COURS${number}`;
 const groupId = id('7ET8ET11');
 class Element {
-    constructor(tag) { this.tag = tag; this.children = []; this.events = {}; this.classList = { add() {} }; }
+    constructor(tag) { this.tag = tag; this.children = []; this.events = {}; this.attributes = {}; this.style = { setProperty: (name, value) => { this.style[name] = value; } }; this.classList = { add() {} }; }
     append(...children) { this.children.push(...children); }
     replaceChildren(...children) { this.children = children; }
     querySelectorAll(selector) {
         assert.equal(selector, '.form-check-input:checked');
         return walk(this).filter(node => node.className === 'form-check-input' && node.checked);
     }
-    setAttribute() {}
+    setAttribute(name, value) { this.attributes[name] = value; }
     addEventListener(name, handler) { this.events[name] = handler; }
 }
 const walk = node => [node, ...node.children.flatMap(walk)];
@@ -126,9 +126,14 @@ test('le compteur compte les lignes présentes, jamais les composants absents du
         const counter = nodes.find(node => node.className === 'ue-progress');
         const checkbox = nodes.find(node => node.id === `completed-${id('7ET8ET9')}`);
         assert.equal(counter.textContent, `0/${numbers.length}`);
+        assert.equal(counter.style['--ue-completion'], 0);
         toggle(checkbox, true);
         assert.equal(counter.textContent, `${numbers.includes('7') ? 2 : 1}/${numbers.length}`);
+        assert.equal(counter.style['--ue-completion'], (numbers.includes('7') ? 2 : 1) / numbers.length);
+        assert.equal(nodes.find(node => node.id === id('7ET8ET9')).attributes['data-completed'], 'true');
         toggle(checkbox, false);
+        assert.equal(nodes.find(node => node.id === id('7ET8ET9')).attributes['data-completed'], 'false');
+        assert.equal(counter.style['--ue-completion'], 0);
         assert.equal(counter.textContent, `0/${numbers.length}`);
     }
 });

@@ -30,8 +30,11 @@ function setCourseCompleted(id, completed) {
 }
 
 function syncCourseProgress() {
-    for (const [id, { checkbox, feedback }] of completionControls) {
-        try { checkbox.checked = isCourseCompleted(id); }
+    for (const [id, { checkbox, feedback, item }] of completionControls) {
+        try {
+            checkbox.checked = isCourseCompleted(id);
+            item.setAttribute('data-completed', String(checkbox.checked));
+        }
         catch { feedback.textContent = SiteTexts.get('messages.stockage'); }
     }
     for (const updateProgress of progressListeners) updateProgress();
@@ -282,7 +285,8 @@ function renderCourse(course) {
     } catch {
         showStorageError();
     }
-    completionControls.set(course.id, { checkbox, feedback });
+    item.setAttribute('data-completed', String(checkbox.checked));
+    completionControls.set(course.id, { checkbox, feedback, item });
     checkbox.addEventListener('change', () => {
         let saved = false;
         try {
@@ -586,6 +590,7 @@ function renderUEs(courses, accordion) {
             // Une ligne du CSV vaut un cours, même si son ID regroupe plusieurs numéros.
             const completed = list.querySelectorAll('.form-check-input:checked').length;
             progress.textContent = `${completed}/${group.length}`;
+            progress.style.setProperty('--ue-completion', completed / group.length);
             progress.setAttribute('aria-label', SiteTexts.get('cours.progression', { faits: completed, total: group.length }));
             progress.title = SiteTexts.get('cours.progression', { faits: completed, total: group.length });
         }

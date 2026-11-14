@@ -83,11 +83,6 @@ def course_order_key(row):
 
 
 STATIC_CSS = """
-/* Une nuance bleu-gris distingue discrètement la version simplifiée. */
-:root {
-  --page: #f5f7f8; --surface: #fff; --ink: #26343b; --muted: #65727a;
-  --line: #dce2e6; --accent: #3c6175; --soft: #eaf0f4;
-}
 * { box-sizing: border-box; }
 body { font-size: 16px; line-height: 1.5; }
 summary { cursor: pointer; }
@@ -98,7 +93,7 @@ details[open] > summary.accordion-button::after { transform: rotate(225deg); }
 @media (max-width: 600px) {
   #accordionOtherSemester > summary.accordion-button::after { width: 8px; height: 8px; margin-right: 4px; }
 }
-details.accordion-item[open] > summary { background: var(--soft); border-radius: 16px 16px 0 0; }
+details.accordion-item[open] > summary { background: var(--soft); border-radius: 0; }
 .ue-title { margin-left: 0; }
 .list-group { padding: 0; margin: 0; list-style: none; }
 .course-heading { grid-column: 1; }
@@ -113,8 +108,9 @@ details.accordion-item[open] > summary { background: var(--soft); border-radius:
 .brand-mark { flex-shrink: 0; }
 @media (max-width: 600px) { .site-header { flex-wrap: wrap; } }
 @media (prefers-color-scheme: dark) {
-  :root { color-scheme: dark; --page: #171d21; --surface: #20292f; --ink: #e5edf1;
-    --muted: #a9b6bf; --line: #384650; --accent: #a5c8dd; --soft: #2b3b45; }
+  :root { color-scheme: dark; --page: #18181b; --surface: #202023; --ink: #fafafa;
+    --muted: #a1a1aa; --line: #38383e; --accent: #fafafa; --soft: #2a2a2f;
+    --on-accent: #18181b; --ring: #71717a; --shadow: 0 1px 2px #00000026; }
 }
 """
 
@@ -181,7 +177,7 @@ def generate(read):
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#28634e">
+<meta name="theme-color" content="#18181b">
 <style>{read('index.css')}{STATIC_CSS}</style>
 </head>
 <body>
@@ -189,8 +185,7 @@ def generate(read):
 <a class="wordmark" href="index.html" aria-label="{t('site.accueil')}"><span class="brand-mark" aria-hidden="true">m.</span> {t('site.nom_simplifie')}</a>
 <a class="version-link" href="index.html">{t('pied_de_page.version_normale')}</a>
 </header>
-<main>
-<aside class="availability-note"><span class="availability-icon" aria-hidden="true">✓</span><p><strong>{t('messages.disponibilite_titre')}</strong><span class="availability-verification">{t('messages.derniere_verification', **verification)}</span></p></aside>''']
+<main>''']
     semesters = sorted({row['semestre'] for row in courses}, key=int)
     if not courses:
         parts.append(f'<p>{t("messages.aucun_cours")}</p>')
