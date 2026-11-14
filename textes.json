@@ -19,7 +19,7 @@
     "colonne_semestre": "Semestre",
     "enregistrements": "Enregistrements",
     "pdf": "PDF",
-    "sous_titre": "Vidéos & PDF",
+    "sous_titre": "Cours cochés / cours total",
     "cours_semestre": "Cours du semestre {semestre}"
   },
   "cours": {

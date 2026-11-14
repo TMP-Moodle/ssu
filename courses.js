@@ -424,7 +424,15 @@ function renderCourses(courses) {
         const heading = element('div', 'semester-heading');
         const title = element(semester === sorted[0][0] ? 'h1' : 'h2', '', SiteTexts.get('navigation.semestre', { semestre: semester }));
         title.id = `semester-title-${semester}`;
-        heading.append(title, element('span', '', SiteTexts.get('navigation.sous_titre')));
+        const progress = element('span', '', `0/${group.length}`);
+        heading.append(title, progress);
+        function updateProgress() {
+            const completed = group.filter(course => completionControls.get(course.id)?.checkbox.checked).length;
+            progress.textContent = `${completed}/${group.length}`;
+            progress.setAttribute('aria-label', SiteTexts.get('cours.progression', { faits: completed, total: group.length }));
+            progress.title = SiteTexts.get('cours.progression', { faits: completed, total: group.length });
+        }
+        progressListeners.add(updateProgress);
         intro.append(heading);
         if (semester === '3') fragment.append(renderDailySchedule(group));
         const accordion = element('div', 'accordion course-accordion');
@@ -433,6 +441,7 @@ function renderCourses(courses) {
         // Dans chaque UE : date croissante, puis numéro ; les cours sans date viennent à la fin.
         group.sort(compareCourses);
         renderUEs(group, accordion);
+        updateProgress();
         section.append(intro, accordion);
         fragment.append(section);
     }

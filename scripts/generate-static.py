@@ -196,8 +196,9 @@ def generate(read):
         parts.append(f'<p>{t("messages.aucun_cours")}</p>')
     for semester in semesters:
         tag = 'h1' if semester == semesters[0] else 'h2'
+        semester_courses = [row for row in courses if row['semestre'] == semester]
         parts.append(f'''<section aria-labelledby="semestre-{semester}">
-<div class="intro"><div class="semester-heading"><{tag} id="semestre-{semester}">{t('navigation.semestre', semestre=semester)}</{tag}><span>{t('navigation.sous_titre')}</span></div></div>
+<div class="intro"><div class="semester-heading"><{tag} id="semestre-{semester}">{t('navigation.semestre', semestre=semester)}</{tag}><span>0/{len(semester_courses)}</span></div></div>
 <div class="course-accordion" aria-label="{t('navigation.cours_semestre', semestre=semester)}">''')
         groups = {}
         ordered = sorted((r for r in courses if r['semestre'] == semester), key=course_order_key)
