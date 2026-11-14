@@ -23,6 +23,8 @@
     "cours_semestre": "Cours du semestre {semestre}"
   },
   "cours": {
+    "ressources_a_venir": "Cours à venir : enregistrement et PDF de l’année précédente.",
+    "ressources_en_attente": "Enregistrement et PDF pas encore en ligne sur le Moodle SSU.",
     "enregistrement": "Enregistrement",
     "premiere_partie": "Enregistrement (première partie)",
     "seconde_partie": "Enregistrement (seconde partie)",

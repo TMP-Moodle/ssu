@@ -76,6 +76,21 @@ def resource_icon(kind):
             f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" focusable="false">{shapes}</svg></span>')
 
 
+def course_information(row, today, texts):
+    information = row.get('information', '').strip()
+    if information:
+        return information
+    if not (row.get('Presentiel', '').strip() or row.get('Visio', '').strip()):
+        return ''
+    if row.get('video_link_1', '').strip() or row.get('pdf_link', '').strip():
+        return ''
+    scheduled = parse_course_date(row.get('date', ''))
+    if not scheduled:
+        return ''
+    key = 'ressources_a_venir' if scheduled[0] > today else 'ressources_en_attente'
+    return texts['cours'][key]
+
+
 def course_order_key(row):
     scheduled = parse_course_date(row['date'])
     return (tuple(map(int, row['ue_numero'].split('.'))),
@@ -110,7 +125,8 @@ details.accordion-item[open] > summary { background: var(--soft); border-radius:
 @media (prefers-color-scheme: dark) {
   :root { color-scheme: dark; --page: #18181b; --surface: #202023; --ink: #fafafa;
     --muted: #a1a1aa; --line: #38383e; --accent: #fafafa; --soft: #2a2a2f;
-    --on-accent: #18181b; --ring: #71717a; --shadow: 0 1px 2px #00000026; }
+    --highlight: #b1adff; --highlight-soft: #302e43;
+    --on-accent: #18181b; --ring: #9691e5; --shadow: 0 1px 2px #00000026; }
 }
 """
 
@@ -216,7 +232,7 @@ def generate(read):
                     date_class, date_key = course_schedule_style(row, iso, today)
                     date_text = t(date_key, date=label)
                     date_label = f'<time class="{date_class}" datetime="{iso}">{date_text}</time>'
-                information = row.get('information', '')
+                information = course_information(row, today, texts)
                 if information:
                     heading += f'<p class="course-information">{html.escape(information)}</p>'
                 heading = f'<div class="course-label">{heading}</div>'

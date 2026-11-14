@@ -10,14 +10,16 @@
     color-scheme: light;
     --page: #fafafa; --surface: #fff; --ink: #18181b; --muted: #71717a;
     --line: #e4e4e7; --accent: #18181b; --soft: #f4f4f5;
-    --on-accent: #fafafa; --ring: #a1a1aa; --shadow: 0 1px 2px #18181b08;
+    --highlight: #5955c7; --highlight-soft: #f0efff;
+    --on-accent: #fafafa; --ring: #8c89dc; --shadow: 0 1px 2px #18181b08;
     --bs-body-bg: var(--page); --bs-body-color: var(--ink); --bs-secondary-color: var(--muted);
 }
 [data-bs-theme="dark"] {
     color-scheme: dark;
     --page: #18181b; --surface: #202023; --ink: #fafafa; --muted: #a1a1aa;
     --line: #38383e; --accent: #fafafa; --soft: #2a2a2f;
-    --on-accent: #18181b; --ring: #71717a; --shadow: 0 1px 2px #00000026;
+    --highlight: #b1adff; --highlight-soft: #302e43;
+    --on-accent: #18181b; --ring: #9691e5; --shadow: 0 1px 2px #00000026;
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -29,6 +31,7 @@ button, input, a { touch-action: manipulation; }
 .site-header, main, footer { width: min(100% - 48px, 1000px); margin-inline: auto; }
 .site-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 18px; border-bottom: 1px solid var(--line); }
 .wordmark { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); font-weight: 600; letter-spacing: -.4px; white-space: nowrap; }
+.wordmark:hover { text-decoration: none; }
 .brand-mark { display: grid; place-items: center; width: 34px; height: 34px; border-radius: var(--radius); background: var(--accent); color: var(--on-accent); font-size: 23px; font-weight: 700; }
 .theme-toggle { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); color: var(--ink); padding: 9px 15px; font-size: 13px; white-space: nowrap; flex-shrink: 0; }
 .theme-toggle:hover { background: var(--soft); }
@@ -136,7 +139,7 @@ button, input, a { touch-action: manipulation; }
 .course-completion .form-check-input { float: none; flex-shrink: 0; margin: 0; }
 .form-check-input { cursor: pointer; width: 16px; height: 16px; border-color: var(--muted); background-color: var(--surface); box-shadow: var(--shadow); }
 .form-check-input[type="checkbox"] { border-radius: 4px; }
-.form-check-input:checked { background-color: var(--accent); border-color: var(--accent); }
+.form-check-input:checked { background-color: var(--highlight); border-color: var(--highlight); }
 .form-check-input:focus { border-color: var(--ring); box-shadow: none; }
 .form-check-input:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
 [data-bs-theme="dark"] .form-check-input:checked {
@@ -439,7 +442,7 @@ a.daily-schedule-label:focus-visible { text-decoration: underline; text-decorati
     .ue-confetti { display: none; }
 }
 
-/* Hiérarchie neutre inspirée de shadcn : les couleurs restent réservées aux modalités. */
+/* Hiérarchie neutre inspirée de shadcn, avec un accent indigo pour le suivi. */
 .ue-progress, .semester-heading > span {
     display: inline-flex; align-items: center; justify-content: center;
     min-width: 38px; padding: 3px 8px; border: 1px solid var(--line);
@@ -472,7 +475,7 @@ a.daily-schedule-label:focus-visible { text-decoration: underline; text-decorati
     height: 2px; border-radius: 2px; pointer-events: none;
 }
 .ue-progress::before { background: var(--line); }
-.ue-progress::after { background: var(--accent); transform: scaleX(var(--ue-completion, 0)); transform-origin: left; }
+.ue-progress::after { background: var(--highlight); transform: scaleX(var(--ue-completion, 0)); transform-origin: left; }
 @media (max-width: 600px), (pointer: coarse) {
     .course-links a.badge { min-height: 44px; padding: 10px 12px; }
     .course-completion > label { min-height: 44px; padding-inline: 10px; }
@@ -485,4 +488,18 @@ a.daily-schedule-label:focus-visible { text-decoration: underline; text-decorati
 @media (max-width: 600px) {
     .course-completion { grid-template-columns: minmax(0, 1fr) max-content; }
     .course-completion > .course-schedule { align-self: center; }
+}
+
+/* Quelques touches d’indigo, sans modifier les couleurs des modalités. */
+.brand-mark { background: #5955c7; color: #fff; box-shadow: 0 3px 12px #5955c724; }
+.course-completion label:has(input:checked) .form-check-label { color: var(--highlight); }
+.semester-heading > span { color: var(--highlight); background: var(--highlight-soft); }
+@media (hover: hover) and (pointer: fine) {
+    a.course-title:hover, a.daily-schedule-label:hover { color: var(--highlight); }
+    .theme-toggle:hover { border-color: var(--highlight); }
+}
+
+/* Une nuance de fond localisée donne du relief au planning sans colorer les cours. */
+.daily-schedule {
+    background: linear-gradient(115deg, #7771da0a, transparent 65%), var(--surface);
 }

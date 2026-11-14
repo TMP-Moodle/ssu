@@ -194,6 +194,22 @@ function pdfLinkColumns(source) {
     return source.pdf_link ? ['pdf_link'] : ['pdf_link_anterieur'];
 }
 
+// Les informations saisies dans le CSV restent toujours prioritaires.
+function courseInformation(course, today = new Date()) {
+    const information = course.information?.trim();
+    if (information) return information;
+    if (!(course.Presentiel?.trim() || course.Visio?.trim())
+        || course.video_link_1?.trim() || course.pdf_link?.trim()) return '';
+    const scheduled = parseCourseDate(course.date);
+    if (!scheduled) return '';
+    const parts = new Intl.DateTimeFormat('en', {
+        timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit',
+    }).formatToParts(today);
+    const part = type => parts.find(value => value.type === type).value;
+    const todayISO = `${part('year')}-${part('month')}-${part('day')}`;
+    return SiteTexts.get(scheduled.iso > todayISO ? 'cours.ressources_a_venir' : 'cours.ressources_en_attente');
+}
+
 function renderCourse(course) {
     const item = element('li', 'list-group-item');
     item.id = course.id;
@@ -213,7 +229,7 @@ function renderCourse(course) {
     report.setAttribute('aria-label', report.title);
     const courseLabel = element('div', 'course-label');
     courseLabel.append(title);
-    const information = course.information?.trim();
+    const information = courseInformation(course);
     if (information) {
         courseLabel.append(element('p', 'course-information', information));
     }
