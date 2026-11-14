@@ -424,6 +424,25 @@ a.daily-schedule-label:focus-visible { text-decoration: underline; text-decorati
     body { padding-top: calc(24px + env(safe-area-inset-top, 0px)); }
 }
 
+/* Confettis fins près de chaque case cochée. */
+.ue-confetti { position: fixed; z-index: 1080; width: 0; height: 0; pointer-events: none; }
+.ue-confetti-piece {
+    position: absolute; width: 4px; height: 8px; border-radius: 1px;
+    will-change: transform, opacity;
+    opacity: 0; animation: ue-confetti-flight 1.5s var(--delay) cubic-bezier(.2,.65,.35,1) both;
+}
+.ue-confetti-piece:nth-child(3n) { width: 5px; height: 5px; border-radius: 50%; }
+@keyframes ue-confetti-flight {
+    0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(0); }
+    12% { opacity: .95; }
+    48% { opacity: .9; transform: translate3d(var(--x), var(--y), 0) rotate(var(--turn)); }
+    100% { opacity: 0; transform: translate3d(var(--drift), 45px, 0) rotate(calc(var(--turn) * 2)); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .ue-confetti-piece { animation: none; }
+    .ue-confetti { display: none; }
+}
+
 /* Une nuance bleu-gris distingue discrètement la version simplifiée. */
 :root {
   --page: #f5f7f8; --surface: #fff; --ink: #26343b; --muted: #65727a;

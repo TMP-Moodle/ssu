@@ -284,13 +284,17 @@ function renderCourse(course) {
     }
     completionControls.set(course.id, { checkbox, feedback });
     checkbox.addEventListener('change', () => {
+        let saved = false;
         try {
             setCourseCompleted(course.id, checkbox.checked);
+            saved = true;
             feedback.textContent = '';
         } catch {
             showStorageError();
         }
+        const origin = saved && checkbox.checked ? checkbox : null;
         syncCourseProgress();
+        if (origin) launchConfetti(origin);
     });
     label.append(checkbox, element('span', 'form-check-label', SiteTexts.get('cours.termine')));
     completion.append(label, feedback);
@@ -495,6 +499,44 @@ function animateViewportPosition(item, panel, targetTop, onArrival) {
         frame = requestAnimationFrame(step);
     };
     frame = requestAnimationFrame(step);
+}
+
+// Une gerbe légère près de chaque case cochée.
+const activeConfetti = new Set();
+
+function launchConfetti(origin) {
+    if (globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    const rect = origin.getBoundingClientRect();
+    const burst = element('div', 'ue-confetti');
+    burst.setAttribute('aria-hidden', 'true');
+    burst.style.left = `${rect.left + rect.width / 2}px`;
+    burst.style.top = `${rect.top + rect.height / 2}px`;
+    const colors = ['#58bfa5', '#8d86d9', '#d7ae62', '#df8f9f', '#6daecb'];
+    // Budget fixe, y compris lors de coches rapides sur un appareil peu puissant.
+    if (activeConfetti.size >= 2) {
+        const oldest = activeConfetti.values().next().value;
+        oldest.remove();
+        activeConfetti.delete(oldest);
+    }
+    const count = 16;
+    for (let i = 0; i < count; i++) {
+        const piece = element('span', 'ue-confetti-piece');
+        const angle = Math.PI + (i / (count - 1)) * Math.PI;
+        const distance = 65 + Math.random() * 100;
+        piece.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
+        piece.style.setProperty('--y', `${Math.sin(angle) * distance - 25}px`);
+        piece.style.setProperty('--drift', `${Math.cos(angle) * distance * 1.25}px`);
+        piece.style.setProperty('--turn', `${Math.random() * 360 - 180}deg`);
+        piece.style.setProperty('--delay', `${Math.random() * 90}ms`);
+        piece.style.backgroundColor = colors[i % colors.length];
+        burst.append(piece);
+    }
+    activeConfetti.add(burst);
+    document.body.append(burst);
+    setTimeout(() => {
+        burst.remove();
+        activeConfetti.delete(burst);
+    }, 1800);
 }
 
 function renderUEs(courses, accordion) {

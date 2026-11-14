@@ -30,6 +30,8 @@ function browser(completed = []) {
         SiteTexts: { get(key, args = {}) { return key.split('.').reduce((value, part) => value[part], texts).replace(/\{(\w+)\}/g, (_, key) => args[key]); } },
     });
     vm.runInContext(code, context);
+    context.confetti = [];
+    context.launchConfetti = origin => context.confetti.push(origin);
     const render = id => {
         context.course = { id, cours: 'Cours test', cours_nom: 'Cours test', semestre: '3', ue_numero: '2.5', date: '' };
         const item = vm.runInContext('renderCourse(course)', context);
@@ -129,4 +131,35 @@ test('le compteur compte les lignes présentes, jamais les composants absents du
         toggle(checkbox, false);
         assert.equal(counter.textContent, `0/${numbers.length}`);
     }
+});
+
+test('la dernière case d’une UE lance aussi les confettis locaux', () => {
+    const { context } = browser([id(7)]);
+    context.courses = [7, 8].map(number => ({ id: id(number), cours: 'Test', cours_nom: 'Test',
+        semestre: '3', ue_numero: '2.5', ue_nom: 'Test', UE: 'Test', date: '' }));
+    context.accordion = new Element('div');
+    context.accordion.id = 'test';
+    vm.runInContext('renderUEs(courses, accordion)', context);
+    const checkbox = walk(context.accordion).find(node => node.id === `completed-${id(8)}`);
+    assert.equal(context.confetti.length, 0);
+    toggle(checkbox, true);
+    assert.deepEqual(context.confetti, [checkbox]);
+    vm.runInContext('syncCourseProgress()', context);
+    assert.equal(context.confetti.length, 1);
+    toggle(checkbox, false);
+    assert.equal(context.confetti.length, 1);
+});
+
+test('chaque case cochée lance des confettis, sans effet au décochage ni en cas d’erreur', () => {
+    const { context, render } = browser();
+    const first = render(id(7));
+    const second = render(id(8));
+    toggle(first, true);
+    toggle(second, true);
+    assert.deepEqual(context.confetti, [first, second]);
+    toggle(first, false);
+    assert.equal(context.confetti.length, 2);
+    context.localStorage.setItem = () => { throw new Error('Stockage refusé'); };
+    toggle(first, true);
+    assert.equal(context.confetti.length, 2);
 });
