@@ -23,7 +23,7 @@
     "cours_semestre": "Cours du semestre {semestre}"
   },
   "cours": {
-    "legende_ue_2_5": "Attention ! Les ressources en jaune datent de l’année dernière : le contenu des cours peut avoir changé. Elles sont remplacées par celles de cette année dès que possible, généralement dans les 24 heures suivant leur publication sur le Moodle SSU.",
+    "legende_ue_2_5": "Attention ! Les ressources en jaune datent de l’année dernière : le contenu des cours peut avoir changé. Elles sont progressivements remplacées par celles de cette année dès que possible, généralement dans les 24 heures suivant leur publication sur le Moodle SSU.",
     "ressources_a_venir": "Cours à venir : enregistrement et PDF de l’année précédente.",
     "ressources_en_attente": "Enregistrement et PDF pas encore en ligne sur le Moodle SSU.",
     "enregistrement": "Enregistrement",
