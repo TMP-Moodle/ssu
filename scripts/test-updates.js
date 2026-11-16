@@ -80,7 +80,7 @@ test('la date de vérification affichée provient du fichier dédié', async () 
     context.window = context;
     vm.runInNewContext(fs.readFileSync(path.join(root, 'textes.js'), 'utf8'), context);
     await context.SiteTexts.ready;
-    assert.equal(node.textContent, 'Contenu à jour au 15/11/2026 à 09h42');
+    assert.equal(node.textContent, 'Dernière vérification le 15/11/2026 à 09h42.');
     assert.deepEqual(calls, ['textes.json?v=test', 'derniere-verification.json?v=test']);
 });
 

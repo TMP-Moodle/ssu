@@ -166,6 +166,46 @@ function element(tag, className, text) {
     return node;
 }
 
+function setupPreviousYearDialog() {
+    const dialog = element('dialog', 'previous-year-dialog');
+    dialog.setAttribute('aria-labelledby', 'previous-year-title');
+    dialog.setAttribute('aria-describedby', 'previous-year-description');
+    const title = element('h2', '', SiteTexts.get('cours.avertissement_anterieur_titre'));
+    title.id = 'previous-year-title';
+    const header = element('div', 'previous-year-header');
+    const symbol = element('span', 'previous-year-symbol');
+    symbol.setAttribute('aria-hidden', 'true');
+    symbol.append(resourceIcon('document'));
+    header.append(symbol, title);
+    const description = element('div', 'previous-year-description');
+    description.id = 'previous-year-description';
+    const sentences = SiteTexts.get('cours.avertissement_anterieur').split(/(?<=\.)\s+/);
+    description.append(...sentences.map(sentence => element('p', '', sentence)));
+    const actions = element('div', 'previous-year-actions');
+    const back = element('button', 'previous-year-back', SiteTexts.get('cours.retour'));
+    back.type = 'button';
+    const proceed = element('a', 'previous-year-proceed', SiteTexts.get('cours.compris'));
+    back.addEventListener('click', () => dialog.close());
+    proceed.addEventListener('click', () => dialog.close());
+    actions.append(back, proceed);
+    dialog.append(header, description, actions);
+    document.body.append(dialog);
+
+    function confirmPreviousYear(event) {
+        const link = event.target.closest('a.link-anterieur, a[data-previous-year]');
+        if (!link || event.defaultPrevented || event.button > 1) return;
+        event.preventDefault();
+        proceed.href = link.href;
+        proceed.target = event.ctrlKey || event.metaKey || event.shiftKey || event.button === 1
+            ? '_blank' : link.target;
+        proceed.rel = 'noopener';
+        dialog.showModal();
+        proceed.focus();
+    }
+    document.addEventListener('click', confirmPreviousYear);
+    document.addEventListener('auxclick', confirmPreviousYear);
+}
+
 // Dessiner directement le SVG évite les artefacts des masques CSS sur iOS.
 function resourceIcon(kind) {
     const icon = element('span', `resource-icon resource-icon-${kind}`);
@@ -219,6 +259,7 @@ function renderCourse(course) {
     const primary = course[primaryColumn];
     const title = element(primary ? 'a' : 'span', 'course-title', course.cours);
     if (primary) title.href = primary;
+    if (primaryColumn?.endsWith('_anterieur')) title.setAttribute('data-previous-year', '');
     const heading = element('div', 'course-heading');
     const report = element('a', 'course-report', '⚑');
     const reportCourse = `S${course.semestre} UE ${course.ue_numero} ${course.cours_nom}`;
@@ -641,7 +682,8 @@ function renderOtherSemesters(text) {
                 const url = new URL(source[column]);
                 if (!["https:", "http:"].includes(url.protocol)) throw new Error("Lien de semestre incorrect.");
                 if (count++) cell.append(element("span", "", " · "));
-                const link = element("a", column.endsWith("_anterieur") ? "link-anterieur" : "", SiteTexts.get(column.endsWith('_anterieur') ? 'cours.anterieur' : column.endsWith('_backup') ? 'cours.secours' : 'cours.acceder'));
+                const link = element("a", column.endsWith("_anterieur") ? "link-anterieur" : "");
+                link.append(element('span', 'resource-label', SiteTexts.get(column.endsWith('_anterieur') ? 'cours.anterieur' : column.endsWith('_backup') ? 'cours.secours' : 'cours.acceder')));
                 link.href = url.href;
                 cell.append(link);
             }
@@ -665,6 +707,7 @@ async function loadCourses() {
     const status = document.getElementById('courses-status');
     try {
         await SiteTexts.ready;
+        setupPreviousYearDialog();
         const response = await fetch(globalThis.SiteAssets?.url('sources.csv') || 'sources.csv', { cache: 'no-store' });
         if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
         const text = await response.text();

@@ -134,6 +134,92 @@ button, input, a { touch-action: manipulation; }
 .course-links { grid-column: 1; grid-row: 2; display: flex; flex-wrap: wrap; gap: var(--space-8); margin: 0; align-items: center; }
 .course-links a.badge { display: inline-flex; align-items: center; gap: 6px; background: var(--due-bg) !important; color: var(--due-ink); border: 1px solid var(--due-border); border-radius: calc(var(--radius) - 2px); font-size: 11px; font-weight: 500; padding: 8px 10px; }
 .resource-label { min-width: 0; }
+.previous-year-dialog {
+    width: min(480px, calc(100% - 32px));
+    max-height: calc(100% - 32px);
+    overflow: auto;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    color: var(--ink);
+    font-family: inherit;
+    box-shadow: 0 24px 64px #0003, 0 4px 16px #0001;
+}
+.previous-year-dialog::backdrop { background: #09090b80; backdrop-filter: blur(3px); }
+.previous-year-header { display: flex; align-items: center; gap: 14px; padding: 24px 24px 0; }
+.previous-year-symbol {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--previous-border);
+    border-radius: 10px;
+    background: var(--previous-bg);
+    color: var(--previous-ink);
+}
+.previous-year-symbol .resource-icon,
+.previous-year-symbol .resource-icon svg { width: 20px; height: 20px; }
+.previous-year-dialog h2 { margin: 0; font-size: 18px; line-height: 1.4; font-weight: 600; letter-spacing: -.4px; }
+.previous-year-description { display: grid; gap: 16px; padding: 20px 24px 24px; }
+.previous-year-description p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.7; }
+.previous-year-description p:first-child { color: var(--ink); font-weight: 500; }
+.previous-year-description p:last-child {
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--previous-border);
+    border-radius: 8px;
+    background: var(--soft);
+    color: var(--ink);
+    font-weight: 500;
+}
+.previous-year-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--line);
+    background: var(--soft);
+}
+.previous-year-actions > * {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+}
+.previous-year-back { background: var(--surface); color: var(--ink); }
+.previous-year-actions .previous-year-proceed {
+    background: var(--accent);
+    color: var(--on-accent);
+    border-color: var(--accent);
+    text-decoration: none;
+}
+@media (hover: hover) and (pointer: fine) {
+    .previous-year-back:hover { border-color: var(--muted); }
+    .previous-year-proceed:hover { opacity: .88; }
+}
+@media (max-width: 420px) {
+    .previous-year-header { padding: 20px 20px 0; gap: 12px; }
+    .previous-year-description { padding: 18px 20px 20px; }
+    .previous-year-actions { flex-direction: column-reverse; padding: 16px 20px; gap: 8px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    .previous-year-dialog[open] { animation: previous-year-appear .16s ease-out; }
+    @keyframes previous-year-appear {
+        from { opacity: 0; transform: translateY(6px) scale(.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+}
 .resource-icon { display: inline-flex; flex: 0 0 14px; width: 14px; height: 14px; }
 .resource-icon svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .course-links a.badge:hover { border-color: var(--due-ink); text-decoration: none; }

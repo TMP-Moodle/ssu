@@ -23,9 +23,9 @@
     "cours_semestre": "Cours du semestre {semestre}"
   },
   "cours": {
-    "legende_ue_2_5": "Attention ! Les ressources en jaune datent de l’année dernière : le contenu des cours peut avoir changé. Elles sont progressivements remplacées par celles de cette année dès que possible, généralement dans les 24 heures suivant leur publication sur le Moodle SSU.",
-    "ressources_a_venir": "Cours à venir : enregistrement et PDF de l’année précédente.",
-    "ressources_en_attente": "Enregistrement et PDF pas encore en ligne sur le Moodle SSU.",
+    "legende_ue_2_5": "Attention ! Les ressources en jaune datent de l’année dernière : le contenu des cours peut avoir changé. Elles sont progressivements remplacées par celles de cette année dès que possible, généralement dans les 12 à 24 heures suivant leur publication sur le Moodle SSU.",
+    "ressources_a_venir": "Cours à venir. En attendant voici les ressources de l’année précédente.",
+    "ressources_en_attente": "Enregistrement et PDF pas encore en ligne sur le Moodle SSU lors de la dernière vérification. En attendant voici les ressources de l’année précédente.",
     "enregistrement": "Enregistrement",
     "premiere_partie": "Enregistrement (première partie)",
     "seconde_partie": "Enregistrement (seconde partie)",
@@ -47,6 +47,10 @@
     "anterieur_seconde_partie": "Enregistrement (seconde partie, cours de l’année dernière)",
     "pdf_anterieur": "PDF (cours de l’année dernière)",
     "anterieur": "Accéder (cours de l’année dernière)",
+    "avertissement_anterieur_titre": "Cours de l’année précédente",
+    "avertissement_anterieur": "Vous allez ouvrir un cours de l’année dernière. Il est proposé pour vous aider à travailler en attendant que celui de cette année soit disponible. Mais le cours de cette année peut être différent : des informations ont pu être ajoutées, modifiées ou supprimées. Ce document peut donc ne pas correspondre entièrement à ce qu'il faut apprendre cette année.",
+    "compris": "Continuer vers le cours",
+    "retour": "Annuler",
     "date_programmee": "Programmé le {date}",
     "non_programme": "Non programmé",
     "date_prevue": "Prévu le {date}",
@@ -56,9 +60,8 @@
     "date_hybride": "En présentiel / visio le {date}"
   },
   "messages": {
-    "disponibilite_titre": "Le Moodle SSU est en avance de 3 ou 4 cours par rapport à TMP Moodle.",
-    "mise_a_jour_prevue": "Le contenu devrait être mis à jour ce soir.",
-    "derniere_verification": "Contenu à jour au {date} à {heure}",
+    "disponibilite_titre": "TMP Moodle est à jour avec le Moodle SSU.",
+    "derniere_verification": "Dernière vérification le {date} à {heure}.",
     "chargement": "Chargement des cours…",
     "chargement_persistant": "Si le chargement se prolonge, vous pouvez consulter la",
     "lien_version_simplifiee": "version simplifiée sans JavaScript",
