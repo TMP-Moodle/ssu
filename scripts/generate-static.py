@@ -189,10 +189,10 @@ def generate(read):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="{t('site.description')}">
 <title>{t('site.nom_simplifie')}</title>
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=violet">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png?v=violet">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png?v=violet">
+<link rel="manifest" href="manifest.webmanifest?v=violet">
 <meta name="theme-color" content="#18181b">
 <style>{read('index.css')}{STATIC_CSS}</style>
 </head>

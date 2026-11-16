@@ -5,7 +5,7 @@ let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingL
 let directory = root.appendingPathComponent("icons")
 try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 
-// Monogramme de référence : vert foncé #141c19 sur vert clair #a2d4b2.
+// Même monogramme que .brand-mark : blanc sur violet #5955c7.
 for (name, size, maskable) in [
     ("favicon-32.png", 32, false),
     ("apple-touch-icon.png", 180, true),
@@ -19,8 +19,8 @@ for (name, size, maskable) in [
         colorSpaceName: .deviceRGB, bytesPerRow: 0, bitsPerPixel: 0)!
     NSGraphicsContext.saveGraphicsState()
     NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: bitmap)
-    NSColor(deviceRed: 162/255, green: 212/255, blue: 178/255, alpha: 1).setFill()
-    let radius = maskable ? 0 : side * 10/34
+    NSColor(deviceRed: 89/255, green: 85/255, blue: 199/255, alpha: 1).setFill()
+    let radius = maskable ? 0 : side * 8/34
     NSBezierPath(roundedRect: NSRect(x: 0, y: 0, width: side, height: side),
         xRadius: radius, yRadius: radius).fill()
 
@@ -28,7 +28,7 @@ for (name, size, maskable) in [
     let font = NSFont.systemFont(ofSize: side * (maskable ? 0.55 : 23/34), weight: .bold)
     let text = NSAttributedString(string: "m.", attributes: [
         .font: font,
-        .foregroundColor: NSColor(deviceRed: 20/255, green: 28/255, blue: 25/255, alpha: 1)
+        .foregroundColor: NSColor.white
     ])
     let dimensions = text.size()
     text.draw(at: NSPoint(x: (side - dimensions.width)/2, y: (side - dimensions.height)/2))
