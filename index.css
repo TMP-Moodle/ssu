@@ -50,6 +50,23 @@ button, input, a { touch-action: manipulation; }
 .accordion-button, .accordion-item:first-of-type > .accordion-header .accordion-button, .accordion-item:last-of-type > .accordion-header .accordion-button.collapsed { border-radius: 0; }
 .accordion-button { gap: 12px; padding: 18px 20px; font-size: 14px; font-weight: 500; line-height: 1.5; background: var(--surface); }
 .ue-title { flex: 1; min-width: 0; }
+.ue-resource-note {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: var(--space-16) 0 0;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.6;
+}
+.ue-resource-note::before {
+    content: "⚠️";
+    flex-shrink: 0;
+    font-size: 16px;
+    line-height: 1;
+}
 .ue-progress { flex-shrink: 0; color: var(--muted); font-size: 12px; font-weight: 400; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .course-accordion .accordion-button::after { margin-left: 0; }
 /* Le fond coloré indique uniquement l’ouverture, pas le survol persistant au toucher. */
@@ -227,6 +244,7 @@ footer p { max-width: 740px; margin: 0; }
     .table td a { white-space: nowrap; }
     /* Même présentation que sur ordinateur, répartie sur la largeur disponible. */
     .course-accordion .accordion-body { padding-inline: var(--space-12); }
+    .ue-resource-note { padding-top: var(--space-12); }
     .list-group-item { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-8); padding-block: var(--space-12); }
     .course-heading { min-width: 0; min-height: 0; }
     .course-completion { grid-column: 1; grid-row: 2; display: grid; grid-template-columns: minmax(0, max-content) max-content; justify-content: start; align-items: center; gap: 4px; min-width: 0; }
@@ -478,6 +496,7 @@ a.daily-schedule-label:focus-visible { text-decoration: underline; text-decorati
 .ue-progress::after { background: var(--highlight); transform: scaleX(var(--ue-completion, 0)); transform-origin: left; }
 @media (max-width: 600px), (pointer: coarse) {
     .course-links a.badge { min-height: 44px; padding: 10px 12px; }
+    .course-schedule .course-date { min-height: 44px; }
     .course-completion > label { min-height: 44px; padding-inline: 10px; }
     .course-completion > label::after { content: none; }
     .course-schedule .course-report {
@@ -486,7 +505,7 @@ a.daily-schedule-label:focus-visible { text-decoration: underline; text-decorati
     }
 }
 @media (max-width: 600px) {
-    .course-completion { grid-template-columns: minmax(0, 1fr) max-content; }
+    .course-completion { grid-template-columns: minmax(0, max-content) max-content; gap: var(--space-8); }
     .course-completion > .course-schedule { align-self: center; }
 }
 

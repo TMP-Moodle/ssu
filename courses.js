@@ -600,6 +600,9 @@ function renderUEs(courses, accordion) {
             positionOpeningUE(item, panel);
         });
         const body = element('div', 'accordion-body');
+        if (group[0].ue_numero === '2.5') {
+            body.append(element('p', 'ue-resource-note', SiteTexts.get('cours.legende_ue_2_5')));
+        }
         const list = element('ul', 'list-group');
         for (const course of group) list.append(renderCourse(course));
         function updateProgress() {

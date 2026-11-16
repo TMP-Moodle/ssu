@@ -220,6 +220,8 @@ def generate(read):
                      f'<span class="ue-separator"> — </span>'
                      f'<span class="ue-name">{html.escape(name)}</span>')
             parts.append(f'<details class="accordion-item"><summary class="accordion-button"><span class="ue-title">{title}</span></summary><div class="accordion-body">')
+            if number == '2.5':
+                parts.append(f'<p class="ue-resource-note">{t("cours.legende_ue_2_5")}</p>')
             parts.append('<ul class="list-group">')
             for row in group:
                 title = row['cours_nom']

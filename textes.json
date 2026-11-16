@@ -23,6 +23,7 @@
     "cours_semestre": "Cours du semestre {semestre}"
   },
   "cours": {
+    "legende_ue_2_5": "Attention ! Les ressources en jaune correspondent aux cours de l’année dernière. Le contenu peut avoir changé depuis.",
     "ressources_a_venir": "Cours à venir : enregistrement et PDF de l’année précédente.",
     "ressources_en_attente": "Enregistrement et PDF pas encore en ligne sur le Moodle SSU.",
     "enregistrement": "Enregistrement",
@@ -41,11 +42,11 @@
     "secours_premiere_partie": "Enregistrement (première partie, lien alternatif)",
     "secours_seconde_partie": "Enregistrement (seconde partie, lien alternatif)",
     "secours": "Accéder (lien alternatif)",
-    "video_anterieure": "Enregistrement (antérieur)",
-    "anterieur_premiere_partie": "Enregistrement (première partie, antérieur)",
-    "anterieur_seconde_partie": "Enregistrement (seconde partie, antérieur)",
-    "pdf_anterieur": "PDF (antérieur)",
-    "anterieur": "Accéder (antérieur)",
+    "video_anterieure": "Enregistrement (cours de l’année dernière)",
+    "anterieur_premiere_partie": "Enregistrement (première partie, cours de l’année dernière)",
+    "anterieur_seconde_partie": "Enregistrement (seconde partie, cours de l’année dernière)",
+    "pdf_anterieur": "PDF (cours de l’année dernière)",
+    "anterieur": "Accéder (cours de l’année dernière)",
     "date_programmee": "Programmé le {date}",
     "non_programme": "Non programmé",
     "date_prevue": "Prévu le {date}",
@@ -55,7 +56,8 @@
     "date_hybride": "En présentiel / visio le {date}"
   },
   "messages": {
-    "disponibilite_titre": "Les nouveaux cours du Moodle SSU sont ajoutés ici au plus tard le lendemain.",
+    "disponibilite_titre": "Le Moodle SSU est en avance de 3 ou 4 cours par rapport à TMP Moodle.",
+    "mise_a_jour_prevue": "Le contenu devrait être mis à jour ce soir.",
     "derniere_verification": "Contenu à jour au {date} à {heure}",
     "chargement": "Chargement des cours…",
     "chargement_persistant": "Si le chargement se prolonge, vous pouvez consulter la",
@@ -77,7 +79,7 @@
     "titre": "Cours à rattraper et programmés",
     "aujourdhui": "Programmé aujourd’hui",
     "demain": "Programmé demain",
-    "aucun": "Aucun cours programmé sur l'EDT.",
+    "aucun": "Aucun cours SSU programmé sur l'EDT.",
     "nombre_cours": "{nombre} cours",
     "rattraper": "Cours à rattraper",
     "aucun_rattraper": "Aucun cours à rattraper.",
