@@ -60,8 +60,7 @@
     "date_hybride": "En présentiel / visio le {date}"
   },
   "messages": {
-    "disponibilite_titre": "Moodle SSU a 4 cours d’avance sur TMP Moodle.",
-    "disponibilite_mise_a_jour": "Les cours seront mis à jour ce soir au plus tard.",
+    "disponibilite_titre": "TMP Moodle est à jour avec Moodle SSU.",
     "derniere_verification": "Dernière vérification le {date} à {heure}.",
     "chargement": "Chargement des cours…",
     "chargement_persistant": "Si le chargement se prolonge, vous pouvez consulter la",
