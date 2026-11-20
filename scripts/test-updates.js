@@ -139,6 +139,7 @@ test('le thème et son bouton fonctionnent même lorsque le script charge après
     const attrs = {}, listeners = {}, saved = {};
     const button = { setAttribute() {}, addEventListener: (name, callback) => { listeners[name] = callback; } };
     const context = {
+        addEventListener: (name, callback) => { listeners[name] = callback; },
         document: { readyState: 'complete', getElementById: () => button,
             documentElement: { setAttribute: (name, value) => { attrs[name] = value; }, getAttribute: name => attrs[name] } },
         matchMedia: () => ({ matches: false, addEventListener() {} }),
@@ -151,4 +152,27 @@ test('le thème et son bouton fonctionnent même lorsque le script charge après
     listeners.click();
     assert.equal(attrs['data-bs-theme'], 'dark');
     assert.equal(saved['tmp-moodle:theme'], 'dark');
+});
+
+test('admin : défaut sombre, préférence partagée et synchronisation entre onglets', () => {
+    const attrs = {}, listeners = {}, saved = {};
+    const button = { setAttribute() {}, addEventListener: (key, fn) => { listeners[key] = fn; } };
+    const context = {
+        document: { readyState: 'complete', getElementById: () => button,
+            documentElement: { dataset: { themeDefault: 'dark' }, setAttribute: (key, val) => { attrs[key] = val; }, getAttribute: key => attrs[key] } },
+        matchMedia: () => ({ matches: false, addEventListener() {} }),
+        localStorage: { getItem: key => saved[key], setItem: (key, val) => { saved[key] = val; } },
+        addEventListener: (key, fn) => { listeners[key] = fn; },
+    };
+    context.window = context;
+    const script = fs.readFileSync(path.join(root, 'theme.js'), 'utf8');
+    vm.runInNewContext(script, context);
+    assert.equal(attrs['data-bs-theme'], 'dark');
+    assert.equal(button.textContent, '☀ Mode clair');
+    listeners.click();
+    assert.equal(saved['tmp-moodle:theme'], 'light');
+    vm.runInNewContext(script, context);
+    assert.equal(attrs['data-bs-theme'], 'light');
+    listeners.storage({ key: 'tmp-moodle:theme', newValue: 'dark' });
+    assert.equal(attrs['data-bs-theme'], 'dark');
 });
