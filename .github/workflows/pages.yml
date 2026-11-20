@@ -1,0 +1,46 @@
+name: Publier TMP Moodle
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Générer les pages et préparer les fichiers publics
+        run: |
+          python3 scripts/generate-static.py
+          python3 scripts/test-version.py
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil
+          output = Path('_site')
+          output.mkdir(exist_ok=True)
+          for name in ('index.html', 'index.css', 'courses.js', 'textes.js', 'textes.json',
+                       'derniere-verification.json', 'theme.js', 'sources.csv',
+                       'manifest.webmanifest', 'version.json', 'version-simplifiee.html', 'preview.png'):
+              shutil.copyfile(name, output / name)
+          shutil.copytree('icons', output / 'icons', dirs_exist_ok=True)
+          PY
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publier sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
