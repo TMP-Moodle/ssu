@@ -91,6 +91,35 @@ function parseCourseDate(value) {
     return { iso: `${year}-${month}-${day}`, label: `${day}/${month}/${year}` };
 }
 
+function courseAddedAt(value) {
+    value = value?.trim();
+    if (!value) return null;
+    try {
+        if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2})$/.test(value)) {
+            parseCourseDate(value.slice(0, 10));
+            const timestamp = Date.parse(value);
+            return Number.isFinite(timestamp) ? timestamp : null;
+        }
+        const parsed = parseCourseDate(value);
+        const midnight = Date.parse(`${parsed.iso}T00:00:00Z`);
+        const offset = new Intl.DateTimeFormat('en', {
+            timeZone: 'Europe/Paris', timeZoneName: 'shortOffset',
+        }).formatToParts(new Date(midnight)).find(part => part.type === 'timeZoneName').value;
+        return midnight - Number(offset.replace('GMT', '')) * 3600000;
+    } catch { return null; }
+}
+
+function isCourseNew(value, now = Date.now()) {
+    const added = courseAddedAt(value);
+    return added !== null && now >= added && now - added <= 72 * 3600000;
+}
+
+function refreshNewBadges() {
+    document.querySelectorAll('[data-added-at]').forEach(badge => {
+        badge.hidden = !isCourseNew(badge.dataset.addedAt);
+    });
+}
+
 function isCourseDue(isoDate, today = new Date()) {
     const localToday = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
     return isoDate <= localToday;
@@ -301,6 +330,13 @@ function renderCourse(course) {
         const link = element('a', column.endsWith('_anterieur') ? 'badge link-anterieur' : 'badge bg-secondary');
         const icon = resourceIcon(column.startsWith('video') ? 'video' : 'document');
         link.append(icon, element('span', 'resource-label', label));
+        const addedAt = course[`${column}_date`];
+        if (courseAddedAt(addedAt) !== null) {
+            const badge = element('span', 'course-new', SiteTexts.get('cours.nouveau'));
+            badge.dataset.addedAt = addedAt;
+            badge.hidden = !isCourseNew(addedAt);
+            link.append(badge);
+        }
         link.href = course[column];
         links.append(link);
     }
@@ -714,6 +750,8 @@ async function loadCourses() {
         const courses = readCourses(text);
         renderOtherSemesters(text);
         renderCourses(courses);
+        setInterval(refreshNewBadges, 1000);
+        document.addEventListener('visibilitychange', refreshNewBadges);
         // Le récapitulatif reste déployé sur ordinateur ; seul le mobile le replie.
         globalThis.matchMedia?.('(min-width: 761px)').addEventListener('change', event => {
             const schedule = document.querySelector('.daily-schedule');

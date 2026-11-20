@@ -34,3 +34,19 @@ Il n’est pas nécessaire d’effacer les données du site ni les cases « Term
 
 Vérifications : `node --test scripts/test-updates.js` et
 `python3 scripts/test-version.py`.
+
+## Badge Nouveau
+
+Chaque champ vidéo ou PDF de `sources.csv` possède une colonne de date
+juste à sa droite : `video_link_1_date`, `video_link_2_date`,
+`video_link_1_backup_date`, `video_link_2_backup_date`,
+`video_link_1_anterieur_date`, `video_link_2_anterieur_date`,
+`pdf_link_date` et `pdf_link_anterieur_date`.
+Ces colonnes facultatives acceptent `20/11/2026`,
+`2026-11-20` (minuit à Paris) ou `2026-11-20T12:23:00+01:00`
+(heure précise avec fuseau ; `+02:00` en été). Le badge apparaît sur le lien concerné, de cette
+date jusqu’à 72 heures après, borne incluse. Une valeur vide, incorrecte
+ou future ne montre aucun badge. Le libellé est dans `cours.nouveau`.
+
+La version principale actualise automatiquement les badges. La version
+simplifiée sans JavaScript ne présente aucun badge Nouveau.

@@ -23,7 +23,8 @@
     "cours_semestre": "Cours du semestre {semestre}"
   },
   "cours": {
-    "legende_ue_2_5": "Attention ! Les ressources en jaune datent de l’année dernière : le contenu des cours peut avoir changé. Elles sont progressivements remplacées par celles de cette année dès que possible, généralement dans les 12 à 24 heures suivant leur publication sur le Moodle SSU.",
+    "nouveau": "Nouveau",
+    "legende_ue_2_5": "Attention ! Les ressources en jaune datent de l’an dernier : leur contenu peut avoir changé. Elles sont généralement remplacées dans les 12 h suivant leur publication sur le Moodle SSU.",
     "ressources_a_venir": "Cours à venir. En attendant voici les ressources de l’année précédente.",
     "ressources_en_attente": "Enregistrement et PDF pas encore en ligne sur le Moodle SSU lors de la dernière vérification. En attendant voici les ressources de l’année précédente.",
     "enregistrement": "Enregistrement",
@@ -60,8 +61,7 @@
     "date_hybride": "En présentiel / visio le {date}"
   },
   "messages": {
-    "disponibilite_titre": "Moodle SSU est en avance d’un cours sur TMP Moodle.",
-    "mise_a_jour_prevue": "Ce cours devrait être disponible ici cet après-midi.",
+    "disponibilite_titre": "TMP Moodle est à jour avec Moodle SSU.",
     "derniere_verification": "Dernière vérification le {date} à {heure}.",
     "chargement": "Chargement des cours…",
     "chargement_persistant": "Si le chargement se prolonge, vous pouvez consulter la",

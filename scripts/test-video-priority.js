@@ -7,7 +7,7 @@ const vm = require('node:vm');
 const root = path.join(__dirname, '..');
 const texts = JSON.parse(fs.readFileSync(path.join(root, 'textes.json'), 'utf8'));
 class Element {
-    constructor(tag) { this.tag = tag; this.children = []; this.classList = { add() {} }; }
+    constructor(tag) { this.tag = tag; this.children = []; this.dataset = {}; this.classList = { add() {} }; }
     append(...children) { this.children.push(...children); }
     setAttribute() {}
     addEventListener() {}
@@ -63,4 +63,24 @@ test('un lien de secours seul est disponible, sans faux message d’absence', ()
 test('le secours ne masque pas les vidéos antérieures quand aucun lien normal n’existe', () => {
     const links = render({ ...previous, video_link_1_backup: '/backup' });
     assert.deepEqual(links.filter(node => node.href).map(node => node.href), ['/backup', '/old1', '/old2']);
+});
+
+test('la nouveauté appartient uniquement à la ressource datée', () => {
+    const today = new Date().toISOString().slice(0, 10);
+    const links = render({ video_link_1: '/video', pdf_link: '/pdf', pdf_link_date: today });
+    const video = links.find(node => node.href === '/video');
+    const pdf = links.find(node => node.href === '/pdf');
+    assert.equal(video.children.some(node => node.className === 'course-new'), false);
+    const badge = pdf.children.find(node => node.className === 'course-new');
+    assert.equal(badge.dataset.addedAt, today);
+    assert.equal(badge.hidden, false);
+});
+test('chaque champ vidéo et PDF utilise sa propre date', () => {
+    for (const column of ['video_link_1', 'video_link_2', 'video_link_1_backup', 'video_link_2_backup',
+        'video_link_1_anterieur', 'video_link_2_anterieur', 'pdf_link', 'pdf_link_anterieur']) {
+        const links = render({ [column]: '/resource', [`${column}_date`]: '2000-01-01' });
+        const badge = links.find(node => node.href === '/resource').children.find(node => node.className === 'course-new');
+        assert.equal(badge.hidden, true);
+        assert.equal(badge.dataset.addedAt, '2000-01-01');
+    }
 });
