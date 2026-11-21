@@ -61,8 +61,7 @@
     "date_hybride": "En présentiel / visio le {date}"
   },
   "messages": {
-    "disponibilite_titre": "Moodle SSU est en avance sur TMP Moodle",
-    "disponibilite_sous_texte": "Le contenu sera mis à jour d'ici ce soir",
+    "disponibilite_titre": "TMP Moodle est à jour avec Moodle SSU",
     "derniere_verification": "Dernière vérification le {date} à {heure}.",
     "chargement": "Chargement des cours…",
     "chargement_persistant": "Si le chargement se prolonge, vous pouvez consulter la",
@@ -71,7 +70,7 @@
     "aucun_cours": "Aucun cours disponible.",
     "stockage": "La progression ne peut pas être enregistrée dans ce navigateur.",
     "erreur_locale": "Pour charger les cours, ouvrez la page avec un serveur local (par exemple Live Server dans VS Code).",
-    "erreur_cours": "Impossible de charger les cours. Vérifiez sources.csv puis rechargez la page.",
+    "erreur_cours": "Impossible de charger les cours. Vérifiez sources.json puis rechargez la page.",
     "consulter_version_simplifiee": "Consulter la version simplifiée ↗"
   },
   "theme": {

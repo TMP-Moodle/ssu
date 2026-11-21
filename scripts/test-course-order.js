@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const root = path.join(__dirname, '..');
-const context = vm.createContext({ URL });
+const context = vm.createContext({ URL, SourceData: require('../sources-format.js') });
 vm.runInContext(fs.readFileSync(path.join(root, 'courses.js'), 'utf8').replace(/loadCourses\(\);\s*$/, ''), context);
 function sort(courses) {
     context.courses = courses.map(([number, date, ue = '2.8']) => ({ cours_numero: String(number), date, ue_numero: ue }));
@@ -24,11 +24,11 @@ test('les UE gardent leur ordre propre, indépendamment des dates', () => {
     assert.deepEqual(sort([[1, '20/11/2026', '2.8'], [2, '01/10/2026', '2.11']]), [1, 2]);
 });
 test('les intitulés affichés ne comportent plus de préfixe numérique ; les identifiants sont conservés', () => {
-    context.csv = fs.readFileSync(path.join(root, 'sources.csv'), 'utf8');
-    const courses = vm.runInContext('readCourses(csv)', context);
+    context.data = JSON.parse(fs.readFileSync(path.join(root, 'sources.json'), 'utf8'));
+    const courses = vm.runInContext('readCourses(data)', context);
     assert.ok(courses.length > 0);
-    const rawIds = vm.runInContext("(() => { const [headers, ...rows] = parseCSV(csv); return rows.filter(row => row[headers.indexOf('cours_nom')]?.trim()).map(row => row[headers.indexOf('id')].trim()); })()", context);
-    assert.deepEqual(Array.from(courses, course => course.id), Array.from(rawIds));
+    const rawIds = context.data.semestres.flatMap(s => s.ues.flatMap(ue => ue.cours.map(c => c.id)));
+    assert.deepEqual(Array.from(courses, course => course.id), rawIds);
     for (const course of courses) {
         assert.equal(course.cours, course.cours_nom);
     }

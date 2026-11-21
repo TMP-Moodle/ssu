@@ -1,0 +1,55 @@
+{
+  "semestres": [
+    {
+      "numero": 3,
+      "ues": [
+        {
+          "numero": "2.8",
+          "nom": "UE de test",
+          "cours": [
+            {
+              "id": "S3_UE2.8_COURS1ET2",
+              "numero": 1,
+              "nom": "Cours, accents et \"guillemets\"",
+              "date": "22/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "Première ligne\nSeconde ligne",
+              "ressources": {
+                "videos": [
+                  null,
+                  {
+                    "url": "https://example.com/video2",
+                    "ajoute_le": "2026-11-22T00:16:00+01:00",
+                    "secours": {
+                      "url": "https://example.com/secours2",
+                      "ajoute_le": "21/11/2026"
+                    }
+                  }
+                ],
+                "videos_anterieures": [
+                  { "url": "https://example.com/ancienne1" },
+                  { "url": "https://example.com/ancienne2", "ajoute_le": "20/11/2026" }
+                ],
+                "pdf": { "url": "https://example.com/pdf", "ajoute_le": "22/11/2026" },
+                "pdf_anterieur": { "url": "https://example.com/ancien-pdf" }
+              },
+              "champs": { "intervenant": "Émilie" }
+            },
+            {
+              "id": "S3_UE2.8_COURS3",
+              "numero": 3,
+              "nom": "Cours sans date ni ressources"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "numero": 1,
+      "ues": [],
+      "id": "S1",
+      "ressources": { "pdf": { "url": "https://example.com/semestre1" } }
+    }
+  ]
+}

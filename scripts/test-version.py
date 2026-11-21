@@ -25,6 +25,26 @@ class VersionTests(unittest.TestCase):
         for override in [{'video_link_1': '/video'}, {'pdf_link': '/pdf'}, {'Visio': ''}, {'date': ''}]:
             self.assertEqual(info({**base, **override}, '2026-11-14', texts), '')
 
+    def test_structured_sources_render_without_javascript(self):
+        fixture = (ROOT / 'scripts/fixtures/sources.json').read_text()
+        page = GENERATOR['generate'](lambda name: fixture if name == 'sources.json' else (ROOT / name).read_text())
+        self.assertIn('Cours, accents et &quot;guillemets&quot;', page)
+        self.assertIn('https://example.com/video2', page)
+        self.assertIn('https://example.com/secours2', page)
+        self.assertIn('https://example.com/semestre1', page)
+        self.assertIn('Cours sans date ni ressources', page)
+        self.assertNotIn('<script', page)
+        self.assertNotIn('https://example.com/ancienne1', page)
+        self.assertNotIn('https://example.com/ancien-pdf', page)
+
+    def test_invalid_sources_are_refused(self):
+        for field, value in [('visio', 'Oui'), ('date', '31/11/2026'), ('id', '')]:
+            with self.subTest(field=field):
+                data = json.loads((ROOT / 'scripts/fixtures/sources.json').read_text())
+                data['semestres'][0]['ues'][0]['cours'][0][field] = value
+                with self.assertRaises(ValueError):
+                    GENERATOR['generate'](lambda name: json.dumps(data) if name == 'sources.json' else (ROOT / name).read_text())
+
     def test_identical_inputs_keep_the_same_version(self):
         read = lambda name: (ROOT / name).read_text()
         page = GENERATOR['generate'](read)

@@ -89,6 +89,7 @@
             try {
                 await loadScript('textes.js');
                 await loadScript('theme.js');
+                await loadScript('sources-format.js');
                 await loadScript('courses.js');
             } catch (error) {
                 const status = document.getElementById('courses-status');
@@ -139,8 +140,8 @@
     </header>
     <main>
         <aside class="availability-note">
-            <span class="availability-icon" aria-hidden="true">⏳</span>
-            <p><strong data-texte="messages.disponibilite_titre">Moodle SSU est en avance sur TMP Moodle</strong><span class="availability-verification" data-texte="messages.disponibilite_sous_texte">Le contenu sera mis à jour d'ici ce soir</span></p>
+            <span class="availability-icon" aria-hidden="true">✓</span>
+            <p><strong data-texte="messages.disponibilite_titre">TMP Moodle est à jour avec Moodle SSU</strong><span class="availability-verification" data-texte="messages.derniere_verification">Dernière vérification le 22/11/2026 à 00h16.</span></p>
         </aside>
         <div id="courses-status" role="status">
             <span data-texte="messages.chargement">Chargement des cours…</span>

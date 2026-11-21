@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """Prépare la page autonome sans JS et le manifeste de version du site."""
 import argparse
-import csv
 from datetime import date, datetime
 import html
 import hashlib
-import io
 import json
 from pathlib import Path
 import re
@@ -31,8 +29,8 @@ def pdf_link_columns(source):
 
 
 VERSION_INPUTS = ('index.html', 'index.css', 'courses.js', 'textes.js',
-                  'textes.json', 'derniere-verification.json', 'theme.js', 'sources.csv', 'scripts/generate-static.py',
-                  'manifest.webmanifest', 'scripts/generate-icons.swift')
+                  'textes.json', 'derniere-verification.json', 'theme.js', 'sources.json', 'scripts/generate-static.py',
+                  'sources-format.js', 'manifest.webmanifest', 'scripts/generate-icons.swift')
 
 
 def build_version(read, page):
@@ -131,6 +129,106 @@ details.accordion-item[open] > summary { background: var(--soft); border-radius:
 """
 
 
+def read_sources(text):
+    """Déplie le JSON en modèle interne commun aux fonctions de présentation."""
+    def invalid(path):
+        raise ValueError(f'sources.json : champ incorrect ({path})')
+
+    def obj(value, path, allowed):
+        if not isinstance(value, dict) or set(value) - set(allowed):
+            invalid(path)
+        return value
+
+    def array(value, path):
+        if not isinstance(value, list):
+            invalid(path)
+        return value
+
+    def string(value, path):
+        if not isinstance(value, str):
+            invalid(path)
+        return value.strip()
+
+    def number(value, path):
+        if type(value) is not int or not 1 <= value <= 9007199254740991:
+            invalid(path)
+        return str(value)
+
+    data = obj(json.loads(text), 'racine', ['semestres'])
+    rows, semesters = [], set()
+    for semester in array(data.get('semestres'), 'semestres'):
+        obj(semester, 'semestre', ['numero', 'ues', 'id', 'ressources', 'champs'])
+        sem = number(semester.get('numero'), 'semestre.numero')
+        if sem in semesters:
+            invalid('semestre.numero dupliqué')
+        semesters.add(sem)
+
+        def row(item, ue=None):
+            columns = ['semestre', 'ue_numero', 'ue_nom', 'cours_numero', 'cours_nom',
+                       'date', 'Presentiel', 'Visio', 'id', 'information']
+            for key in LINKS + BACKUP_LINKS:
+                columns.extend([key, key + '_date'])
+            result = dict.fromkeys(columns, '')
+            result['semestre'] = sem
+            result['id'] = string(item.get('id'), 'id')
+            if ue is not None:
+                result.update(ue_numero=string(ue.get('numero'), 'ue.numero'),
+                              ue_nom=string(ue.get('nom'), 'ue.nom'),
+                              cours_numero=number(item.get('numero'), 'cours.numero'),
+                              cours_nom=string(item.get('nom'), 'cours.nom'),
+                              date=string(item.get('date', ''), 'cours.date'),
+                              information=string(item.get('information', ''), 'cours.information'))
+                for key, column in [('presentiel', 'Presentiel'), ('visio', 'Visio')]:
+                    if type(item.get(key, False)) is not bool:
+                        invalid('cours.' + key)
+                    result[column] = 'Oui' if item.get(key) else ''
+            resources = obj(item.get('ressources', {}), 'ressources',
+                            ['videos', 'videos_anterieures', 'pdf', 'pdf_anterieur'])
+
+            def resource(value, key, backup=False):
+                if value is None:
+                    return
+                obj(value, key, ['url', 'ajoute_le', 'secours'] if backup else ['url', 'ajoute_le'])
+                result[key] = string(value.get('url', ''), key + '.url')
+                result[key + '_date'] = string(value.get('ajoute_le', ''), key + '.ajoute_le')
+                if backup:
+                    resource(value.get('secours'), key + '_backup')
+
+            for field in ['videos', 'videos_anterieures']:
+                if field not in resources:
+                    continue
+                videos = array(resources[field], field)
+                if len(videos) > 2:
+                    invalid(field + ' : deux parties maximum')
+                for i, value in enumerate(videos, 1):
+                    resource(value, f'video_link_{i}' + ('_anterieur' if field == 'videos_anterieures' else ''), field == 'videos')
+            resource(resources.get('pdf'), 'pdf_link')
+            resource(resources.get('pdf_anterieur'), 'pdf_link_anterieur')
+            if 'champs' in item:
+                extra = item['champs']
+                if not isinstance(extra, dict):
+                    invalid('champs')
+                for key, value in extra.items():
+                    if key in columns or key in ('__proto__', 'constructor', 'prototype'):
+                        invalid('champs.' + key)
+                    result[key] = string(value, 'champs.' + key)
+            rows.append(result)
+
+        ues = set()
+        for ue in array(semester.get('ues'), 'semestre.ues'):
+            obj(ue, 'ue', ['numero', 'nom', 'cours'])
+            key = string(ue.get('numero'), 'ue.numero')
+            if key in ues:
+                invalid('ue.numero dupliqué')
+            ues.add(key)
+            for course in array(ue.get('cours'), 'ue.cours'):
+                obj(course, 'cours', ['id', 'numero', 'nom', 'date', 'presentiel', 'visio', 'information', 'ressources', 'champs'])
+                row(course, ue)
+        if 'ressources' in semester:
+            row(semester)
+    return rows
+
+
 def generate(read):
     texts = json.loads(read('textes.json'))
     verification = json.loads(read('derniere-verification.json'))
@@ -152,15 +250,8 @@ def generate(read):
     def link(url, label, attrs=''):
         return f'<a href="{html.escape(url, quote=True)}"{attrs}>{label}</a>'
 
-    reader = csv.DictReader(io.StringIO(read('sources.csv').lstrip('\ufeff')))
-    required = {'semestre', 'ue_numero', 'ue_nom', 'cours_numero', 'cours_nom', 'id', 'date', 'Presentiel', 'Visio', *LINKS}
-    if not required.issubset(reader.fieldnames or []):
-        raise ValueError('Colonnes manquantes dans sources.csv')
     courses, resources, ids = [], [], set()
-    for line, row in enumerate(reader, 2):
-        if None in row or None in row.values():
-            raise ValueError(f'Nombre de champs incorrect à la ligne {line}')
-        row = {key: value.strip() for key, value in row.items()}
+    for line, row in enumerate(read_sources(read('sources.json')), 1):
         parse_course_date(row['date'])
         if not re.fullmatch(r'[1-9]\d*', row['semestre']):
             raise ValueError(f'Semestre incorrect à la ligne {line}')
@@ -182,7 +273,7 @@ def generate(read):
         courses.append(row)
 
     parts = [f'''<!DOCTYPE html>
-<!-- Généré par scripts/generate-static.py ; modifier sources.csv, textes.json, derniere-verification.json ou index.css. -->
+<!-- Généré par scripts/generate-static.py ; modifier sources.json, textes.json, derniere-verification.json ou index.css. -->
 <html lang="fr">
 <head>
 <meta charset="utf-8">

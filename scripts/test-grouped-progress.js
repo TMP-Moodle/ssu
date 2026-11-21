@@ -114,7 +114,7 @@ test('un refus de stockage laisse les cases cohérentes et affiche une erreur', 
     assert.equal(group.checked, false);
     assert.equal(vm.runInContext(`completionControls.get('${groupId}').feedback.textContent`, context), texts.messages.stockage);
 });
-test('le compteur compte les lignes présentes, jamais les composants absents du CSV', () => {
+test('le compteur compte les lignes présentes, jamais les composants absents du JSON', () => {
     for (const numbers of [['7ET8ET9'], ['7ET8ET9', '12'], ['7ET8ET9', '7', '12']]) {
         const { context } = browser();
         context.courses = numbers.map(number => ({ id: id(number), cours: 'Cours test', cours_nom: 'Cours test',

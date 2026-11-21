@@ -17,7 +17,7 @@ test('présentiel et visio : message futur, aujourd’hui et passé', () => {
         assert.equal(info({ ...mode, date: '13/11/2026' }), texts.cours.ressources_en_attente);
     }
 });
-test('les informations du CSV priment ; vidéo, PDF, absence de modalité ou de date excluent le message', () => {
+test('les informations du JSON priment ; vidéo, PDF, absence de modalité ou de date excluent le message', () => {
     assert.equal(info({ information: '  Message spécifique  ' }), 'Message spécifique');
     for (const values of [{ video_link_1: '/video' }, { pdf_link: '/pdf' }, { Presentiel: '' }, { date: '' }]) {
         assert.equal(info(values), '');

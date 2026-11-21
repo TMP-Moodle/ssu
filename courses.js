@@ -1,4 +1,4 @@
-/* Les intitulés et les liens de chaque cours proviennent de sources.csv. */
+/* Les intitulés et les liens de chaque cours proviennent de sources.json. */
 'use strict';
 
 const COURSE_COLUMNS = [
@@ -38,42 +38,6 @@ function syncCourseProgress() {
         catch { feedback.textContent = SiteTexts.get('messages.stockage'); }
     }
     for (const updateProgress of progressListeners) updateProgress();
-}
-
-// Prend en charge les virgules, retours à la ligne et guillemets dans les champs.
-function parseCSV(text) {
-    const rows = [];
-    let row = [];
-    let field = '';
-    let quoted = false;
-    text = text.replace(/^\uFEFF/, '');
-
-    for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        if (char === '"') {
-            if (quoted && text[i + 1] === '"') {
-                field += '"';
-                i++;
-            } else {
-                quoted = !quoted;
-            }
-        } else if (!quoted && char === ',') {
-            row.push(field);
-            field = '';
-        } else if (!quoted && (char === '\n' || char === '\r')) {
-            row.push(field);
-            if (row.some(value => value.trim())) rows.push(row);
-            row = [];
-            field = '';
-            if (char === '\r' && text[i + 1] === '\n') i++;
-        } else {
-            field += char;
-        }
-    }
-    if (quoted) throw new Error('Un champ CSV contient des guillemets non fermés.');
-    row.push(field);
-    if (row.some(value => value.trim())) rows.push(row);
-    return rows;
 }
 
 // Accepte le format français ou ISO, sans décalage lié au fuseau horaire.
@@ -137,17 +101,9 @@ function courseScheduleStyle(course, isoDate, today = new Date()) {
 }
 
 function readSources(text) {
-    const [headers, ...rows] = parseCSV(text);
-    if (!headers || ['semestre', 'ue_numero', 'ue_nom', 'cours_numero', 'cours_nom', ...COURSE_COLUMNS.slice(2), 'id', 'date', 'Presentiel', 'Visio'].some(column => !headers.includes(column))) {
-        throw new Error('Les colonnes attendues sont absentes de sources.csv.');
-    }
+    const rows = SourceData.toRows(typeof text === 'string' ? JSON.parse(text) : text);
     const ids = new Set();
-    return rows.map((row, index) => {
-        if (row.length !== headers.length) {
-            throw new Error(`Nombre de champs incorrect à la ligne ${index + 2}.`);
-        }
-        const course = Object.fromEntries(headers.map((header, i) => [header, row[i].trim()]));
-
+    return rows.map((course, index) => {
         parseCourseDate(course.date);
         if (!/^[1-9]\d*$/.test(course.semestre)) {
             throw new Error(`Semestre incorrect à la ligne ${index + 2}.`);
@@ -167,7 +123,7 @@ function readSources(text) {
             throw new Error(`UE ou cours incorrect à la ligne ${index + 2}.`);
         }
         // Les libellés sont composés pour afficher le même contenu dans les deux versions.
-        // L’identifiant reste celui du CSV, même si le nom ou le numéro change.
+        // L’identifiant reste celui du JSON, même si le nom ou le numéro change.
         course.UE = `S${course.semestre} UE ${course.ue_numero} - ${course.ue_nom}`;
         course.cours = course.cours_nom;
         if (!COURSE_ID_PATTERN.test(course.id) || ids.has(course.id)) {
@@ -263,7 +219,7 @@ function pdfLinkColumns(source) {
     return source.pdf_link ? ['pdf_link'] : ['pdf_link_anterieur'];
 }
 
-// Les informations saisies dans le CSV restent toujours prioritaires.
+// Les informations saisies dans le JSON restent toujours prioritaires.
 function courseInformation(course, today = new Date()) {
     const information = course.information?.trim();
     if (information) return information;
@@ -683,7 +639,7 @@ function renderUEs(courses, accordion) {
         const list = element('ul', 'list-group');
         for (const course of group) list.append(renderCourse(course));
         function updateProgress() {
-            // Une ligne du CSV vaut un cours, même si son ID regroupe plusieurs numéros.
+            // Une entrée JSON vaut un cours, même si son ID regroupe plusieurs numéros.
             const completed = list.querySelectorAll('.form-check-input:checked').length;
             progress.textContent = `${completed}/${group.length}`;
             progress.style.setProperty('--ue-completion', completed / group.length);
@@ -744,9 +700,9 @@ async function loadCourses() {
     try {
         await SiteTexts.ready;
         setupPreviousYearDialog();
-        const response = await fetch(globalThis.SiteAssets?.url('sources.csv') || 'sources.csv', { cache: 'no-store' });
+        const response = await fetch(globalThis.SiteAssets?.url('sources.json') || 'sources.json', { cache: 'no-store' });
         if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
-        const text = await response.text();
+        const text = await response.json();
         const courses = readCourses(text);
         renderOtherSemesters(text);
         renderCourses(courses);

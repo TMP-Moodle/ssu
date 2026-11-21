@@ -54,8 +54,8 @@ async function browser({ failManifest = false, failScript = false } = {}) {
 
 test('scripts, styles et données utilisent la même version, dans le bon ordre', async () => {
     const b = await browser();
-    assert.deepEqual(b.scripts.map(url => new URL(url).pathname.split('/').pop()), ['textes.js', 'theme.js', 'courses.js']);
-    for (const url of [...b.scripts, b.nodes['site-style'].href, b.context.SiteAssets.url('sources.csv'), b.context.SiteAssets.url('textes.json'), b.context.SiteAssets.url('derniere-verification.json')]) {
+    assert.deepEqual(b.scripts.map(url => new URL(url).pathname.split('/').pop()), ['textes.js', 'theme.js', 'sources-format.js', 'courses.js']);
+    for (const url of [...b.scripts, b.nodes['site-style'].href, b.context.SiteAssets.url('sources.json'), b.context.SiteAssets.url('textes.json'), b.context.SiteAssets.url('derniere-verification.json')]) {
         assert.equal(new URL(url).searchParams.get('v'), initial);
         assert(new URL(url).pathname.startsWith('/ssu/'));
     }
@@ -121,7 +121,7 @@ test('onglet masqué ou réseau absent : aucune interruption ni boucle de rechar
 
 test('manifeste indisponible au départ : les fichiers sont tout de même demandés avec une version fraîche', async () => {
     const b = await browser({ failManifest: true });
-    assert.equal(b.scripts.length, 3);
+    assert.equal(b.scripts.length, 4);
     const versions = b.scripts.map(url => new URL(url).searchParams.get('v'));
     assert(versions.every(version => version && version === versions[0]));
 });

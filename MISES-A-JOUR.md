@@ -1,7 +1,7 @@
 # Mises à jour et cache
 
 `index.html` contient un petit chargeur qui demande `version.json` sans cache.
-Il utilise cette version dans les URL des scripts, des styles, du CSV, des textes
+Il utilise cette version dans les URL des scripts, des styles, du JSON des cours, des textes
 et des liens vers la page simplifiée. La progression et le choix du thème restent
 enregistrés dans le navigateur.
 
@@ -37,16 +37,10 @@ Vérifications : `node --test scripts/test-updates.js` et
 
 ## Badge Nouveau
 
-Chaque champ vidéo ou PDF de `sources.csv` possède une colonne de date
-juste à sa droite : `video_link_1_date`, `video_link_2_date`,
-`video_link_1_backup_date`, `video_link_2_backup_date`,
-`video_link_1_anterieur_date`, `video_link_2_anterieur_date`,
-`pdf_link_date` et `pdf_link_anterieur_date`.
-Ces colonnes facultatives acceptent `20/11/2026`,
-`2026-11-20` (minuit à Paris) ou `2026-11-20T12:23:00+01:00`
-(heure précise avec fuseau ; `+02:00` en été). Le badge apparaît sur le lien concerné, de cette
-date jusqu’à 72 heures après, borne incluse. Une valeur vide, incorrecte
-ou future ne montre aucun badge. Le libellé est dans `cours.nouveau`.
+Chaque ressource vidéo ou PDF de `sources.json` peut contenir une date `ajoute_le` à côté de son `url`. Les liens de secours ont leur propre date.
 
-La version principale actualise automatiquement les badges. La version
-simplifiée sans JavaScript ne présente aucun badge Nouveau.
+Ces dates facultatives acceptent `20/11/2026`, `2026-11-20` (minuit à Paris) ou `2026-11-20T12:23:00+01:00` (heure précise avec fuseau ; `+02:00` en été). Le badge apparaît sur le lien concerné, de cette date jusqu’à 72 heures après, borne incluse. Une valeur vide, incorrecte ou future ne montre aucun badge. Le libellé est dans `cours.nouveau`.
+
+La version principale actualise automatiquement les badges. La version simplifiée sans JavaScript ne présente aucun badge Nouveau.
+
+Le format des cours et des ressources est décrit dans [MODIFIER-LES-COURS.md](MODIFIER-LES-COURS.md). Le lecteur JavaScript du site est `sources-format.js` ; il fait partie des fichiers utilisés pour calculer la version.

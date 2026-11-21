@@ -1,0 +1,1070 @@
+{
+  "semestres": [
+    {
+      "numero": 3,
+      "ues": [
+        {
+          "numero": "1.2",
+          "nom": "Santé publique et économie de la santé",
+          "cours": [
+            {
+              "id": "S3_UE1.2_COURS1",
+              "numero": 1,
+              "nom": "Introduction aux biostatistiques et à l'épidémiologie",
+              "date": "16/10/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235524251"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=e195cbd5-fab7-41cb-8b4c-a2ae149a4ce2"
+                }
+              }
+            },
+            {
+              "id": "S3_UE1.2_COURS2",
+              "numero": 2,
+              "nom": "Enjeux de santé publique en périnatalité",
+              "date": "05/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235524028"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=0bcce203-9aba-44ff-ae15-b3a93cbc1336&r=view"
+                }
+              }
+            },
+            {
+              "id": "S3_UE1.2_COURS3",
+              "numero": 3,
+              "nom": "Santé des femmes",
+              "date": "02/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://mega.nz/file/yuhlnDqL#pfwZpNzH1DqAH5idMNocv7Fm4t7cgmuzL9dTbhPF6IE"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=e385a1bc-2156-4936-bb3e-38ce0b308d75&r=view"
+                }
+              }
+            },
+            {
+              "id": "S3_UE1.2_COURS4",
+              "numero": 4,
+              "nom": "Impact des maladies infectieuses en santé",
+              "date": "09/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "L’enregistrement disponible sur le Moodle SSU ne contient pas de son et est donc inexploitable.",
+              "ressources": {
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=b51f7541-980c-43ec-8008-5cdcd8affee1"
+                }
+              }
+            },
+            {
+              "id": "S3_UE1.2_COURS5",
+              "numero": 5,
+              "nom": "Le vieillissement, un défi à relever pour la santé",
+              "date": "10/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235524291"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=c804659c-b4d2-438b-a6c1-21f9d97361c5&r=view"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "numero": "2.5",
+          "nom": "Processus inflammatoires et infectieux",
+          "cours": [
+            {
+              "id": "S3_UE2.5_COURS6ET7",
+              "numero": 6,
+              "nom": "Processus infectieux / Fièvre et septicémie",
+              "date": "02/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "L’enregistrement disponible sur le Moodle SSU ne contient pas de son et est donc inexploitable. Voici celui de l’année précédente.",
+              "ressources": {
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235533792"
+                  },
+                  {
+                    "url": "https://vimeo.com/1235533806"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=c2ff794c-c5c6-472d-a343-81571790b28a"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS15",
+              "numero": 15,
+              "nom": "Bactéries multirésistantes",
+              "date": "03/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1244944731?share=copy&fl=sv&fe=ci"
+                  }
+                ],
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235534442"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=55aa3565-4cdb-47f2-b2f8-600c57302adc"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS1",
+              "numero": 1,
+              "nom": "Infections du voyageur",
+              "date": "05/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1244944914?share=copy&fl=sv&fe=ci"
+                  }
+                ],
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235533525"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=eaa7bfd3-980d-4d97-8028-153b520e2049",
+                  "ajoute_le": "22/11/2026"
+                },
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=0befe73b-4bcc-4ed0-9d87-ff823d6d37e3"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS11",
+              "numero": 11,
+              "nom": "Infections liées aux soins",
+              "date": "05/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1244945141?share=copy&fl=sv&fe=ci",
+                    "ajoute_le": "19/11/2026"
+                  }
+                ],
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235534100"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=be2db5ec-9f38-4ff9-95ad-9f3c8c6e5a33",
+                  "ajoute_le": "19/11/2026"
+                },
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=90d35a48-5c3c-4150-b530-b47010a3c31b"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS18",
+              "numero": 18,
+              "nom": "Infections des parties molles - IST",
+              "date": "05/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://drive.google.com/file/d/1kLgQ86dklXdTvyY1bWz51bP7qozTQgvP/view?usp=drive_link",
+                    "ajoute_le": "19/11/2026",
+                    "secours": {
+                      "url": "https://mega.nz/file/v24FBTyZ#E1kIJ4Ev3JJ7Xl43P9kOjsd37ZFY5-zBOf7mGjqsdNs"
+                    }
+                  }
+                ],
+                "videos_anterieures": [
+                  {
+                    "url": "https://mega.nz/file/X2R1yLpT#qUco4C1RstNLaoy9UquFLehdseKXiAdQTKbTnAWukRE"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=dd9db6d2-c0dd-4e28-bfc8-aabf08e7319e",
+                  "ajoute_le": "19/11/2026"
+                },
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=0662d089-a607-4e60-b9a4-9a79e327504f"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS4",
+              "numero": 4,
+              "nom": "Infection du sujet âgé",
+              "date": "09/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1246062657?share=copy&fl=sv&fe=ci",
+                    "ajoute_le": "19/11/2026"
+                  }
+                ],
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235533042"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=457efaba-5136-4646-aea1-ea1f9b35e03d",
+                  "ajoute_le": "19/11/2026"
+                },
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=50e92ff0-5bb2-43dd-8aff-10f2bf73d585"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS10",
+              "numero": 10,
+              "nom": "Infections urinaires et infections ostéo-articulaires",
+              "date": "09/11/2026",
+              "presentiel": false,
+              "visio": true,
+              "information": "L’enregistrement proposé est celui de l’année précédente, car le cours mis en ligne sur Moodle SSU n'est pas accessible.",
+              "ressources": {
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1248347692?share=copy&fl=sv&fe=ci"
+                  }
+                ],
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=99727925-02cb-434b-8ac8-461ad906f723"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS9",
+              "numero": 9,
+              "nom": "Infection chez la femme enceinte",
+              "date": "10/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1249005767?share=copy&fl=sv&fe=ci",
+                    "ajoute_le": "22/11/2026"
+                  }
+                ],
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235534000"
+                  }
+                ],
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=6afc52ab-c21b-43a9-a9b4-2ed792f6bbdd"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS12",
+              "numero": 12,
+              "nom": "Hépatites virales",
+              "date": "12/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1249005765?share=copy&fl=sv&fe=ci",
+                    "ajoute_le": "22/11/2026"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=a4ae2dff-89c3-4e59-a2b2-44f8a0f297c9",
+                  "ajoute_le": "22/11/2026"
+                },
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=f1335fbf-2385-4ebd-b497-abc2d8d1f09c"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS19",
+              "numero": 19,
+              "nom": "Particularités des infections chez les enfants",
+              "date": "12/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1247284783?share=copy&fl=sv&fe=ci",
+                    "ajoute_le": "19/11/2026"
+                  }
+                ],
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235534750"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=a8c74c24-ac67-4b38-a66c-b11c060f4949",
+                  "ajoute_le": "22/11/2026"
+                },
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=a39cc01a-0fe5-4a2e-af07-b7678b472599"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS20",
+              "numero": 20,
+              "nom": "Vaccinations",
+              "date": "12/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1247284781?share=copy&fl=sv&fe=ci",
+                    "ajoute_le": "19/11/2026"
+                  }
+                ],
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235534753"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=e6af05e9-8a1e-471f-b082-76ff69c4889d",
+                  "ajoute_le": "22/11/2026"
+                },
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=e7fa0fe6-8e70-4709-a3ba-ca9830dae625"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS16",
+              "numero": 16,
+              "nom": "Infection chez l'immunodéprimé",
+              "date": "13/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1247284782?share=copy&fl=sv&fe=ci",
+                    "ajoute_le": "19/11/2026"
+                  }
+                ],
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235534458"
+                  },
+                  {
+                    "url": "https://vimeo.com/1235534484"
+                  }
+                ],
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=3861174f-dfd0-4d1f-9435-656f2beb31e9"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS5",
+              "numero": 5,
+              "nom": "Mécanisme inflammatoire et immunité",
+              "date": "17/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1247970646?share=copy&fl=sv&fe=ci",
+                    "ajoute_le": "19/11/2026"
+                  }
+                ],
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235533638"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=531582d9-84ef-4a71-874e-f91991db16c3",
+                  "ajoute_le": "19/11/2026"
+                },
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=0c069698-06b4-4050-a55f-151e78ecfabe"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS8",
+              "numero": 8,
+              "nom": "Pneumopathie",
+              "date": "17/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "L’enregistrement proposé est celui de l’année précédente, car le cours mis en ligne sur Moodle SSU n'est pas accessible.",
+              "ressources": {
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1248347693?share=copy&fl=sv&fe=ci"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=181048d7-d5a9-4619-a8ca-09f8967b2dd6",
+                  "ajoute_le": "19/11/2026"
+                },
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=51014ae5-2422-4f06-88d9-2106b65e6bb5"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS17",
+              "numero": 17,
+              "nom": "Grippe",
+              "date": "17/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1247970643?share=copy&fl=sv&fe=ci",
+                    "ajoute_le": "19/11/2026"
+                  }
+                ],
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235534624"
+                  }
+                ],
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=57f7ab8b-0411-440f-9e09-5629f3e5b501"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS13",
+              "numero": 13,
+              "nom": "Tuberculose",
+              "date": "27/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235534219"
+                  }
+                ],
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=38d3d19c-213f-44f9-9f9b-5c75736e2a1f"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS14",
+              "numero": 14,
+              "nom": "Méningites / Encéphalites",
+              "date": "27/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235534356"
+                  }
+                ],
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=9349e30f-581f-4e6a-ab68-1e8a4a7a0f5e"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS2",
+              "numero": 2,
+              "nom": "Infection par le VIH-SIDA",
+              "date": "30/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos_anterieures": [
+                  {
+                    "url": "https://mega.nz/file/mvAGyRyL#d35y7rGkN9adUVyDtziQOkf2RXTOAWUBiaI8bNPCS6c"
+                  }
+                ],
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=73af0325-5abb-44d5-ad5e-8764191e8760"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.5_COURS3",
+              "numero": 3,
+              "nom": "Traitements anti-rétroviraux",
+              "date": "30/11/2026",
+              "presentiel": true,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos_anterieures": [
+                  {
+                    "url": "https://vimeo.com/1235533077"
+                  }
+                ],
+                "pdf_anterieur": {
+                  "url": "https://smallpdf.com/file#s=d87d87a9-7832-4108-9c81-a92b393edf6e"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "numero": "2.8",
+          "nom": "Processus obstructifs",
+          "cours": [
+            {
+              "id": "S3_UE2.8_COURS1",
+              "numero": 1,
+              "nom": "Introduction à l'UE",
+              "date": "07/10/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235312729"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=499a0687-39b0-45c8-af61-42997b64f2bc&r=view"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS2",
+              "numero": 2,
+              "nom": "BPCO",
+              "date": "29/10/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235313012"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=efc339e1-35a2-4726-bec4-c6de85785b5e"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS3",
+              "numero": 3,
+              "nom": "Troubles obstructifs digestifs en pédiatrie",
+              "date": "09/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235313224"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=ccab25f8-e662-47a9-94d6-70b9451b236f"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS4",
+              "numero": 4,
+              "nom": "Appareil urinaire",
+              "date": "12/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235313355"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=18af779b-61a7-4467-8135-eed370694bec"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS5",
+              "numero": 5,
+              "nom": "Infarctus du myocarde",
+              "date": "22/10/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235313480"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=55e22654-23c5-4982-80dc-e6f9293a41a3"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS6",
+              "numero": 6,
+              "nom": "AVC",
+              "date": "20/10/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235313619"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=f599caf2-5881-4c55-b301-cc1311c27fc9"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS7",
+              "numero": 7,
+              "nom": "Troubles obstructifs respiratoires en pédiatrie",
+              "date": "10/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235313795"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=434b05f5-f4f1-4aad-bbc9-bbf936d0a93e"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS8",
+              "numero": 8,
+              "nom": "Thrombose et embolie pulmonaire",
+              "date": "16/10/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235313902"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=2ae3878b-4b5d-46a9-9f64-edb0022db4d3"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS9",
+              "numero": 9,
+              "nom": "Asthme",
+              "date": "22/10/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235313908"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=aabe7296-dcaa-42cf-b5e5-e84a07479433"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS10",
+              "numero": 10,
+              "nom": "Occlusion intestinale aigüe",
+              "date": "13/10/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235308564"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=fe9f4669-a090-4f7e-9b3c-43ace8aa4465"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS11",
+              "numero": 11,
+              "nom": "Pathologies obstructives",
+              "date": "20/10/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235313935"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=249ed4ec-1cc7-4236-bc65-9515777448f8"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS12",
+              "numero": 12,
+              "nom": "Maladies inflammatoires du tube digestif",
+              "date": "12/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235314061"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=996736d0-f11d-4259-b545-2166dede8054"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS13",
+              "numero": 13,
+              "nom": "Artérite des membres inférieurs",
+              "date": "19/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235314559"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=bfce5be3-6225-4576-a253-13160da6212b"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.8_COURS14",
+              "numero": 14,
+              "nom": "Pancreatite aigüe",
+              "date": "02/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235314577"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=a4f18233-9cf2-4f1d-a23f-b66e1ebd7f39"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "numero": "2.11",
+          "nom": "Pharmacologie et thérapeutiques",
+          "cours": [
+            {
+              "id": "S3_UE2.11_COURS1",
+              "numero": 1,
+              "nom": "Antiviraux",
+              "date": "04/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235341258"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=95602bb4-c5c9-4f79-a369-f07a19c61756"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.11_COURS2",
+              "numero": 2,
+              "nom": "Psychopharmacologie neuropharmacologie",
+              "date": "05/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235341325"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=d0fe2252-3609-4e71-a92b-710131d9dfee"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.11_COURS3",
+              "numero": 3,
+              "nom": "Antidiabétiques, médicaments de la thyroïde",
+              "date": "04/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235341314"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=6834fd2d-4ec6-484c-bd84-6c4dafe21f27"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.11_COURS4",
+              "numero": 4,
+              "nom": "Médicaments du tube digestif",
+              "date": "04/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235341366"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=021ea1c8-4ddf-4fda-a29a-aea3339f53b7"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.11_COURS5",
+              "numero": 5,
+              "nom": "Dérivés nitrés, antagonistes calciques, bêta-bloquants médicaments de l’angor",
+              "date": "04/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235341524"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=cd5ed31e-408a-4763-be2c-f0cdc2418d7d"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.11_COURS6",
+              "numero": 6,
+              "nom": "Médicaments de l’urgence",
+              "date": "06/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235341612"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=5ce3b8d8-dbb7-437c-a2b0-1db26e64c588"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.11_COURS7",
+              "numero": 7,
+              "nom": "Diurétiques",
+              "date": "06/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235341634"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=039718ae-c261-47ff-a703-76f2c1352916"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.11_COURS8",
+              "numero": 8,
+              "nom": "Principes des topiques en dermatologie",
+              "date": "02/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235341662"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=2751c175-6981-412c-aeb7-b1c07e0e87ed"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.11_COURS9",
+              "numero": 9,
+              "nom": "Médicaments de l’asthme",
+              "date": "06/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235341890"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=c79778a9-eb2c-45c5-805b-8b9ca14057a4"
+                }
+              }
+            },
+            {
+              "id": "S3_UE2.11_COURS10",
+              "numero": 10,
+              "nom": "Médicaments de la contraception",
+              "date": "06/11/2026",
+              "presentiel": false,
+              "visio": false,
+              "information": "",
+              "ressources": {
+                "videos": [
+                  {
+                    "url": "https://vimeo.com/1235341993"
+                  }
+                ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=01b37f59-1c40-4910-920d-e86820aa4011"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "numero": 1,
+      "ues": [],
+      "id": "S1",
+      "ressources": {
+        "pdf": {
+          "url": "https://mega.nz/folder/yyIEVSpI#xhZszTQ6LSJDRW4ERD61jg"
+        }
+      }
+    },
+    {
+      "numero": 2,
+      "ues": [],
+      "id": "S2",
+      "ressources": {
+        "pdf": {
+          "url": "https://mega.nz/folder/HrZCDYKA#qUq6pyQxqNOqDTPZrLhGhA"
+        }
+      }
+    }
+  ]
+}
