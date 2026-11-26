@@ -310,6 +310,10 @@
                     "url": "https://vimeo.com/1235534000"
                   }
                 ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=659cf1ec-6edd-4a8a-bea4-a42b27d07c93",
+                  "ajoute_le": "27/11/2026"
+                },
                 "pdf_anterieur": {
                   "url": "https://smallpdf.com/file#s=6afc52ab-c21b-43a9-a9b4-2ed792f6bbdd"
                 }
@@ -511,9 +515,9 @@
               "numero": 13,
               "nom": "Tuberculose",
               "date": "27/11/2026",
-              "presentiel": true,
+              "presentiel": false,
               "visio": false,
-              "information": "",
+              "information": "Enregistrement et PDF pas encore en ligne sur le Moodle SSU lors de la dernière vérification. En attendant voici les ressources de l’année précédente.",
               "ressources": {
                 "videos_anterieures": [
                   {
@@ -530,9 +534,9 @@
               "numero": 14,
               "nom": "Méningites / Encéphalites",
               "date": "27/11/2026",
-              "presentiel": true,
+              "presentiel": false,
               "visio": false,
-              "information": "",
+              "information": "Enregistrement et PDF pas encore en ligne sur le Moodle SSU lors de la dernière vérification. En attendant voici les ressources de l’année précédente.",
               "ressources": {
                 "videos_anterieures": [
                   {
