@@ -505,6 +505,10 @@
                     "url": "https://vimeo.com/1235534624"
                   }
                 ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=3b002f2c-f2f8-4151-b039-8e3cdfab7a31",
+                  "ajoute_le": "28/11/2026"
+                },
                 "pdf_anterieur": {
                   "url": "https://smallpdf.com/file#s=57f7ab8b-0411-440f-9e09-5629f3e5b501"
                 }
@@ -517,13 +521,17 @@
               "date": "27/11/2026",
               "presentiel": false,
               "visio": false,
-              "information": "Enregistrement et PDF pas encore en ligne sur le Moodle SSU lors de la dernière vérification. En attendant voici les ressources de l’année précédente.",
+              "information": "L’enregistrement proposé est celui de l’année précédente.",
               "ressources": {
                 "videos_anterieures": [
                   {
                     "url": "https://vimeo.com/1235534219"
                   }
                 ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=0776c633-a142-449d-95fd-ed9573b409f0",
+                  "ajoute_le": "28/11/2026"
+                },
                 "pdf_anterieur": {
                   "url": "https://smallpdf.com/file#s=38d3d19c-213f-44f9-9f9b-5c75736e2a1f"
                 }
@@ -536,13 +544,17 @@
               "date": "27/11/2026",
               "presentiel": false,
               "visio": false,
-              "information": "Enregistrement et PDF pas encore en ligne sur le Moodle SSU lors de la dernière vérification. En attendant voici les ressources de l’année précédente.",
+              "information": "L’enregistrement proposé est celui de l’année précédente.",
               "ressources": {
                 "videos_anterieures": [
                   {
                     "url": "https://vimeo.com/1235534356"
                   }
                 ],
+                "pdf": {
+                  "url": "https://smallpdf.com/file#s=a6835c41-0633-425b-8a9d-d85369c208e2",
+                  "ajoute_le": "28/11/2026"
+                },
                 "pdf_anterieur": {
                   "url": "https://smallpdf.com/file#s=9349e30f-581f-4e6a-ab68-1e8a4a7a0f5e"
                 }
